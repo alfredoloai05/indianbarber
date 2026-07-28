@@ -14,7 +14,6 @@ export function SiteLayout() {
   });
 
   useEffect(() => {
-    setMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [location.pathname]);
 
@@ -31,7 +30,7 @@ export function SiteLayout() {
       <motion.div className="scroll-progress" style={{ scaleX: progress }} />
 
       <header className="site-header">
-        <Link className="brand" to="/" aria-label="Indian Club, inicio">
+        <Link className="brand" to="/" aria-label="Indian Club, inicio" onClick={() => setMenuOpen(false)}>
           <span className="brand__name">INDIAN CLUB</span>
           <span className="brand__claim">House of Presence</span>
         </Link>
@@ -80,7 +79,7 @@ export function SiteLayout() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.045 }}
                 >
-                  <NavLink to={item.to}>
+                  <NavLink to={item.to} onClick={() => setMenuOpen(false)}>
                     <span>0{index + 1}</span>
                     {item.label}
                   </NavLink>
