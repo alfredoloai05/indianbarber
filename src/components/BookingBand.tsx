@@ -5,10 +5,10 @@ export function BookingBand() {
     <section className="booking-band" aria-labelledby="booking-band-title">
       <div>
         <span>Tu momento en Indian</span>
-        <h2 id="booking-band-title">La decisión es tuya. El tiempo también.</h2>
+        <h2 id="booking-band-title">Elige el servicio. Encuentra tu horario.</h2>
       </div>
       <p>
-        En esta primera fase la disponibilidad y confirmación continúan en AgendaPro. Llegarás al flujo externo con el contexto claro.
+        Consulta la disponibilidad de profesionales, fechas y horarios, y confirma tu cita online.
       </p>
       <a className="button button--dark" href={bookingUrl} target="_blank" rel="noreferrer">
         Ver horarios <span aria-hidden="true">↗</span>
