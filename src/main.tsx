@@ -10,6 +10,7 @@ import './styles/final-prototype.css';
 import './styles/final-components.css';
 import './styles/polish-overrides.css';
 import './styles/brand-motion.css';
+import './styles/immersive-home-v2.css';
 
 const root = document.getElementById('root');
 
