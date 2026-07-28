@@ -1,5 +1,14 @@
 export const bookingUrl = import.meta.env.VITE_BOOKING_URL || 'https://indianclubec.com/citas';
 
+export const brand = {
+  name: 'Indian Club',
+  campaign: 'House of Presence',
+  logoMark: 'https://content.app-sources.com/s/249321345646214611/uploads/Images/Logo_Indian_Club-7891806.png?format=webp',
+  logoLockup: 'https://content.app-sources.com/s/249321345646214611/uploads/NUEVO_LOGO/2-2400470.png?format=webp',
+  red: '#e31b2d',
+  blue: '#0878b9',
+};
+
 export const contact = {
   phone: '07 272 6042',
   phoneHref: 'tel:+59372726042',
@@ -27,11 +36,14 @@ export const navItems = [
 ];
 
 export const media = {
-  hero: 'https://images.unsplash.com/photo-1747830280502-f33d7305a714?auto=format&fit=crop&q=86&w=2200',
-  barber: 'https://images.unsplash.com/photo-1747830280502-f33d7305a714?auto=format&fit=crop&q=82&w=1800',
-  tattoo: 'https://images.unsplash.com/photo-1775135981378-4e7c1767436d?auto=format&fit=crop&q=82&w=1800',
+  hero: 'https://content.app-sources.com/s/249321345646214611/uploads/Nuevo_Portafolio/IMG_2623-4450906.jpg?format=webp',
+  barber: 'https://content.app-sources.com/s/249321345646214611/uploads/Nuevo_Portafolio/IMG_2597-4450906.png?format=webp',
+  barberAlt: 'https://content.app-sources.com/s/249321345646214611/uploads/Nuevo_Portafolio/IMG_2212-4450905.jpg?format=webp',
+  tattoo: 'https://content.app-sources.com/s/249321345646214611/uploads/Nuevo_Portafolio/IMG_1156-4450899.jpg?format=webp',
+  nails: 'https://content.app-sources.com/s/249321345646214611/uploads/Nuevo_Portafolio/IMG_9109.JPG-4450892.jpeg?format=webp',
   cafe: 'https://images.unsplash.com/photo-1780398645489-85968d809196?auto=format&fit=crop&q=82&w=1800',
   exterior: 'https://images.unsplash.com/photo-1771865600306-d4ef4c06ae16?auto=format&fit=crop&q=82&w=1800',
+  parking: 'https://content.app-sources.com/s/249321345646214611/uploads/El_centro/7bd8d8dc-a404-4fa3-ba04-0420ee94de1d-8326539.jpeg?format=webp',
 };
 
 export const stats = [
@@ -52,7 +64,7 @@ export const services = [
     signature: 'Precisión visible',
     price: 'USD 10',
     image: media.barber,
-    imageAlt: 'Barbero trabajando un corte con luz cinematográfica',
+    imageAlt: 'Corte realizado por Indian Club dentro de su local en Loja',
     ritual: ['Diagnóstico y referencia', 'Corte y estructura', 'Lavado, peinado y recomendación'],
     inclusions: ['Exfoliación facial', 'Masaje', 'Lavado', 'Peinado'],
   },
@@ -66,8 +78,8 @@ export const services = [
     duration: '30–45 min',
     signature: 'Detalle sereno',
     price: 'Desde USD 6',
-    image: media.barber,
-    imageAlt: 'Trabajo de barbería enfocado en precisión y detalle',
+    image: media.barberAlt,
+    imageAlt: 'Resultado de barbería realizado en Indian Club',
     ritual: ['Lectura de crecimiento', 'Preparación de piel', 'Contorno, afeitado y cierre'],
     inclusions: ['Toallas calientes', 'Perfilado', 'Cuidado de piel', 'Acabado'],
   },
@@ -82,7 +94,7 @@ export const services = [
     signature: 'Ritual completo',
     price: 'Desde USD 14',
     image: media.hero,
-    imageAlt: 'Sesión integral de grooming en barbería',
+    imageAlt: 'Cliente dentro de Indian Club después de un servicio de barbería',
     ritual: ['Consulta integral', 'Servicio combinado', 'Styling y cuidado posterior'],
     inclusions: ['Cabello', 'Barba o cejas', 'Opciones de limpieza facial', 'Bebida en servicio VIP'],
   },
@@ -96,8 +108,8 @@ export const services = [
     duration: 'Según servicio',
     signature: 'Cuidado en detalle',
     price: 'Consultar disponibilidad',
-    image: media.cafe,
-    imageAlt: 'Atmósfera cálida y cuidada dentro de Indian Club',
+    image: media.nails,
+    imageAlt: 'Diseño de uñas realizado por Indian Club Nails Studio',
     ritual: ['Evaluación y elección', 'Preparación e higiene', 'Aplicación y cuidado final'],
     inclusions: ['Manicura', 'Pedicura', 'Semipermanente', 'Soft Gel'],
   },
@@ -112,7 +124,7 @@ export const services = [
     signature: 'Lenguaje propio',
     price: 'Cotización gratuita',
     image: media.tattoo,
-    imageAlt: 'Artista tatuando a un cliente en un estudio oscuro',
+    imageAlt: 'Tatuaje realizado por Indian Club Tattoo Studio',
     ritual: ['Brief y cotización', 'Diseño y preparación', 'Ejecución y guía de cuidado'],
     inclusions: ['Cotización', 'Diseño', 'Preparación higiénica', 'Guía posterior'],
   },
@@ -127,7 +139,7 @@ export const services = [
     signature: 'Acabado consciente',
     price: 'Desde USD 3',
     image: media.exterior,
-    imageAlt: 'Vista nocturna de un espacio de cuidado personal',
+    imageAlt: 'Atmósfera nocturna de un espacio de cuidado personal',
     ritual: ['Seleccionar complemento', 'Preparación', 'Aplicación y recomendaciones'],
     inclusions: ['Cejas', 'Cera', 'Lifting', 'Limpieza facial'],
   },
@@ -135,28 +147,34 @@ export const services = [
 
 export const team = [
   {
-    name: 'Barbería & peluquería',
-    role: 'Cortes, barba, afeitado y diagnóstico',
-    statement: 'La referencia abre la conversación; el oficio decide cómo hacerla funcionar en la vida real.',
-    image: media.barber,
+    name: 'René Chamba',
+    role: 'Coordinador y todólogo',
+    statement: 'Coordina la experiencia de la casa y conecta las distintas disciplinas de Indian Club.',
+    image: 'https://content.app-sources.com/s/249321345646214611/uploads/El_centro/equipo_indian_club_1-8394408.png?format=webp',
   },
   {
-    name: 'Nails Studio',
-    role: 'Manicura, pedicura y sistemas semipermanentes',
-    statement: 'Higiene, técnica y cuidado del detalle antes que una tendencia pasajera.',
-    image: media.cafe,
+    name: 'César Castejón',
+    role: 'Tatuador especializado en diseños personalizados',
+    statement: 'Convierte ideas personales en piezas trabajadas con conversación, criterio y cuidado.',
+    image: 'https://content.app-sources.com/s/249321345646214611/uploads/El_centro/equipo_indian_club_5-8394408.png?format=webp',
   },
   {
-    name: 'Tattoo Studio',
-    role: 'Diseño, cotización y ejecución',
-    statement: 'Una pieza permanente empieza escuchando la historia y delimitando bien la intención.',
-    image: media.tattoo,
+    name: 'Alisson Ruiz',
+    role: 'Manicurista experta en uñas acrílicas y esculpidas',
+    statement: 'Trabaja técnica, higiene y detalle para construir resultados con identidad propia.',
+    image: 'https://content.app-sources.com/s/249321345646214611/thumbnails/640x480/El_centro/equipo_indian_club_6-8394408.png?format=webp',
   },
   {
-    name: 'Hospitalidad Indian',
-    role: 'Café, recepción y acompañamiento',
-    statement: 'La visita se siente completa cuando el espacio entiende tu tiempo antes, durante y después del servicio.',
-    image: media.exterior,
+    name: 'Santiago Vivanco',
+    role: 'Barbero experto en cortes y perfilado de barba',
+    statement: 'Lee forma y crecimiento antes de ejecutar un corte que pueda sostenerse fuera de la silla.',
+    image: 'https://content.app-sources.com/s/249321345646214611/uploads/El_centro/equipo_indian_club_2-8394408.png?format=webp',
+  },
+  {
+    name: 'Adrián Pardo',
+    role: 'Barbero experto en cortes y perfilado de barba',
+    statement: 'Cuida proporción, textura y acabado para que cada resultado se sienta propio.',
+    image: 'https://content.app-sources.com/s/249321345646214611/thumbnails/640x480/El_centro/equipo_indian_club_8-8394407.png?format=webp',
   },
 ];
 
@@ -198,7 +216,7 @@ export const journalItems = [
     type: 'Oficio',
     title: 'Lo que un buen diagnóstico revela antes del primer corte',
     excerpt: 'Rostro, textura, hábitos y contexto: la conversación que evita decisiones genéricas.',
-    image: media.hero,
+    image: media.barberAlt,
   },
   {
     slug: 'cafe-conversacion-y-ritmo',
