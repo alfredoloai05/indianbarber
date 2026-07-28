@@ -46,7 +46,6 @@ const finderResults = {
 const heroScenes = [
   {
     label: 'Barbería',
-    number: '01',
     image: media.barber,
     alt: 'Corte realizado dentro de Indian Club en Loja',
     to: '/servicios/corte-de-autor',
@@ -55,7 +54,6 @@ const heroScenes = [
   },
   {
     label: 'Tattoo',
-    number: '02',
     image: media.tattoo,
     alt: 'Tatuaje realizado por Indian Club Tattoo Studio',
     to: '/servicios/tattoo-studio',
@@ -64,7 +62,6 @@ const heroScenes = [
   },
   {
     label: 'Nails',
-    number: '03',
     image: media.nails,
     alt: 'Diseño de uñas realizado por Indian Club Nails Studio',
     to: '/servicios/nails-studio',
@@ -73,7 +70,6 @@ const heroScenes = [
   },
   {
     label: 'El Club',
-    number: '04',
     image: media.parking,
     alt: 'Espacio de Indian Club en Loja',
     to: '/club',
@@ -116,6 +112,7 @@ export function HomePage() {
 
       <div className="final-home final-home--brand final-home--immersive">
         <section className="immersive-hero" ref={heroRef} aria-label="Experiencias de Indian Club">
+          <h1 className="visually-hidden">Indian Club: barbería, tattoo, nails y café en Loja</h1>
           <motion.div className="immersive-hero__stage" style={{ scale: stageScale }}>
             {heroScenes.map((scene, index) => {
               const active = activeScene === index;
@@ -145,7 +142,6 @@ export function HomePage() {
                       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                     />
                     <span className="immersive-hero__wash" aria-hidden="true" />
-                    <span className="immersive-hero__number">{scene.number}</span>
                     <div className="immersive-hero__label">
                       <small>Indian Club</small>
                       <strong>{scene.label}</strong>
@@ -173,7 +169,7 @@ export function HomePage() {
                 exit={reduceMotion ? undefined : { opacity: 0, y: -10 }}
                 transition={{ duration: 0.32 }}
               >
-                <span>{heroScenes[activeScene].number} / 04</span>
+                <span>{heroScenes[activeScene].label}</span>
                 <p>{heroScenes[activeScene].detail}</p>
               </motion.div>
             </AnimatePresence>
@@ -200,13 +196,13 @@ export function HomePage() {
 
         <section className="ritual-finder" aria-labelledby="ritual-finder-title">
           <div className="ritual-finder__intro">
-            <span>01 / Orientación</span>
+            <span>Encuentra tu camino</span>
             <h2 id="ritual-finder-title">¿Qué necesitas hoy?</h2>
             <p>Empieza por la intención y encuentra una ruta clara entre los servicios de Indian Club.</p>
           </div>
 
           <div className="ritual-finder__choices" role="group" aria-label="Selecciona tu intención">
-            {(Object.keys(finderResults) as FinderIntent[]).map((key, index) => (
+            {(Object.keys(finderResults) as FinderIntent[]).map((key) => (
               <button
                 key={key}
                 type="button"
@@ -214,7 +210,6 @@ export function HomePage() {
                 className={intent === key ? 'is-active' : undefined}
                 onClick={() => setIntent(key)}
               >
-                <span>0{index + 1}</span>
                 {finderResults[key].label}
               </button>
             ))}
@@ -229,7 +224,6 @@ export function HomePage() {
           >
             <div className="ritual-finder__result-media">
               <img src={result.service.image} alt={result.service.imageAlt} loading="lazy" />
-              <span>{result.service.number}</span>
             </div>
             <div>
               <small>Ruta sugerida</small>
@@ -250,7 +244,7 @@ export function HomePage() {
         <section className="service-reel" aria-labelledby="service-reel-title">
           <header className="service-reel__header">
             <div>
-              <span>02 / Servicios</span>
+              <span>El oficio</span>
               <h2 id="service-reel-title">Todo lo que puedes vivir en Indian.</h2>
             </div>
             <p>Conoce cada servicio, su duración y precio de referencia antes de pasar a la agenda.</p>
@@ -266,7 +260,6 @@ export function HomePage() {
                 transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
               >
                 <Link className="service-reel__item" to={`/servicios/${service.slug}`}>
-                  <span className="service-reel__number">{service.number}</span>
                   <div className="service-reel__image">
                     <img src={service.image} alt="" loading="lazy" />
                   </div>
@@ -288,7 +281,7 @@ export function HomePage() {
 
         <section className="official-stylebook" aria-labelledby="official-stylebook-title">
           <div className="official-stylebook__heading">
-            <span>03 / Style Book</span>
+            <span>Style Book</span>
             <h2 id="official-stylebook-title">Cortes, trazos y detalles hechos en Indian Club.</h2>
             <p>Una selección del trabajo publicado por barbería, tattoo y nails en Loja.</p>
             <Link className="final-link final-link--brand" to="/style-book">Abrir galería completa</Link>
@@ -304,7 +297,7 @@ export function HomePage() {
                 whileHover={reduceMotion ? undefined : { y: -12 }}
               >
                 <img src={image} alt="Trabajo publicado por Indian Club" loading="lazy" />
-                <figcaption>INDIAN / 0{index + 1}</figcaption>
+                <figcaption>{['BARBERÍA', 'DETALLE', 'TATTOO', 'NAILS'][index]}</figcaption>
               </motion.figure>
             ))}
           </div>
@@ -315,7 +308,7 @@ export function HomePage() {
             <img src={media.parking} alt="Espacio de Indian Club en Loja" loading="lazy" />
           </div>
           <div className="house-scene__copy">
-            <span>04 / El Club</span>
+            <span>El Club</span>
             <h2 id="house-scene-title">Una visita completa, desde que llegas.</h2>
             <p>La cafetería acompaña la pausa, el parqueo facilita la llegada y cada área mantiene el mismo nivel de cuidado.</p>
             <div className="house-scene__facts">
@@ -327,23 +320,21 @@ export function HomePage() {
           </div>
         </section>
 
-        <section className="craft-sequence" aria-labelledby="craft-sequence-title">
+        <section className="craft-sequence craft-sequence--editorial" aria-labelledby="craft-sequence-title">
           <header>
-            <span>05 / La experiencia</span>
-            <h2 id="craft-sequence-title">Escuchar, crear, cuidar y volver.</h2>
+            <span>La experiencia</span>
+            <h2 id="craft-sequence-title">Tu visita tiene un ritmo propio.</h2>
           </header>
-          <div className="craft-sequence__line" aria-hidden="true" />
-          <div className="craft-sequence__steps">
-            {ritualSteps.map(([title, detail], index) => (
+          <div className="craft-sequence__flow">
+            {ritualSteps.map(([title, detail]) => (
               <motion.article
                 key={title}
                 variants={reveal}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true, amount: 0.55 }}
-                transition={{ duration: 0.5, delay: index * 0.05 }}
+                viewport={{ once: true, amount: 0.35 }}
+                transition={{ duration: 0.55 }}
               >
-                <span>0{index + 1}</span>
                 <h3>{title}</h3>
                 <p>{detail}</p>
               </motion.article>
@@ -353,14 +344,13 @@ export function HomePage() {
 
         <section className="promotion-ledger" aria-labelledby="promotion-ledger-title">
           <header>
-            <span>06 / Promociones</span>
+            <span>Promociones</span>
             <h2 id="promotion-ledger-title">Beneficios vigentes en Indian Club.</h2>
             <p>Revisa la promoción y confirma disponibilidad directamente con el centro.</p>
           </header>
           <div>
-            {promotions.map((promotion, index) => (
+            {promotions.map((promotion) => (
               <a href={bookingUrl} target="_blank" rel="noreferrer" key={promotion.title}>
-                <span>0{index + 1}</span>
                 <small>{promotion.eyebrow}</small>
                 <strong>{promotion.title}</strong>
                 <p>{promotion.note}</p>
@@ -372,13 +362,13 @@ export function HomePage() {
 
         <section className="house-notes" aria-labelledby="house-notes-title">
           <header>
-            <span>07 / Inspírate</span>
+            <span>Inspírate</span>
             <h2 id="house-notes-title">Ideas para elegir, cuidar y mantener tu estilo.</h2>
           </header>
           <div className="house-notes__lead">
             <img src={journalItems[0].image} alt="Trabajo detallado de barbería realizado en Indian Club" loading="lazy" />
             <div>
-              <small>{journalItems[0].type} · {journalItems[0].number}</small>
+              <small>{journalItems[0].type}</small>
               <h3>{journalItems[0].title}</h3>
               <p>{journalItems[0].excerpt}</p>
               <Link to={`/inspirate/${journalItems[0].slug}`}>Leer nota <Arrow /></Link>
@@ -387,7 +377,6 @@ export function HomePage() {
           <div className="house-notes__index">
             {journalItems.slice(1).map((item) => (
               <Link to={`/inspirate/${item.slug}`} key={item.slug}>
-                <span>{item.number}</span>
                 <small>{item.type}</small>
                 <strong>{item.title}</strong>
                 <i aria-hidden="true">↗</i>
@@ -398,7 +387,7 @@ export function HomePage() {
 
         <section className="final-visit" aria-labelledby="final-visit-title">
           <div className="final-visit__address">
-            <span>08 / Visítanos</span>
+            <span>Visítanos</span>
             <h2 id="final-visit-title">Indian Club está en el centro de Loja.</h2>
             <address>
               <strong>{contact.address}</strong>
