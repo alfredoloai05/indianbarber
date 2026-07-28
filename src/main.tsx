@@ -7,6 +7,7 @@ import './styles/global.css';
 import './styles/pages.css';
 import './styles/admin.css';
 import './styles/final-prototype.css';
+import './styles/final-components.css';
 
 const root = document.getElementById('root');
 
