@@ -17,7 +17,7 @@ export function ServiceDetailPage() {
     return (
       <section className="not-found compact-not-found">
         <span>Servicio no encontrado</span>
-        <h1>La ruta existe. El ritual todavía no.</h1>
+        <h1>Este servicio no está disponible.</h1>
         <Link className="button" to="/servicios">Volver a servicios</Link>
       </section>
     );
@@ -51,7 +51,7 @@ export function ServiceDetailPage() {
         <div>
           <p className="final-kicker">La secuencia</p>
           <h2>El resultado empieza antes de la herramienta.</h2>
-          <p>La consulta inicial evita copiar una referencia que no corresponde a tu textura, tu rutina o el resultado que realmente necesitas sostener.</p>
+          <p>La consulta inicial ayuda a elegir una referencia que funcione con tu textura, tu rutina y el resultado que quieres mantener.</p>
         </div>
         <ol>
           {service.ritual.map((step, index) => (
@@ -67,7 +67,7 @@ export function ServiceDetailPage() {
       <section className="service-inclusions">
         <div>
           <span>Incluye o puede incluir</span>
-          <h2>Todo lo importante, sin letra pequeña visual.</h2>
+          <h2>Todo lo que forma parte del servicio.</h2>
         </div>
         <ul>
           {service.inclusions.map((item, index) => (

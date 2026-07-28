@@ -17,10 +17,10 @@ export function TeamPage() {
         <div className="chapter-intro__index">02 / PERSONAS</div>
         <div>
           <p className="final-kicker">El equipo Indian</p>
-          <h1>La marca tiene rostro. <em>Y el oficio tiene nombre.</em></h1>
+          <h1>Personas distintas. <em>Un mismo estándar de cuidado.</em></h1>
         </div>
         <p className="chapter-intro__aside">
-          Esta página utiliza los nombres, especialidades y retratos publicados por Indian Club. Ya no presenta disciplinas genéricas: presenta a las personas de la casa.
+          Barbería, tattoo, nails y coordinación se encuentran en un equipo que conoce la casa y acompaña cada servicio de principio a fin.
         </p>
         <motion.img
           className="chapter-intro__brand-mark"
@@ -81,8 +81,8 @@ export function TeamPage() {
       <section className="team-callout team-callout--brand">
         <img src={brand.logoMark} alt="" />
         <span>Elegir profesional</span>
-        <h2>La afinidad importa. La evidencia técnica importa más.</h2>
-        <p>En AgendaPro podrás revisar disponibilidad y elegir al profesional disponible para el ritual que necesitas.</p>
+        <h2>Encuentra a la persona adecuada para tu servicio.</h2>
+        <p>Consulta la disponibilidad y elige al profesional que mejor corresponda a la experiencia que buscas.</p>
       </section>
 
       <BookingBand />

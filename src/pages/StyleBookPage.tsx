@@ -27,10 +27,10 @@ export function StyleBookPage() {
         <div className="chapter-intro__index">04 / STYLE BOOK</div>
         <div>
           <p className="final-kicker">Archivo visual Indian Club</p>
-          <h1>Ya no imaginamos la marca. <em>Mostramos su trabajo real.</em></h1>
+          <h1>Cortes, trazos y detalles. <em>Hechos en Indian.</em></h1>
         </div>
         <p className="chapter-intro__aside">
-          Esta edición utiliza fotografías publicadas en el Style Book oficial de Indian Club: cortes, tatuajes y manicura realizados por la casa.
+          Una selección de barbería, tattoo y nails realizados por el equipo de Indian Club en Loja.
         </p>
         <motion.img
           className="chapter-intro__brand-mark"
@@ -44,8 +44,8 @@ export function StyleBookPage() {
 
       <section className="style-book-opening style-book-opening--brand">
         <span>ARCHIVO / INDIAN</span>
-        <p>El logo crea reconocimiento. El trabajo demuestra por qué la marca merece recordarse.</p>
-        <strong>Loja · Actual</strong>
+        <p>Forma, textura, línea y color en una misma casa.</p>
+        <strong>Loja · Ecuador</strong>
       </section>
 
       <section className="style-book-grid style-book-grid--official" aria-label="Galería de trabajos reales de Indian Club">
@@ -67,8 +67,8 @@ export function StyleBookPage() {
 
       <section className="style-book-manifesto style-book-manifesto--brand">
         <div>
-          <span>Una regla</span>
-          <h2>La imagen no adorna el servicio. Demuestra el estándar.</h2>
+          <span>El detalle</span>
+          <h2>Cada servicio deja una firma distinta.</h2>
         </div>
         <div className="style-book-manifesto__mark">
           <motion.img
@@ -77,7 +77,7 @@ export function StyleBookPage() {
             animate={reduceMotion ? undefined : { rotate: [0, 2, -2, 0] }}
             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
           />
-          <p>El archivo final crecerá con producción propia: fachada, manos, herramientas, procesos, retratos y resultados reales.</p>
+          <p>Explora resultados reales y encuentra referencias para conversar con el profesional antes de tu cita.</p>
         </div>
       </section>
 
