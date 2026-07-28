@@ -1,0 +1,51 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [main, feature/initial-frontend]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint
+        shell: bash
+        run: |
+          set +e
+          npm run lint > lint-output.log 2>&1
+          status=$?
+          cat lint-output.log
+          exit $status
+
+      - name: Build
+        if: success()
+        shell: bash
+        run: |
+          set +e
+          npm run build > build-output.log 2>&1
+          status=$?
+          cat build-output.log
+          exit $status
+
+      - name: Upload quality diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-diagnostics
+          path: |
+            lint-output.log
+            build-output.log
+          if-no-files-found: ignore

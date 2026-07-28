@@ -1,0 +1,300 @@
+.admin-setup,
+.admin-login {
+  width: min(1180px, calc(100vw - 2rem));
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: clamp(4rem, 10vw, 9rem) 0;
+  display: grid;
+  align-content: center;
+  gap: 2rem;
+}
+
+.admin-setup > span,
+.admin-login > div > span,
+.admin-shell header span,
+.admin-shell aside > span,
+.admin-editor__heading span,
+.admin-empty span {
+  color: var(--color-gold);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.admin-setup h1,
+.admin-login h1,
+.admin-empty h1 {
+  max-width: 11ch;
+  margin: 0;
+  font-size: clamp(3.6rem, 8vw, 8.5rem);
+  line-height: 0.82;
+  letter-spacing: -0.055em;
+}
+
+.admin-setup p,
+.admin-login > div > p {
+  max-width: 720px;
+  margin: 0;
+  line-height: 1.75;
+  color: rgb(241 234 223 / 0.62);
+}
+
+.admin-setup code {
+  padding: 0.15rem 0.35rem;
+  border: 1px solid var(--color-line);
+  color: var(--color-gold-bright);
+}
+
+.admin-setup .button {
+  width: fit-content;
+}
+
+.admin-login {
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.55fr);
+  align-items: center;
+  gap: clamp(3rem, 8vw, 9rem);
+}
+
+.admin-login form {
+  padding: clamp(2rem, 4vw, 3.5rem);
+  display: grid;
+  gap: 1.5rem;
+  border: 1px solid var(--color-line);
+  background: var(--color-ink);
+}
+
+.admin-login label,
+.admin-json-editor {
+  display: grid;
+  gap: 0.65rem;
+  color: var(--color-gold);
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.admin-login input,
+.admin-json-editor textarea {
+  width: 100%;
+  border: 1px solid var(--color-line);
+  border-radius: 0;
+  background: var(--color-black);
+  color: var(--color-ivory);
+  font: inherit;
+  text-transform: none;
+  letter-spacing: normal;
+  outline: none;
+}
+
+.admin-login input {
+  min-height: 52px;
+  padding: 0 1rem;
+}
+
+.admin-login input:focus,
+.admin-json-editor textarea:focus {
+  border-color: var(--color-gold-bright);
+  box-shadow: 0 0 0 2px rgb(212 175 104 / 0.12);
+}
+
+.admin-login form > p,
+.admin-editor__actions p {
+  margin: 0;
+  line-height: 1.5;
+  color: var(--color-gold-bright);
+}
+
+.admin-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  grid-template-rows: 78px minmax(0, 1fr);
+  background: #080808;
+}
+
+.admin-shell > header {
+  grid-column: 1 / -1;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-line);
+  background: #050505;
+}
+
+.admin-shell > header > div {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-shell header small,
+.admin-shell header strong {
+  color: rgb(241 234 223 / 0.52);
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.admin-shell header button {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--color-line);
+  background: transparent;
+  color: var(--color-ivory);
+  cursor: pointer;
+}
+
+.admin-shell > aside {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  border-right: 1px solid var(--color-line);
+  background: #0b0b0a;
+  overflow-y: auto;
+}
+
+.admin-shell aside > span {
+  margin-bottom: 1rem;
+}
+
+.admin-shell aside button {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.35rem 1rem;
+  text-align: left;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-ivory);
+  cursor: pointer;
+}
+
+.admin-shell aside button:hover,
+.admin-shell aside button.is-active,
+.admin-shell aside button:focus-visible {
+  border-color: var(--color-line);
+  background: rgb(212 175 104 / 0.06);
+}
+
+.admin-shell aside button small {
+  color: var(--color-gold);
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.admin-shell aside button strong {
+  grid-column: 1;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.admin-shell aside button i {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  align-self: center;
+  color: rgb(241 234 223 / 0.38);
+  font-size: 0.58rem;
+  font-style: normal;
+  text-transform: uppercase;
+}
+
+.admin-shell aside > p {
+  color: rgb(241 234 223 / 0.45);
+  line-height: 1.5;
+}
+
+.admin-shell > main {
+  padding: clamp(1.5rem, 4vw, 4rem);
+  overflow-y: auto;
+}
+
+.admin-editor__heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.admin-editor__heading h1 {
+  margin: 0.6rem 0 0;
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  line-height: 0.9;
+}
+
+.admin-editor__heading > small {
+  color: rgb(241 234 223 / 0.4);
+}
+
+.admin-json-editor textarea {
+  min-height: 470px;
+  padding: 1.2rem;
+  resize: vertical;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+.admin-editor__actions {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.admin-empty {
+  min-height: 70vh;
+  display: grid;
+  align-content: center;
+  gap: 1rem;
+}
+
+@media (max-width: 860px) {
+  .admin-login {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto minmax(0, 1fr);
+  }
+
+  .admin-shell > header {
+    grid-column: 1;
+    min-height: 78px;
+  }
+
+  .admin-shell > aside {
+    border-right: 0;
+    border-bottom: 1px solid var(--color-line);
+    max-height: 260px;
+  }
+
+  .admin-editor__heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 560px) {
+  .admin-shell > header {
+    align-items: flex-start;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .admin-shell > header > div:last-child {
+    align-items: flex-end;
+    flex-direction: column;
+  }
+
+  .admin-editor__actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

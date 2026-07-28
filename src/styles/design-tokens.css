@@ -1,30 +1,41 @@
 :root {
-  --color-ink: #151412;
-  --color-ink-soft: #22201d;
-  --color-ivory: #f5f0e8;
-  --color-stone: #a9a198;
-  --color-red: #b5282c;
-  --color-brass: #b89962;
-  --color-white: #fffdf9;
+  --color-black: #050505;
+  --color-ink: #090909;
+  --color-ink-soft: #11110f;
+  --color-panel: #15140f;
+  --color-ivory: #f1eadf;
+  --color-ivory-soft: #cfc5b5;
+  --color-stone: #8f887c;
+  --color-gold: #d4af68;
+  --color-gold-bright: #f0d397;
+  --color-gold-muted: #8f7241;
+  --color-line: rgb(212 175 104 / 0.24);
+  --color-white: #fffdf8;
 
-  --font-display: Georgia, 'Times New Roman', serif;
-  --font-ui: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Cormorant Garamond', 'Times New Roman', serif;
+  --font-ui: 'Manrope', Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
   --space-4: 1rem;
+  --space-5: 1.25rem;
   --space-6: 1.5rem;
   --space-8: 2rem;
+  --space-10: 2.5rem;
   --space-12: 3rem;
   --space-16: 4rem;
+  --space-20: 5rem;
   --space-24: 6rem;
   --space-32: 8rem;
+  --space-40: 10rem;
 
-  --radius-sm: 0.5rem;
-  --radius-md: 1rem;
-  --radius-lg: 1.5rem;
+  --radius-sm: 0.35rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.25rem;
 
-  --shadow-floating: 0 24px 80px rgb(0 0 0 / 0.18);
-  --container: min(1180px, calc(100vw - 2rem));
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+  --shadow-floating: 0 30px 100px rgb(0 0 0 / 0.48);
+  --container: min(1380px, calc(100vw - clamp(1.5rem, 5vw, 7rem)));
+  --reading: 760px;
 }
