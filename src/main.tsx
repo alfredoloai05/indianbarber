@@ -9,6 +9,7 @@ import './styles/admin.css';
 import './styles/final-prototype.css';
 import './styles/final-components.css';
 import './styles/polish-overrides.css';
+import './styles/brand-motion.css';
 
 const root = document.getElementById('root');
 
