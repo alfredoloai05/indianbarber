@@ -11,6 +11,7 @@ import './styles/final-components.css';
 import './styles/polish-overrides.css';
 import './styles/brand-motion.css';
 import './styles/immersive-home-v2.css';
+import './styles/art-direction-v3.css';
 
 const root = document.getElementById('root');
 
