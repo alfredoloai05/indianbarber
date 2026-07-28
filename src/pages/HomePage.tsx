@@ -10,66 +10,53 @@ const heroScenes = [
   {
     label: 'Barbería',
     copy: 'Cortes, barba y acabado con precisión.',
-    to: '/servicios/corte-de-autor',
-    media: visualMedia.barber,
+    media: visualMedia.hero.barber,
   },
   {
     label: 'Tattoo',
     copy: 'Diseño, conversación y técnica.',
-    to: '/servicios/tattoo-studio',
-    media: visualMedia.tattoo,
+    media: visualMedia.hero.tattoo,
   },
   {
     label: 'Nails',
     copy: 'Manos, pies y detalle profesional.',
-    to: '/servicios/nails-studio',
-    media: visualMedia.nails,
+    media: visualMedia.hero.nails,
   },
   {
     label: 'El Club',
     copy: 'Café, parqueo y una visita sin apuro.',
-    to: '/club',
-    media: visualMedia.club,
+    media: visualMedia.hero.club,
   },
 ] as const;
 
 const finderResults = {
-  mantener: {
-    label: 'Mantener lo que ya funciona',
+  corte: {
+    label: 'Corte',
+    caption: 'Cabello',
     service: services[0],
-    media: visualMedia.barberDetail,
-    reason: 'Recupera forma, textura y limpieza sin cambiar por completo tu estilo.',
+    media: visualMedia.intent.cut,
   },
-  cambiar: {
-    label: 'Cambiar con criterio',
-    service: services[2],
-    media: visualMedia.barber,
-    reason: 'Revisa cabello, barba y acabado en una sesión más completa.',
+  barba: {
+    label: 'Barba',
+    caption: 'Perfilado y afeitado',
+    service: services[1],
+    media: visualMedia.intent.beard,
   },
-  preparar: {
-    label: 'Prepararme para algo importante',
-    service: services[2],
-    media: visualMedia.club,
-    reason: 'Resuelve el conjunto con tiempo suficiente para afinar cada detalle.',
+  nails: {
+    label: 'Nails',
+    caption: 'Manos y pies',
+    service: services[3],
+    media: visualMedia.intent.nails,
   },
-  expresar: {
-    label: 'Expresar algo propio',
+  tattoo: {
+    label: 'Tattoo',
+    caption: 'Diseño y cotización',
     service: services[4],
-    media: visualMedia.tattoo,
-    reason: 'Convierte una idea en una pieza trabajada con conversación y técnica.',
+    media: visualMedia.intent.tattoo,
   },
 } as const;
 
 type FinderIntent = keyof typeof finderResults;
-
-const serviceVisuals = [
-  visualMedia.barber,
-  visualMedia.barberDetail,
-  visualMedia.club,
-  visualMedia.nails,
-  visualMedia.tattoo,
-  visualMedia.club,
-] as const;
 
 function Arrow() {
   return <span aria-hidden="true">↗</span>;
@@ -77,13 +64,13 @@ function Arrow() {
 
 export function HomePage() {
   const [activeHero, setActiveHero] = useState(0);
-  const [intent, setIntent] = useState<FinderIntent>('mantener');
+  const [intent, setIntent] = useState<FinderIntent>('corte');
   const [activeService, setActiveService] = useState(0);
   const reduceMotion = useReducedMotion();
   const currentHero = heroScenes[activeHero];
   const result = finderResults[intent];
   const currentService = services[activeService];
-  const currentServiceMedia = serviceVisuals[activeService];
+  const currentServiceMedia = visualMedia.services[activeService];
 
   return (
     <>
@@ -92,16 +79,16 @@ export function HomePage() {
         description="Indian Club reúne barbería, tattoo, nails y café en el centro de Loja. Conoce servicios, promociones, trabajos y reservas."
       />
 
-      <div className="art-home">
+      <div className="art-home art-home--flow-polish">
         <section className="film-hero" aria-labelledby="film-hero-title">
           <AnimatePresence mode="wait">
             <motion.div
               className="film-hero__media"
               key={currentHero.label}
-              initial={reduceMotion ? false : { opacity: 0, scale: 1.04 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={reduceMotion ? undefined : { opacity: 0 }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              initial={reduceMotion ? false : { opacity: 0, scale: 1.035, filter: 'blur(8px)' }}
+              animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+              exit={reduceMotion ? undefined : { opacity: 0, scale: 0.99 }}
+              transition={{ duration: 0.72, ease: [0.16, 1, 0.3, 1] }}
             >
               <ViewportVideo
                 src={currentHero.media.video}
@@ -124,7 +111,17 @@ export function HomePage() {
 
             <div className="film-hero__statement">
               <h1 id="film-hero-title">Barbería, tattoo, nails y café.</h1>
-              <p>{currentHero.copy}</p>
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={currentHero.copy}
+                  initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={reduceMotion ? undefined : { opacity: 0, y: -8 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {currentHero.copy}
+                </motion.p>
+              </AnimatePresence>
               <div className="film-hero__actions">
                 <a href={bookingUrl} target="_blank" rel="noreferrer">Reservar cita <Arrow /></a>
                 <Link to="/style-book">Ver trabajos</Link>
@@ -160,46 +157,51 @@ export function HomePage() {
         <div className="brand-ticker" aria-hidden="true">
           <motion.div
             animate={reduceMotion ? undefined : { x: ['0%', '-50%'] }}
-            transition={{ duration: 22, repeat: Infinity, ease: 'linear' }}
+            transition={{ duration: 26, repeat: Infinity, ease: 'linear' }}
           >
             <span>INDIAN CLUB</span><i>BARBERÍA</i><span>TATTOO</span><i>NAILS</i><span>CAFÉ</span>
             <span>INDIAN CLUB</span><i>BARBERÍA</i><span>TATTOO</span><i>NAILS</i><span>CAFÉ</span>
           </motion.div>
         </div>
 
-        <section className="intent-canvas" aria-labelledby="intent-title">
+        <section className="intent-canvas intent-canvas--direct" aria-labelledby="intent-title">
           <div className="intent-canvas__media">
             <AnimatePresence mode="wait">
               <motion.div
                 key={intent}
-                initial={reduceMotion ? false : { opacity: 0, clipPath: 'inset(0 0 100% 0)' }}
-                animate={{ opacity: 1, clipPath: 'inset(0 0 0% 0)' }}
-                exit={reduceMotion ? undefined : { opacity: 0 }}
-                transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                initial={reduceMotion ? false : { opacity: 0, clipPath: 'inset(0 0 12% 0)', scale: 1.025 }}
+                animate={{ opacity: 1, clipPath: 'inset(0 0 0% 0)', scale: 1 }}
+                exit={reduceMotion ? undefined : { opacity: 0, clipPath: 'inset(12% 0 0 0)' }}
+                transition={{ duration: 0.58, ease: [0.16, 1, 0.3, 1] }}
               >
                 <ViewportVideo
                   src={result.media.video}
                   poster={result.media.poster}
-                  label={result.label}
+                  label={`${result.label} en Indian Club`}
                 />
               </motion.div>
             </AnimatePresence>
-            <div className="intent-canvas__result">
-              <span>Te recomendamos</span>
-              <h3>{result.service.title}</h3>
-              <p>{result.reason}</p>
-              <dl>
-                <div><dt>Tiempo</dt><dd>{result.service.duration}</dd></div>
-                <div><dt>Precio</dt><dd>{result.service.price}</dd></div>
-              </dl>
-              <Link to={`/servicios/${result.service.slug}`}>Ver servicio <Arrow /></Link>
-            </div>
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                className="intent-canvas__result intent-canvas__result--simple"
+                key={result.service.slug}
+                initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={reduceMotion ? undefined : { opacity: 0, y: -12 }}
+                transition={{ duration: 0.34 }}
+              >
+                <small>{result.caption}</small>
+                <h3>{result.service.title}</h3>
+                <Link to={`/servicios/${result.service.slug}`}>Ver servicio <Arrow /></Link>
+              </motion.div>
+            </AnimatePresence>
           </div>
 
-          <div className="intent-canvas__choices">
+          <div className="intent-canvas__choices intent-canvas__choices--direct">
             <span>Encuentra tu servicio</span>
-            <h2 id="intent-title">¿Qué quieres hacer hoy?</h2>
-            <div role="group" aria-label="Selecciona tu intención">
+            <h2 id="intent-title">¿Qué buscas hoy?</h2>
+            <div role="group" aria-label="Selecciona un servicio">
               {(Object.keys(finderResults) as FinderIntent[]).map((key) => (
                 <button
                   type="button"
@@ -210,7 +212,8 @@ export function HomePage() {
                   onMouseEnter={() => setIntent(key)}
                   onFocus={() => setIntent(key)}
                 >
-                  {finderResults[key].label}
+                  <strong>{finderResults[key].label}</strong>
+                  <small>{finderResults[key].caption}</small>
                 </button>
               ))}
             </div>
@@ -223,10 +226,10 @@ export function HomePage() {
               <motion.div
                 className="service-stage__visual"
                 key={currentService.slug}
-                initial={reduceMotion ? false : { opacity: 0, scale: 1.04 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={reduceMotion ? undefined : { opacity: 0 }}
-                transition={{ duration: 0.55 }}
+                initial={reduceMotion ? false : { opacity: 0, scale: 1.025, x: -14 }}
+                animate={{ opacity: 1, scale: 1, x: 0 }}
+                exit={reduceMotion ? undefined : { opacity: 0, x: 14 }}
+                transition={{ duration: 0.52, ease: [0.16, 1, 0.3, 1] }}
               >
                 <ViewportVideo
                   src={currentServiceMedia.video}
@@ -265,9 +268,9 @@ export function HomePage() {
 
         <section className="club-film" aria-labelledby="club-film-title">
           <ViewportVideo
-            src={visualMedia.club.video}
-            poster={visualMedia.club.poster}
-            label="Ambiente de café y club"
+            src={visualMedia.clubFeature.video}
+            poster={visualMedia.clubFeature.poster}
+            label="Ambiente social de café y club"
           />
           <div className="club-film__veil" />
           <div className="club-film__copy">
@@ -299,7 +302,7 @@ export function HomePage() {
 
         <section className="journal-scene" aria-labelledby="journal-scene-title">
           <div className="journal-scene__lead">
-            <img src={visualMedia.barberDetail.poster} alt="Detalle de un corte profesional" loading="lazy" />
+            <img src={visualMedia.journal.poster} alt="Ambiente profesional de barbería" loading="lazy" />
             <div>
               <span>Inspírate</span>
               <h2 id="journal-scene-title">Consejos que siguen funcionando después de la cita.</h2>
