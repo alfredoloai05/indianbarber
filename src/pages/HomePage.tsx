@@ -3,31 +3,8 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Seo } from '../components/Seo';
 import { ViewportVideo } from '../components/ViewportVideo';
-import { bookingUrl, brand, contact, journalItems, promotions, services, stats } from '../data/site';
+import { bookingUrl, brand, contact, journalItems, promotions, services } from '../data/site';
 import { visualMedia } from '../data/visualMedia';
-
-const heroScenes = [
-  {
-    label: 'Barbería',
-    copy: 'Cortes, barba y acabado con precisión.',
-    media: visualMedia.hero.barber,
-  },
-  {
-    label: 'Tattoo',
-    copy: 'Diseño, conversación y técnica.',
-    media: visualMedia.hero.tattoo,
-  },
-  {
-    label: 'Nails',
-    copy: 'Manos, pies y detalle profesional.',
-    media: visualMedia.hero.nails,
-  },
-  {
-    label: 'El Club',
-    copy: 'Café, parqueo y una visita sin apuro.',
-    media: visualMedia.hero.club,
-  },
-] as const;
 
 const finderResults = {
   corte: {
@@ -63,11 +40,9 @@ function Arrow() {
 }
 
 export function HomePage() {
-  const [activeHero, setActiveHero] = useState(0);
   const [intent, setIntent] = useState<FinderIntent>('corte');
   const [activeService, setActiveService] = useState(0);
   const reduceMotion = useReducedMotion();
-  const currentHero = heroScenes[activeHero];
   const result = finderResults[intent];
   const currentService = services[activeService];
   const currentServiceMedia = visualMedia.services[activeService];
@@ -81,24 +56,20 @@ export function HomePage() {
 
       <div className="art-home art-home--flow-polish">
         <section className="film-hero" aria-labelledby="film-hero-title">
-          <AnimatePresence mode="wait">
-            <motion.div
-              className="film-hero__media"
-              key={currentHero.label}
-              initial={reduceMotion ? false : { opacity: 0, scale: 1.035, filter: 'blur(8px)' }}
-              animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-              exit={reduceMotion ? undefined : { opacity: 0, scale: 0.99 }}
-              transition={{ duration: 0.72, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <ViewportVideo
-                src={currentHero.media.video}
-                poster={currentHero.media.poster}
-                label={`${currentHero.label} en Indian Club`}
-                priority
-              />
-              <div className="film-hero__veil" />
-            </motion.div>
-          </AnimatePresence>
+          <motion.div
+            className="film-hero__media"
+            initial={reduceMotion ? false : { opacity: 0, scale: 1.035, filter: 'blur(8px)' }}
+            animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+            transition={{ duration: 0.72, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <ViewportVideo
+              src={visualMedia.hero.barber.video}
+              poster={visualMedia.hero.barber.poster}
+              label="Barbería en Indian Club"
+              priority
+            />
+            <div className="film-hero__veil" />
+          </motion.div>
 
           <div className="film-hero__content">
             <div className="film-hero__identity">
@@ -111,46 +82,12 @@ export function HomePage() {
 
             <div className="film-hero__statement">
               <h1 id="film-hero-title">Barbería, tattoo, nails y café.</h1>
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={currentHero.copy}
-                  initial={reduceMotion ? false : { opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={reduceMotion ? undefined : { opacity: 0, y: -8 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {currentHero.copy}
-                </motion.p>
-              </AnimatePresence>
+              <p>Cortes, barba y acabado con precisión.</p>
               <div className="film-hero__actions">
                 <a href={bookingUrl} target="_blank" rel="noreferrer">Reservar cita <Arrow /></a>
                 <Link to="/style-book">Ver trabajos</Link>
               </div>
             </div>
-          </div>
-
-          <div className="film-hero__switcher" role="tablist" aria-label="Áreas de Indian Club">
-            {heroScenes.map((scene, index) => (
-              <button
-                key={scene.label}
-                type="button"
-                role="tab"
-                aria-selected={activeHero === index}
-                className={activeHero === index ? 'is-active' : undefined}
-                onMouseEnter={() => setActiveHero(index)}
-                onFocus={() => setActiveHero(index)}
-                onClick={() => setActiveHero(index)}
-              >
-                <strong>{scene.label}</strong>
-                <span>{scene.copy}</span>
-              </button>
-            ))}
-          </div>
-
-          <div className="film-hero__stats" aria-label="Datos de Indian Club">
-            {stats.map((stat) => (
-              <span key={stat.label}><strong>{stat.value}</strong>{stat.label}</span>
-            ))}
           </div>
         </section>
 
