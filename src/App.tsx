@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import { SiteLayout } from './components/SiteLayout';
+import { AdminPage } from './pages/AdminPage';
 import { ArticlePage } from './pages/ArticlePage';
 import { ClubPage } from './pages/ClubPage';
 import { ContactPage } from './pages/ContactPage';
@@ -14,6 +15,7 @@ import { TeamPage } from './pages/TeamPage';
 function App() {
   return (
     <Routes>
+      <Route path="admin" element={<AdminPage />} />
       <Route element={<SiteLayout />}>
         <Route index element={<HomePage />} />
         <Route path="servicios" element={<ServicesPage />} />
