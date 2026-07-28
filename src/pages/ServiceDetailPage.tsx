@@ -1,7 +1,13 @@
 import { Link, useParams } from 'react-router-dom';
 import { BookingBand } from '../components/BookingBand';
 import { Seo } from '../components/Seo';
-import { services } from '../data/site';
+import { bookingUrl, services } from '../data/site';
+
+const stepDescriptions = [
+  'Alineamos intención, referencia, mantenimiento y límites antes de comenzar.',
+  'La técnica se adapta a tu rostro, textura, piel o idea; nunca al revés.',
+  'Cerramos con acabado, cuidados y una expectativa clara sobre cómo sostener el resultado.',
+];
 
 export function ServiceDetailPage() {
   const { slug } = useParams();
@@ -20,41 +26,62 @@ export function ServiceDetailPage() {
   return (
     <>
       <Seo title={service.title} description={service.detail} />
-      <section className={`service-detail service-detail--${service.number}`}>
-        <div className="service-detail__rail">
-          <Link to="/servicios">← Todos los servicios</Link>
-          <span>{service.number} / 04</span>
+
+      <section className="service-detail-final">
+        <div className="service-detail-final__media">
+          <img src={service.image} alt={service.imageAlt} loading="eager" />
+          <div aria-hidden="true" />
+          <span>{service.number} / 06</span>
         </div>
-        <div className="service-detail__hero">
-          <p className="eyebrow">{service.kicker}</p>
+        <div className="service-detail-final__copy">
+          <Link to="/servicios">← Todos los servicios</Link>
+          <p className="final-kicker">{service.kicker}</p>
           <h1>{service.title}</h1>
           <p>{service.detail}</p>
-        </div>
-        <div className="service-detail__facts">
-          <div><span>Duración</span><strong>{service.duration}</strong></div>
-          <div><span>Firma</span><strong>{service.signature}</strong></div>
+          <dl>
+            <div><dt>Tiempo estimado</dt><dd>{service.duration}</dd></div>
+            <div><dt>Precio de referencia</dt><dd>{service.price}</dd></div>
+            <div><dt>Firma</dt><dd>{service.signature}</dd></div>
+          </dl>
+          <a className="final-button" href={bookingUrl} target="_blank" rel="noreferrer">Ver disponibilidad ↗</a>
         </div>
       </section>
 
-      <section className="service-ritual">
+      <section className="service-ritual service-ritual--final">
         <div>
-          <p className="eyebrow">El proceso</p>
-          <h2>Una secuencia con intención.</h2>
+          <p className="final-kicker">La secuencia</p>
+          <h2>El resultado empieza antes de la herramienta.</h2>
+          <p>La consulta inicial evita copiar una referencia que no corresponde a tu textura, tu rutina o el resultado que realmente necesitas sostener.</p>
         </div>
         <ol>
           {service.ritual.map((step, index) => (
             <li key={step}>
               <span>0{index + 1}</span>
               <strong>{step}</strong>
-              <p>{index === 0 ? 'Alineamos expectativas antes de comenzar.' : index === 1 ? 'La técnica se adapta a la persona, no al revés.' : 'Cerramos con claridad para sostener el resultado.'}</p>
+              <p>{stepDescriptions[index]}</p>
             </li>
           ))}
         </ol>
       </section>
 
-      <section className="service-note">
+      <section className="service-inclusions">
+        <div>
+          <span>Incluye o puede incluir</span>
+          <h2>Todo lo importante, sin letra pequeña visual.</h2>
+        </div>
+        <ul>
+          {service.inclusions.map((item, index) => (
+            <li key={item}><span>0{index + 1}</span><strong>{item}</strong></li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="service-note service-note--complete">
         <span>Antes de reservar</span>
-        <p>Los precios y disponibilidad definitivos se muestran en AgendaPro. Esta página explica el criterio y la experiencia antes de enviar al flujo externo.</p>
+        <p>
+          La disponibilidad, profesional y valor final aparecen en AgendaPro. Tattoo, diseños personalizados y algunos tratamientos pueden requerir cotización o conversación previa.
+        </p>
+        <Link to="/contacto">Resolver una duda ↗</Link>
       </section>
 
       <BookingBand />
