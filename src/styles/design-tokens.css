@@ -9,7 +9,12 @@
   --color-gold: #d4af68;
   --color-gold-bright: #f0d397;
   --color-gold-muted: #8f7241;
+  --color-indian-red: #e31b2d;
+  --color-indian-red-soft: #ff4555;
+  --color-indian-blue: #0878b9;
+  --color-indian-blue-soft: #27a4dc;
   --color-line: rgb(212 175 104 / 0.24);
+  --color-brand-line: rgb(8 120 185 / 0.32);
   --color-white: #fffdf8;
 
   --font-display: 'Cormorant Garamond', 'Times New Roman', serif;
@@ -35,7 +40,9 @@
   --radius-lg: 1.25rem;
 
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-brand: cubic-bezier(0.16, 1, 0.3, 1);
   --shadow-floating: 0 30px 100px rgb(0 0 0 / 0.48);
+  --shadow-brand: 0 30px 100px rgb(8 120 185 / 0.12), 0 18px 70px rgb(227 27 45 / 0.1);
   --container: min(1380px, calc(100vw - clamp(1.5rem, 5vw, 7rem)));
   --reading: 760px;
 }
