@@ -8,21 +8,21 @@ export function InspirePage() {
     <>
       <Seo
         title="Inspírate"
-        description="Guías de estilo, oficio y cultura de Indian Club para tomar mejores decisiones sobre presencia, cuidado y ritual."
+        description="Guías de estilo, oficio y cultura de Indian Club para elegir, cuidar y mantener tu imagen."
       />
       <PageHero
         index="04 / JOURNAL"
         eyebrow="Inspírate"
-        title="Ideas para mirar mejor, "
-        accent="no para copiar."
-        description="El contenido editorial debe ayudar a decidir, mantener y comprender. No existe para llenar una cuadrícula ni perseguir palabras clave sin valor."
+        title="Ideas para elegir mejor, "
+        accent="cuidar y mantener."
+        description="Guías breves sobre cortes, textura, diagnóstico, cuidado y la experiencia de Indian Club."
       />
 
       <section className="journal-cover">
         <div className="journal-cover__feature">
           <span>Edición 01 · House Notes</span>
-          <h2>La presencia se construye antes de entrar al espejo.</h2>
-          <p>Una colección de criterios sobre forma, tiempo, cuidado y cultura para tomar decisiones que sigan funcionando fuera de Indian.</p>
+          <h2>Tu estilo continúa después de salir de Indian.</h2>
+          <p>Consejos sobre forma, mantenimiento, productos y hábitos para sostener mejor cada resultado.</p>
         </div>
         <div className="journal-cover__mark" aria-hidden="true">HOUSE<br />NOTES</div>
       </section>
