@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import {
+  AnimatePresence,
   motion,
   useReducedMotion,
   useScroll,
@@ -42,6 +43,45 @@ const finderResults = {
   },
 } as const;
 
+const heroScenes = [
+  {
+    label: 'Barbería',
+    number: '01',
+    image: media.barber,
+    alt: 'Corte realizado dentro de Indian Club en Loja',
+    to: '/servicios/corte-de-autor',
+    detail: 'Corte, barba y acabado con lectura de forma, textura y rutina.',
+    accent: 'blue',
+  },
+  {
+    label: 'Tattoo',
+    number: '02',
+    image: media.tattoo,
+    alt: 'Tatuaje realizado por Indian Club Tattoo Studio',
+    to: '/servicios/tattoo-studio',
+    detail: 'Diseño, conversación y ejecución para piezas con intención propia.',
+    accent: 'red',
+  },
+  {
+    label: 'Nails',
+    number: '03',
+    image: media.nails,
+    alt: 'Diseño de uñas realizado por Indian Club Nails Studio',
+    to: '/servicios/nails-studio',
+    detail: 'Manos y pies trabajados con técnica, higiene y detalle.',
+    accent: 'blue',
+  },
+  {
+    label: 'El Club',
+    number: '04',
+    image: media.parking,
+    alt: 'Espacio de Indian Club en Loja',
+    to: '/club',
+    detail: 'Café, parqueo y una casa pensada para disfrutar la visita completa.',
+    accent: 'red',
+  },
+] as const;
+
 type FinderIntent = keyof typeof finderResults;
 
 function Arrow() {
@@ -50,6 +90,7 @@ function Arrow() {
 
 export function HomePage() {
   const [intent, setIntent] = useState<FinderIntent>('mantener');
+  const [activeScene, setActiveScene] = useState(0);
   const heroRef = useRef<HTMLElement>(null);
   const reduceMotion = useReducedMotion();
   const result = finderResults[intent];
@@ -57,10 +98,9 @@ export function HomePage() {
     target: heroRef,
     offset: ['start start', 'end start'],
   });
-  const heroScale = useTransform(heroProgress, [0, 1], [1, reduceMotion ? 1 : 1.12]);
-  const heroCopyY = useTransform(heroProgress, [0, 1], [0, reduceMotion ? 0 : 120]);
-  const logoRotate = useTransform(heroProgress, [0, 1], [0, reduceMotion ? 0 : 16]);
-  const logoY = useTransform(heroProgress, [0, 1], [0, reduceMotion ? 0 : -70]);
+  const stageScale = useTransform(heroProgress, [0, 1], [1, reduceMotion ? 1 : 0.965]);
+  const brandY = useTransform(heroProgress, [0, 1], [0, reduceMotion ? 0 : -54]);
+  const brandOpacity = useTransform(heroProgress, [0, 0.72, 1], [1, 0.96, 0]);
 
   const reveal = {
     hidden: reduceMotion ? { opacity: 1 } : { opacity: 0, y: 36 },
@@ -71,74 +111,82 @@ export function HomePage() {
     <>
       <Seo
         title="Indian Club · Barbería, estética, tattoo y café"
-        description="Indian Club es barbería, nails, tattoo studio y cafetería en Loja. Una marca con más de siete años de experiencia y una identidad propia."
+        description="Indian Club es barbería, nails, tattoo studio y cafetería en Loja. Reserva online y conoce sus trabajos, servicios, promociones y equipo."
       />
 
-      <div className="final-home final-home--brand">
-        <section className="brand-hero" ref={heroRef} aria-labelledby="brand-hero-title">
-          <div className="brand-hero__media">
-            <motion.img
-              src={media.hero}
-              alt="Cliente atendido dentro de Indian Club en Loja"
-              loading="eager"
-              fetchPriority="high"
-              style={{ scale: heroScale }}
-            />
-            <div className="brand-hero__veil" />
+      <div className="final-home final-home--brand final-home--immersive">
+        <section className="immersive-hero" ref={heroRef} aria-label="Experiencias de Indian Club">
+          <motion.div className="immersive-hero__stage" style={{ scale: stageScale }}>
+            {heroScenes.map((scene, index) => {
+              const active = activeScene === index;
+
+              return (
+                <motion.article
+                  className={`immersive-hero__panel immersive-hero__panel--${scene.accent}${active ? ' is-active' : ''}`}
+                  key={scene.label}
+                  animate={{ flexGrow: active ? 3.8 : 1 }}
+                  initial={reduceMotion ? false : { clipPath: 'inset(100% 0 0 0)' }}
+                  whileInView={{ clipPath: 'inset(0% 0 0 0)' }}
+                  viewport={{ once: true }}
+                  transition={{
+                    flexGrow: { duration: 0.62, ease: [0.16, 1, 0.3, 1] },
+                    clipPath: { duration: 0.9, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] },
+                  }}
+                  onMouseEnter={() => setActiveScene(index)}
+                  onFocus={() => setActiveScene(index)}
+                >
+                  <Link to={scene.to} aria-label={`${scene.label}: ${scene.detail}`}>
+                    <motion.img
+                      src={scene.image}
+                      alt={scene.alt}
+                      loading={index < 2 ? 'eager' : 'lazy'}
+                      fetchPriority={index === 0 ? 'high' : undefined}
+                      animate={{ scale: active ? 1.015 : 1.09 }}
+                      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    />
+                    <span className="immersive-hero__wash" aria-hidden="true" />
+                    <span className="immersive-hero__number">{scene.number}</span>
+                    <div className="immersive-hero__label">
+                      <small>Indian Club</small>
+                      <strong>{scene.label}</strong>
+                    </div>
+                  </Link>
+                </motion.article>
+              );
+            })}
+          </motion.div>
+
+          <motion.div className="immersive-hero__brand" style={{ y: brandY, opacity: brandOpacity }}>
+            <img src={brand.logoLockup} alt="Indian Club" />
+            <div className="immersive-hero__brand-meta">
+              <span>Loja · Ecuador</span>
+              <span>Desde 2018</span>
+            </div>
+          </motion.div>
+
+          <div className="immersive-hero__active-copy" aria-live="polite">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={heroScenes[activeScene].label}
+                initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={reduceMotion ? undefined : { opacity: 0, y: -10 }}
+                transition={{ duration: 0.32 }}
+              >
+                <span>{heroScenes[activeScene].number} / 04</span>
+                <p>{heroScenes[activeScene].detail}</p>
+              </motion.div>
+            </AnimatePresence>
           </div>
 
-          <motion.div className="brand-hero__copy" style={{ y: heroCopyY }}>
-            <motion.p
-              className="brand-hero__eyebrow"
-              initial={reduceMotion ? false : { opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-            >
-              Loja · Ecuador · Desde 2018
-            </motion.p>
-            <motion.h1
-              id="brand-hero-title"
-              initial={reduceMotion ? false : { opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
-            >
-              Indian no es un nombre decorativo.
-              <em>Es la identidad de la casa.</em>
-            </motion.h1>
-            <motion.p
-              className="brand-hero__lead"
-              initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.75, delay: 0.34 }}
-            >
-              Barbería, nails, tattoo y café reunidos alrededor de una marca reconocible: el indio, el rojo, el azul y una forma propia de recibir.
-            </motion.p>
-            <motion.div
-              className="final-actions"
-              initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.48 }}
-            >
-              <a className="final-button final-button--brand" href={bookingUrl} target="_blank" rel="noreferrer">
-                Reservar en Indian <Arrow />
-              </a>
-              <Link className="final-link final-link--brand" to="/style-book">Ver trabajos reales</Link>
-            </motion.div>
-          </motion.div>
+          <div className="immersive-hero__actions">
+            <a className="final-button final-button--brand immersive-hero__booking" href={bookingUrl} target="_blank" rel="noreferrer">
+              Reservar <Arrow />
+            </a>
+            <Link className="immersive-hero__discover" to="/style-book">Ver trabajos reales</Link>
+          </div>
 
-          <motion.div
-            className="brand-hero__emblem"
-            style={{ rotate: logoRotate, y: logoY }}
-            initial={reduceMotion ? false : { opacity: 0, scale: 0.72 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="brand-hero__orbit" aria-hidden="true" />
-            <img src={brand.logoMark} alt="Símbolo del indio de Indian Club" />
-            <span>IDENTIDAD / 01</span>
-          </motion.div>
-
-          <div className="brand-hero__proof" aria-label="Datos de Indian Club">
+          <div className="immersive-hero__proof" aria-label="Datos de Indian Club">
             {stats.map((stat) => (
               <div key={stat.label}>
                 <strong>{stat.value}</strong>
@@ -146,94 +194,15 @@ export function HomePage() {
               </div>
             ))}
           </div>
-        </section>
 
-        <div className="brand-marquee" aria-hidden="true">
-          <motion.div
-            animate={reduceMotion ? undefined : { x: ['0%', '-50%'] }}
-            transition={{ duration: 24, repeat: Infinity, ease: 'linear' }}
-          >
-            <span>INDIAN CLUB</span><i>◆</i><span>BARBERÍA</span><i>◆</i><span>NAILS</span><i>◆</i><span>TATTOO</span><i>◆</i><span>CAFÉ</span><i>◆</i>
-            <span>INDIAN CLUB</span><i>◆</i><span>BARBERÍA</span><i>◆</i><span>NAILS</span><i>◆</i><span>TATTOO</span><i>◆</i><span>CAFÉ</span><i>◆</i>
-          </motion.div>
-        </div>
-
-        <section className="brand-origin" aria-labelledby="brand-origin-title">
-          <div className="brand-origin__sticky">
-            <span>01 / La marca</span>
-            <motion.img
-              src={brand.logoMark}
-              alt="Logotipo histórico de Indian Club"
-              whileInView={reduceMotion ? undefined : { rotate: [0, -2, 2, 0], scale: [0.96, 1.02, 1] }}
-              viewport={{ once: true, amount: 0.6 }}
-              transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-            />
-            <h2 id="brand-origin-title">El indio se mantiene. La experiencia evoluciona.</h2>
-            <p>{brand.campaign} funciona como concepto de campaña, pero Indian Club sigue siendo la marca principal.</p>
-          </div>
-
-          <div className="brand-origin__chapters">
-            <motion.article
-              variants={reveal}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.35 }}
-              transition={{ duration: 0.7 }}
-            >
-              <div className="brand-origin__photo brand-origin__photo--barber">
-                <img src={media.barber} alt="Corte realizado dentro de Indian Club" loading="lazy" />
-                <span>TRABAJO REAL / 01</span>
-              </div>
-              <div>
-                <small>El oficio</small>
-                <h3>La marca vive en el resultado, no solo en el logo.</h3>
-                <p>Los cortes del Style Book y las fotografías del equipo conectan la nueva web con la experiencia que ya existe en Loja.</p>
-              </div>
-            </motion.article>
-
-            <motion.article
-              variants={reveal}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.35 }}
-              transition={{ duration: 0.7 }}
-            >
-              <div className="brand-origin__photo brand-origin__photo--tattoo">
-                <img src={media.tattoo} alt="Tatuaje realizado por Indian Club Tattoo Studio" loading="lazy" />
-                <span>TRAZO REAL / 02</span>
-              </div>
-              <div>
-                <small>La expresión</small>
-                <h3>Barbería, tattoo y nails hablan con voces distintas dentro de la misma casa.</h3>
-                <p>El rojo y el azul aparecen como pulsos de identidad. El negro sigue dando profundidad y el dorado queda como acento premium.</p>
-              </div>
-            </motion.article>
-
-            <motion.article
-              variants={reveal}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.35 }}
-              transition={{ duration: 0.7 }}
-            >
-              <div className="brand-origin__photo brand-origin__photo--nails">
-                <img src={media.nails} alt="Diseño de uñas realizado por Indian Club Nails Studio" loading="lazy" />
-                <span>DETALLE REAL / 03</span>
-              </div>
-              <div>
-                <small>El detalle</small>
-                <h3>La personalidad se construye con contraste, color y movimiento.</h3>
-                <p>Las transiciones, el emblema animado y la fotografía propia evitan que la web parezca una plantilla intercambiable.</p>
-              </div>
-            </motion.article>
-          </div>
+          <span className="immersive-hero__scroll" aria-hidden="true">Desliza para explorar</span>
         </section>
 
         <section className="ritual-finder" aria-labelledby="ritual-finder-title">
           <div className="ritual-finder__intro">
-            <span>02 / Orientación</span>
+            <span>01 / Orientación</span>
             <h2 id="ritual-finder-title">¿Qué necesitas hoy?</h2>
-            <p>No hace falta memorizar el catálogo. Empieza por la intención y nosotros te mostramos una ruta clara.</p>
+            <p>Empieza por la intención y encuentra una ruta clara entre los servicios de Indian Club.</p>
           </div>
 
           <div className="ritual-finder__choices" role="group" aria-label="Selecciona tu intención">
@@ -281,10 +250,10 @@ export function HomePage() {
         <section className="service-reel" aria-labelledby="service-reel-title">
           <header className="service-reel__header">
             <div>
-              <span>03 / El oficio</span>
-              <h2 id="service-reel-title">Seis maneras de entrar a Indian.</h2>
+              <span>02 / Servicios</span>
+              <h2 id="service-reel-title">Todo lo que puedes vivir en Indian.</h2>
             </div>
-            <p>Trabajos y categorías reales de la casa, con intención, tiempo y precio de referencia antes de llegar a la agenda.</p>
+            <p>Conoce cada servicio, su duración y precio de referencia antes de pasar a la agenda.</p>
           </header>
 
           <div className="service-reel__list">
@@ -319,9 +288,9 @@ export function HomePage() {
 
         <section className="official-stylebook" aria-labelledby="official-stylebook-title">
           <div className="official-stylebook__heading">
-            <span>04 / Style Book real</span>
-            <h2 id="official-stylebook-title">La web deja de imaginar Indian y empieza a mostrarlo.</h2>
-            <p>Estas imágenes provienen del Style Book publicado por la marca. La producción final podrá ampliar el archivo sin perder este lenguaje.</p>
+            <span>03 / Style Book</span>
+            <h2 id="official-stylebook-title">Cortes, trazos y detalles hechos en Indian Club.</h2>
+            <p>Una selección del trabajo publicado por barbería, tattoo y nails en Loja.</p>
             <Link className="final-link final-link--brand" to="/style-book">Abrir galería completa</Link>
           </div>
           <div className="official-stylebook__track">
@@ -343,25 +312,25 @@ export function HomePage() {
 
         <section className="house-scene" aria-labelledby="house-scene-title">
           <div className="house-scene__media">
-            <img src={media.cafe} alt="Cafetería de ambiente cálido y oscuro" loading="lazy" />
+            <img src={media.parking} alt="Espacio de Indian Club en Loja" loading="lazy" />
           </div>
           <div className="house-scene__copy">
-            <span>05 / La casa</span>
-            <h2 id="house-scene-title">Llegar antes también forma parte de la visita.</h2>
-            <p>La cafetería convierte la espera en pausa. El parqueo exclusivo reduce fricción. La conversación y el espacio sostienen el ritmo del servicio.</p>
+            <span>04 / El Club</span>
+            <h2 id="house-scene-title">Una visita completa, desde que llegas.</h2>
+            <p>La cafetería acompaña la pausa, el parqueo facilita la llegada y cada área mantiene el mismo nivel de cuidado.</p>
             <div className="house-scene__facts">
               <div><strong>Café</strong><span>Antes o después de tu cita</span></div>
               <div><strong>Parqueo</strong><span>Exclusivo para clientes</span></div>
               <div><strong>Centro de Loja</strong><span>24 de Mayo y José Antonio Eguiguren</span></div>
             </div>
-            <Link className="final-link final-link--brand" to="/club">Entrar a la casa</Link>
+            <Link className="final-link final-link--brand" to="/club">Conocer el club</Link>
           </div>
         </section>
 
         <section className="craft-sequence" aria-labelledby="craft-sequence-title">
           <header>
-            <span>06 / El recorrido</span>
-            <h2 id="craft-sequence-title">Una secuencia con ritmo, oficio y memoria.</h2>
+            <span>05 / La experiencia</span>
+            <h2 id="craft-sequence-title">Escuchar, crear, cuidar y volver.</h2>
           </header>
           <div className="craft-sequence__line" aria-hidden="true" />
           <div className="craft-sequence__steps">
@@ -384,9 +353,9 @@ export function HomePage() {
 
         <section className="promotion-ledger" aria-labelledby="promotion-ledger-title">
           <header>
-            <span>07 / Ahora en Indian</span>
-            <h2 id="promotion-ledger-title">Promociones con condiciones claras.</h2>
-            <p>Sin popups, contadores falsos ni urgencia inventada. Revisa la opción y confirma directamente con el centro.</p>
+            <span>06 / Promociones</span>
+            <h2 id="promotion-ledger-title">Beneficios vigentes en Indian Club.</h2>
+            <p>Revisa la promoción y confirma disponibilidad directamente con el centro.</p>
           </header>
           <div>
             {promotions.map((promotion, index) => (
@@ -403,8 +372,8 @@ export function HomePage() {
 
         <section className="house-notes" aria-labelledby="house-notes-title">
           <header>
-            <span>08 / House Notes</span>
-            <h2 id="house-notes-title">Contenido para decidir mejor y mantener lo que eliges.</h2>
+            <span>07 / Inspírate</span>
+            <h2 id="house-notes-title">Ideas para elegir, cuidar y mantener tu estilo.</h2>
           </header>
           <div className="house-notes__lead">
             <img src={journalItems[0].image} alt="Trabajo detallado de barbería realizado en Indian Club" loading="lazy" />
@@ -429,8 +398,8 @@ export function HomePage() {
 
         <section className="final-visit" aria-labelledby="final-visit-title">
           <div className="final-visit__address">
-            <span>09 / Llegar</span>
-            <h2 id="final-visit-title">Tu cita tiene un lugar, un horario y una salida clara.</h2>
+            <span>08 / Visítanos</span>
+            <h2 id="final-visit-title">Indian Club está en el centro de Loja.</h2>
             <address>
               <strong>{contact.address}</strong>
               <span>{contact.city}</span>
@@ -447,9 +416,9 @@ export function HomePage() {
           </div>
 
           <div className="final-visit__booking">
-            <span>AgendaPro / Fase 1</span>
+            <span>Reservas online</span>
             <h3>Elige servicio, profesional y horario.</h3>
-            <p>La reserva continúa en el sistema actual para no interrumpir la operación de Indian Club.</p>
+            <p>Consulta la disponibilidad y confirma tu cita en AgendaPro.</p>
             <a className="final-button final-button--dark" href={bookingUrl} target="_blank" rel="noreferrer">
               Reservar ahora <Arrow />
             </a>
