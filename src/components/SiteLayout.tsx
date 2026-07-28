@@ -8,8 +8,11 @@ import {
   useSpring,
 } from 'framer-motion';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
-import { BrandIntro } from './BrandIntro';
 import { bookingUrl, brand, contact, navItems } from '../data/site';
+
+const desktopItems = navItems.filter((item) =>
+  ['/servicios', '/equipo', '/club', '/style-book'].includes(item.to),
+);
 
 export function SiteLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -49,42 +52,28 @@ export function SiteLayout() {
 
   return (
     <div className="site-shell site-shell--brand">
-      <BrandIntro />
       <a className="skip-link" href="#main-content">Saltar al contenido</a>
       <motion.div className="scroll-progress" style={{ scaleX: progress }} />
-      <div className="brand-stripe" aria-hidden="true"><span /><i /><b /></div>
       {!reduceMotion ? <motion.div className="ambient-cursor" style={{ x: cursorX, y: cursorY }} aria-hidden="true" /> : null}
 
-      <header className="site-header site-header--brand">
-        <Link className="brand brand--logo" to="/" aria-label="Indian Club, inicio" onClick={() => setMenuOpen(false)}>
-          <motion.img
-            src={brand.logoMark}
-            alt=""
-            className="brand__symbol"
-            whileHover={reduceMotion ? undefined : { rotate: -3, scale: 1.06 }}
-            transition={{ type: 'spring', stiffness: 240, damping: 18 }}
-          />
-          <span className="brand__wording">
-            <span className="brand__name">INDIAN CLUB</span>
-            <span className="brand__claim">Barbería · Estética · Tattoo · Café</span>
-          </span>
+      <header className="site-header site-header--compact">
+        <Link className="compact-brand" to="/" aria-label="Indian Club, inicio" onClick={() => setMenuOpen(false)}>
+          <img src={brand.logoMark} alt="" />
+          <span>INDIAN CLUB</span>
         </Link>
 
-        <nav className="desktop-nav" aria-label="Navegación principal">
-          {navItems.slice(1, 6).map((item) => (
+        <nav className="compact-nav" aria-label="Navegación principal">
+          {desktopItems.map((item) => (
             <NavLink key={item.to} to={item.to} className={({ isActive }) => (isActive ? 'is-active' : undefined)}>
               {item.label}
             </NavLink>
           ))}
         </nav>
 
-        <div className="header-actions">
-          <Link className="header-contact" to="/contacto">Llegar</Link>
-          <a className="button button--compact button--brand" href={bookingUrl} target="_blank" rel="noreferrer">
-            Reservar
-          </a>
+        <div className="compact-actions">
+          <a className="compact-booking" href={bookingUrl} target="_blank" rel="noreferrer">Reservar</a>
           <button
-            className="menu-trigger"
+            className="menu-trigger menu-trigger--compact"
             type="button"
             aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
             aria-expanded={menuOpen}
@@ -105,27 +94,17 @@ export function SiteLayout() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.24 }}
           >
-            <motion.img
-              className="menu-overlay__brand-mark"
-              src={brand.logoMark}
-              alt=""
-              initial={reduceMotion ? false : { opacity: 0, scale: 0.72, rotate: -8 }}
-              animate={{ opacity: 0.12, scale: 1, rotate: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            />
-            <div className="menu-overlay__index">INDIAN CLUB / LOJA</div>
+            <img className="menu-overlay__brand-mark" src={brand.logoMark} alt="" />
+            <div className="menu-overlay__index">INDIAN CLUB · LOJA</div>
             <nav aria-label="Navegación móvil">
               {navItems.map((item, index) => (
                 <motion.div
                   key={item.to}
                   initial={reduceMotion ? false : { opacity: 0, y: 18 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: reduceMotion ? 0 : index * 0.045 }}
+                  transition={{ delay: reduceMotion ? 0 : index * 0.04 }}
                 >
-                  <NavLink to={item.to} onClick={() => setMenuOpen(false)}>
-                    <span>0{index + 1}</span>
-                    {item.label}
-                  </NavLink>
+                  <NavLink to={item.to} onClick={() => setMenuOpen(false)}>{item.label}</NavLink>
                 </motion.div>
               ))}
             </nav>
@@ -146,15 +125,15 @@ export function SiteLayout() {
             <img src={brand.logoMark} alt="" />
             <span>INDIAN CLUB</span>
           </Link>
-          <span>{brand.campaign} · Loja, Ecuador</span>
+          <span>Barbería · Tattoo · Nails · Café</span>
           <address>{contact.address}<br />{contact.city}</address>
         </div>
         <div className="site-footer__links">
           <Link to="/servicios">Servicios</Link>
           <Link to="/equipo">Equipo</Link>
-          <Link to="/club">La casa</Link>
+          <Link to="/club">El Club</Link>
           <Link to="/style-book">Style Book</Link>
-          <Link to="/inspirate">House Notes</Link>
+          <Link to="/inspirate">Inspírate</Link>
           <Link to="/contacto">Contacto</Link>
         </div>
         <div className="site-footer__links">
@@ -172,7 +151,7 @@ export function SiteLayout() {
         </div>
         <div className="site-footer__legal">
           <span>© 2026 Indian Club</span>
-          <span>El indio, el rojo y el azul forman parte de la identidad de la casa.</span>
+          <span>Loja, Ecuador</span>
         </div>
       </footer>
     </div>
