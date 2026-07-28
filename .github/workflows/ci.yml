@@ -22,9 +22,16 @@ jobs:
         run: npm install
 
       - name: Lint
-        run: npm run lint
+        shell: bash
+        run: |
+          set +e
+          npm run lint > lint-output.log 2>&1
+          status=$?
+          cat lint-output.log
+          exit $status
 
       - name: Build
+        if: success()
         shell: bash
         run: |
           set +e
@@ -33,10 +40,12 @@ jobs:
           cat build-output.log
           exit $status
 
-      - name: Upload build diagnostics
+      - name: Upload quality diagnostics
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: build-diagnostics
-          path: build-output.log
+          name: quality-diagnostics
+          path: |
+            lint-output.log
+            build-output.log
           if-no-files-found: ignore
