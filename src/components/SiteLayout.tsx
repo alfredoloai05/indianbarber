@@ -8,7 +8,8 @@ import {
   useSpring,
 } from 'framer-motion';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
-import { bookingUrl, contact, navItems } from '../data/site';
+import { BrandIntro } from './BrandIntro';
+import { bookingUrl, brand, contact, navItems } from '../data/site';
 
 export function SiteLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -47,15 +48,26 @@ export function SiteLayout() {
   }, [cursorX, cursorY, reduceMotion]);
 
   return (
-    <div className="site-shell">
+    <div className="site-shell site-shell--brand">
+      <BrandIntro />
       <a className="skip-link" href="#main-content">Saltar al contenido</a>
       <motion.div className="scroll-progress" style={{ scaleX: progress }} />
+      <div className="brand-stripe" aria-hidden="true"><span /><i /><b /></div>
       {!reduceMotion ? <motion.div className="ambient-cursor" style={{ x: cursorX, y: cursorY }} aria-hidden="true" /> : null}
 
-      <header className="site-header">
-        <Link className="brand" to="/" aria-label="Indian Club, inicio" onClick={() => setMenuOpen(false)}>
-          <span className="brand__name">INDIAN CLUB</span>
-          <span className="brand__claim">House of Presence</span>
+      <header className="site-header site-header--brand">
+        <Link className="brand brand--logo" to="/" aria-label="Indian Club, inicio" onClick={() => setMenuOpen(false)}>
+          <motion.img
+            src={brand.logoMark}
+            alt=""
+            className="brand__symbol"
+            whileHover={reduceMotion ? undefined : { rotate: -3, scale: 1.06 }}
+            transition={{ type: 'spring', stiffness: 240, damping: 18 }}
+          />
+          <span className="brand__wording">
+            <span className="brand__name">INDIAN CLUB</span>
+            <span className="brand__claim">Barbería · Estética · Tattoo · Café</span>
+          </span>
         </Link>
 
         <nav className="desktop-nav" aria-label="Navegación principal">
@@ -68,7 +80,7 @@ export function SiteLayout() {
 
         <div className="header-actions">
           <Link className="header-contact" to="/contacto">Llegar</Link>
-          <a className="button button--compact" href={bookingUrl} target="_blank" rel="noreferrer">
+          <a className="button button--compact button--brand" href={bookingUrl} target="_blank" rel="noreferrer">
             Reservar
           </a>
           <button
@@ -87,13 +99,21 @@ export function SiteLayout() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            className="menu-overlay"
+            className="menu-overlay menu-overlay--brand"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.24 }}
           >
-            <div className="menu-overlay__index">IC / HOUSE 01</div>
+            <motion.img
+              className="menu-overlay__brand-mark"
+              src={brand.logoMark}
+              alt=""
+              initial={reduceMotion ? false : { opacity: 0, scale: 0.72, rotate: -8 }}
+              animate={{ opacity: 0.12, scale: 1, rotate: 0 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            />
+            <div className="menu-overlay__index">INDIAN CLUB / LOJA</div>
             <nav aria-label="Navegación móvil">
               {navItems.map((item, index) => (
                 <motion.div
@@ -120,10 +140,13 @@ export function SiteLayout() {
         <Outlet />
       </main>
 
-      <footer className="site-footer site-footer--complete">
+      <footer className="site-footer site-footer--complete site-footer--brand">
         <div className="site-footer__identity">
-          <Link className="site-footer__brand" to="/">INDIAN CLUB</Link>
-          <span>House of Presence · Loja, Ecuador</span>
+          <Link className="site-footer__brand site-footer__brand-lockup" to="/">
+            <img src={brand.logoMark} alt="" />
+            <span>INDIAN CLUB</span>
+          </Link>
+          <span>{brand.campaign} · Loja, Ecuador</span>
           <address>{contact.address}<br />{contact.city}</address>
         </div>
         <div className="site-footer__links">
@@ -149,7 +172,7 @@ export function SiteLayout() {
         </div>
         <div className="site-footer__legal">
           <span>© 2026 Indian Club</span>
-          <span>Diseñado para cuidar presencia, tiempo y elección.</span>
+          <span>El indio, el rojo y el azul forman parte de la identidad de la casa.</span>
         </div>
       </footer>
     </div>
