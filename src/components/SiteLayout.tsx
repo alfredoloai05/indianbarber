@@ -134,6 +134,13 @@ export function SiteLayout() {
           <Link to="/inspirate">House Notes</Link>
           <Link to="/contacto">Contacto</Link>
         </div>
+        <div className="site-footer__links">
+          <Link to="/promociones">Promociones</Link>
+          <Link to="/productos">Productos</Link>
+          <Link to="/tarjetas-regalo">Tarjetas regalo</Link>
+          <Link to="/reservar">Cómo reservar</Link>
+          <a href={contact.mapHref} target="_blank" rel="noreferrer">Abrir mapa ↗</a>
+        </div>
         <div className="site-footer__contact">
           <a href={contact.phoneHref}>{contact.phone}</a>
           <a href={contact.whatsappHref} target="_blank" rel="noreferrer">WhatsApp</a>
