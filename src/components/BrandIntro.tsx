@@ -4,24 +4,22 @@ import { brand } from '../data/site';
 
 export function BrandIntro() {
   const reduceMotion = useReducedMotion();
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.sessionStorage.getItem('indian-brand-intro') !== 'played';
+  });
 
   useEffect(() => {
-    if (reduceMotion) return undefined;
+    if (!visible || reduceMotion) return undefined;
 
-    const hasPlayed = window.sessionStorage.getItem('indian-brand-intro');
-    if (hasPlayed) return undefined;
-
-    setVisible(true);
     window.sessionStorage.setItem('indian-brand-intro', 'played');
-
     const timer = window.setTimeout(() => setVisible(false), 1900);
     return () => window.clearTimeout(timer);
-  }, [reduceMotion]);
+  }, [reduceMotion, visible]);
 
   return (
     <AnimatePresence>
-      {visible ? (
+      {visible && !reduceMotion ? (
         <motion.div
           className="brand-intro"
           initial={{ opacity: 1 }}
