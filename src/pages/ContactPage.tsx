@@ -1,52 +1,56 @@
 import { BookingBand } from '../components/BookingBand';
-import { PageHero } from '../components/PageHero';
 import { Seo } from '../components/Seo';
-import { bookingUrl } from '../data/site';
+import { bookingUrl, contact, media } from '../data/site';
 
 export function ContactPage() {
   return (
     <>
       <Seo
         title="Contacto"
-        description="Información de llegada y contacto de Indian Club en Loja, Ecuador. Reserva tu cita mediante el flujo actual de AgendaPro."
-      />
-      <PageHero
-        index="05 / LLEGAR"
-        eyebrow="Contacto"
-        title="La experiencia empieza "
-        accent="antes de abrir la puerta."
-        description="Dirección, horarios, canales de soporte y políticas se publicarán únicamente después de validarlos con la operación de Indian Club."
+        description="Dirección, horarios, teléfono, WhatsApp y reservas de Indian Club en Loja, Ecuador."
       />
 
-      <section className="contact-board">
-        <div className="contact-board__map" role="img" aria-label="Mapa conceptual de Loja, Ecuador">
-          <span>LOJA / ECUADOR</span>
-          <div aria-hidden="true">IC</div>
+      <section className="chapter-intro">
+        <div className="chapter-intro__index">07 / LLEGAR</div>
+        <div>
+          <p className="final-kicker">Contacto Indian Club</p>
+          <h1>La experiencia empieza <em>antes de abrir la puerta.</em></h1>
         </div>
-        <div className="contact-board__details">
+        <p className="chapter-intro__aside">
+          Aquí tienes la información necesaria para llegar, consultar y reservar sin buscarla entre promociones o textos decorativos.
+        </p>
+      </section>
+
+      <section className="real-contact-grid">
+        <a className="real-contact-grid__map" href={contact.mapHref} target="_blank" rel="noreferrer">
+          <img src={media.exterior} alt="Fachada nocturna de un espacio de cuidado personal" loading="eager" />
           <div>
-            <span>Ciudad</span>
-            <strong>Loja, Ecuador</strong>
+            <span>LOJA / ECUADOR</span>
+            <strong>{contact.address}<br />Abrir ubicación ↗</strong>
           </div>
-          <div>
-            <span>Dirección exacta</span>
-            <strong>Por validar con el cliente</strong>
-          </div>
+        </a>
+
+        <div className="real-contact-grid__details">
+          <div><span>Dirección</span><strong>{contact.address}<br />{contact.city}</strong></div>
+          <div><span>Teléfono</span><a href={contact.phoneHref}>{contact.phone}</a></div>
+          <div><span>WhatsApp</span><a href={contact.whatsappHref} target="_blank" rel="noreferrer">{contact.whatsapp} ↗</a></div>
+          <div><span>Correo</span><a href={contact.emailHref}>{contact.email}</a></div>
           <div>
             <span>Horarios</span>
-            <strong>Por validar con la operación</strong>
+            {contact.hours.map((item) => <strong key={item.days}>{item.days}: {item.value}<br /></strong>)}
           </div>
-          <div>
-            <span>Reservas</span>
-            <a href={bookingUrl} target="_blank" rel="noreferrer">Abrir flujo actual ↗</a>
+          <div className="real-contact-grid__actions">
+            <a className="final-button" href={bookingUrl} target="_blank" rel="noreferrer">Reservar cita ↗</a>
+            <a className="final-link" href={contact.whatsappHref} target="_blank" rel="noreferrer">Hacer una consulta</a>
           </div>
         </div>
       </section>
 
-      <section className="contact-principles">
-        <article><span>01</span><h2>Antes de llegar</h2><p>Revisa servicio, duración y disponibilidad en el flujo de reserva.</p></article>
-        <article><span>02</span><h2>Durante la visita</h2><p>Conversa sobre rutina, expectativas y mantenimiento antes de iniciar.</p></article>
-        <article><span>03</span><h2>Después</h2><p>Conserva las recomendaciones y vuelve cuando la forma lo necesite, no por presión artificial.</p></article>
+      <section className="contact-journey">
+        <article><span>01</span><h2>Antes</h2><p>Revisa servicio, duración, precio de referencia y disponibilidad.</p></article>
+        <article><span>02</span><h2>Llegar</h2><p>Estamos en el centro de Loja y contamos con parqueo exclusivo para clientes.</p></article>
+        <article><span>03</span><h2>Durante</h2><p>Conversa sobre rutina, expectativas y mantenimiento antes de iniciar.</p></article>
+        <article><span>04</span><h2>Después</h2><p>Conserva las recomendaciones y vuelve cuando la forma o el cuidado lo necesiten.</p></article>
       </section>
 
       <BookingBand />

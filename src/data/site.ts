@@ -1,76 +1,185 @@
-export const bookingUrl = import.meta.env.VITE_BOOKING_URL || 'https://indianclubec.com';
+export const bookingUrl = import.meta.env.VITE_BOOKING_URL || 'https://indianclubec.com/citas';
+
+export const contact = {
+  phone: '07 272 6042',
+  phoneHref: 'tel:+59372726042',
+  whatsapp: '+593 96 383 6857',
+  whatsappHref: 'https://api.whatsapp.com/send?phone=593963836857',
+  email: 'indianbarberia@gmail.com',
+  emailHref: 'mailto:indianbarberia@gmail.com',
+  address: '24 de Mayo y José Antonio Eguiguren',
+  city: 'Loja 110102, Ecuador',
+  mapHref: 'https://www.google.com/maps/search/?api=1&query=24+de+Mayo+%26+Jose+Antonio+Eguiguren+Loja+Ecuador',
+  hours: [
+    { days: 'Lunes a sábado', value: '09h00 — 21h00' },
+    { days: 'Domingo', value: '10h00 — 14h00' },
+  ],
+};
 
 export const navItems = [
   { label: 'Inicio', to: '/' },
   { label: 'Servicios', to: '/servicios' },
   { label: 'Equipo', to: '/equipo' },
   { label: 'La casa', to: '/club' },
+  { label: 'Style Book', to: '/style-book' },
   { label: 'Inspírate', to: '/inspirate' },
   { label: 'Contacto', to: '/contacto' },
+];
+
+export const media = {
+  hero: 'https://images.unsplash.com/photo-1747830280502-f33d7305a714?auto=format&fit=crop&q=86&w=2200',
+  barber: 'https://images.unsplash.com/photo-1747830280502-f33d7305a714?auto=format&fit=crop&q=82&w=1800',
+  tattoo: 'https://images.unsplash.com/photo-1775135981378-4e7c1767436d?auto=format&fit=crop&q=82&w=1800',
+  cafe: 'https://images.unsplash.com/photo-1780398645489-85968d809196?auto=format&fit=crop&q=82&w=1800',
+  exterior: 'https://images.unsplash.com/photo-1771865600306-d4ef4c06ae16?auto=format&fit=crop&q=82&w=1800',
+};
+
+export const stats = [
+  { value: '+7', label: 'años de experiencia' },
+  { value: '4.7', label: 'estrellas en más de 420 reseñas' },
+  { value: '+100k', label: 'clientes atendidos' },
 ];
 
 export const services = [
   {
     slug: 'corte-de-autor',
     number: '01',
-    title: 'Corte de autor',
-    kicker: 'Arquitectura, textura y caída.',
+    title: 'Corte de cabello',
+    kicker: 'Forma, textura y mantenimiento.',
     detail:
-      'Una lectura completa de rostro, cabello y rutina para construir una forma que siga funcionando cuando salgas de la silla.',
+      'Corte profesional con lectura de rostro, textura y rutina. Incluye exfoliación facial, masaje, lavado de cuero cabelludo y peinado.',
     duration: '45–60 min',
     signature: 'Precisión visible',
-    ritual: ['Diagnóstico', 'Diseño y estructura', 'Acabado y recomendación'],
+    price: 'USD 10',
+    image: media.barber,
+    imageAlt: 'Barbero trabajando un corte con luz cinematográfica',
+    ritual: ['Diagnóstico y referencia', 'Corte y estructura', 'Lavado, peinado y recomendación'],
+    inclusions: ['Exfoliación facial', 'Masaje', 'Lavado', 'Peinado'],
   },
   {
     slug: 'barba-ritual',
     number: '02',
-    title: 'Barba ritual',
-    kicker: 'Contorno, vapor y cuidado.',
+    title: 'Barba y afeitado',
+    kicker: 'Contorno, calor y cuidado.',
     detail:
-      'Definición sin rigidez, preparación de piel y acabados pensados para sostener la presencia más allá de la fotografía.',
-    duration: '35–45 min',
+      'Perfilado preciso, afeitado clásico o trabajo con cera caliente para definir facciones y cuidar la piel sin rigidez.',
+    duration: '30–45 min',
     signature: 'Detalle sereno',
-    ritual: ['Lectura de crecimiento', 'Preparación de piel', 'Contorno y cierre'],
+    price: 'Desde USD 6',
+    image: media.barber,
+    imageAlt: 'Trabajo de barbería enfocado en precisión y detalle',
+    ritual: ['Lectura de crecimiento', 'Preparación de piel', 'Contorno, afeitado y cierre'],
+    inclusions: ['Toallas calientes', 'Perfilado', 'Cuidado de piel', 'Acabado'],
   },
   {
-    slug: 'signature-combo',
+    slug: 'combos-indian',
     number: '03',
-    title: 'Signature combo',
+    title: 'Combos Indian',
     kicker: 'Una sesión. Una lectura completa.',
     detail:
-      'Corte y barba trabajados como un único sistema visual, con tiempo suficiente para conversar, ajustar y cerrar cada decisión.',
-    duration: '80–95 min',
+      'Corte Essential, Premium, Pro y Servicio VIP para resolver cabello, barba, piel y detalles en una sola visita.',
+    duration: '60–100 min',
     signature: 'Ritual completo',
-    ritual: ['Consulta integral', 'Corte y barba', 'Styling y cuidado'],
+    price: 'Desde USD 14',
+    image: media.hero,
+    imageAlt: 'Sesión integral de grooming en barbería',
+    ritual: ['Consulta integral', 'Servicio combinado', 'Styling y cuidado posterior'],
+    inclusions: ['Cabello', 'Barba o cejas', 'Opciones de limpieza facial', 'Bebida en servicio VIP'],
   },
   {
-    slug: 'tattoo-nails',
+    slug: 'nails-studio',
     number: '04',
-    title: 'Tattoo & Nails',
-    kicker: 'Expresión dentro de la casa.',
+    title: 'Nails Studio',
+    kicker: 'Cuidado preciso de manos y pies.',
     detail:
-      'Servicios de expresión personal conectados por el mismo estándar: criterio, higiene, escucha y una estética con lenguaje propio.',
-    duration: 'Según sesión',
+      'Manicura, pedicura, semipermanente, base rubber y Soft Gel realizados con técnica, higiene y un acabado limpio.',
+    duration: 'Según servicio',
+    signature: 'Cuidado en detalle',
+    price: 'Consultar disponibilidad',
+    image: media.cafe,
+    imageAlt: 'Atmósfera cálida y cuidada dentro de Indian Club',
+    ritual: ['Evaluación y elección', 'Preparación e higiene', 'Aplicación y cuidado final'],
+    inclusions: ['Manicura', 'Pedicura', 'Semipermanente', 'Soft Gel'],
+  },
+  {
+    slug: 'tattoo-studio',
+    number: '05',
+    title: 'Tattoo Studio',
+    kicker: 'Idea, trazo y permanencia.',
+    detail:
+      'Cotización, conversación creativa y ejecución responsable para convertir una idea en una pieza con intención y cuidado posterior.',
+    duration: 'Según pieza',
     signature: 'Lenguaje propio',
-    ritual: ['Brief creativo', 'Propuesta y preparación', 'Ejecución y cuidado'],
+    price: 'Cotización gratuita',
+    image: media.tattoo,
+    imageAlt: 'Artista tatuando a un cliente en un estudio oscuro',
+    ritual: ['Brief y cotización', 'Diseño y preparación', 'Ejecución y guía de cuidado'],
+    inclusions: ['Cotización', 'Diseño', 'Preparación higiénica', 'Guía posterior'],
+  },
+  {
+    slug: 'servicios-especiales',
+    number: '06',
+    title: 'Servicios especiales',
+    kicker: 'Pequeños detalles que cambian el conjunto.',
+    detail:
+      'Cejas, depilación con cera, lifting, tinturado de barba, rizos, limpieza facial y peinado para completar el ritual.',
+    duration: '15–60 min',
+    signature: 'Acabado consciente',
+    price: 'Desde USD 3',
+    image: media.exterior,
+    imageAlt: 'Vista nocturna de un espacio de cuidado personal',
+    ritual: ['Seleccionar complemento', 'Preparación', 'Aplicación y recomendaciones'],
+    inclusions: ['Cejas', 'Cera', 'Lifting', 'Limpieza facial'],
   },
 ];
 
 export const team = [
   {
-    name: 'Dirección creativa',
-    role: 'Corte, imagen y diagnóstico',
-    statement: 'Lee la presencia antes de proponer una forma.',
+    name: 'Barbería & peluquería',
+    role: 'Cortes, barba, afeitado y diagnóstico',
+    statement: 'La referencia abre la conversación; el oficio decide cómo hacerla funcionar en la vida real.',
+    image: media.barber,
   },
   {
-    name: 'Barbería de precisión',
-    role: 'Barba, fades y acabados',
-    statement: 'Trabaja el detalle para que el resultado siga funcionando después de la visita.',
+    name: 'Nails Studio',
+    role: 'Manicura, pedicura y sistemas semipermanentes',
+    statement: 'Higiene, técnica y cuidado del detalle antes que una tendencia pasajera.',
+    image: media.cafe,
   },
   {
-    name: 'Expresión y cultura',
-    role: 'Tattoo, nails y colaboraciones',
-    statement: 'Conecta técnica, higiene y una voz visual propia.',
+    name: 'Tattoo Studio',
+    role: 'Diseño, cotización y ejecución',
+    statement: 'Una pieza permanente empieza escuchando la historia y delimitando bien la intención.',
+    image: media.tattoo,
+  },
+  {
+    name: 'Hospitalidad Indian',
+    role: 'Café, recepción y acompañamiento',
+    statement: 'La visita se siente completa cuando el espacio entiende tu tiempo antes, durante y después del servicio.',
+    image: media.exterior,
+  },
+];
+
+export const promotions = [
+  {
+    eyebrow: 'Primera visita',
+    title: '20% en tu primer servicio de tattoo o nails',
+    note: 'Disponible para nuevos clientes y sujeto a preconfirmación del centro.',
+  },
+  {
+    eyebrow: 'Martes',
+    title: '3 × 2 en servicios de barbería',
+    note: 'Puedes compartirlo con dos amigos o combinar tres servicios para ti.',
+  },
+  {
+    eyebrow: 'Jueves',
+    title: '20% para universitarios',
+    note: 'Presenta tu carnet antes de iniciar el servicio.',
+  },
+  {
+    eyebrow: 'Tu cumpleaños',
+    title: '15% de descuento',
+    note: 'Disponible todos los días y sujeto a validación del centro.',
   },
 ];
 
@@ -81,6 +190,7 @@ export const journalItems = [
     type: 'Guía',
     title: 'Cómo elegir un corte que funcione también dentro de tres semanas',
     excerpt: 'Una guía para pensar en caída, mantenimiento y rutina antes de elegir una referencia.',
+    image: media.barber,
   },
   {
     slug: 'diagnostico-antes-del-corte',
@@ -88,6 +198,7 @@ export const journalItems = [
     type: 'Oficio',
     title: 'Lo que un buen diagnóstico revela antes del primer corte',
     excerpt: 'Rostro, textura, hábitos y contexto: la conversación que evita decisiones genéricas.',
+    image: media.hero,
   },
   {
     slug: 'cafe-conversacion-y-ritmo',
@@ -95,6 +206,7 @@ export const journalItems = [
     type: 'Casa',
     title: 'Café, conversación y el valor de bajar el ritmo',
     excerpt: 'Por qué Indian Club se diseña como un lugar para llegar, no solo como una cita que cumplir.',
+    image: media.cafe,
   },
 ];
 
