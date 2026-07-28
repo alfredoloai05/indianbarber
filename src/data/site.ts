@@ -1,4 +1,4 @@
-export const bookingUrl = 'https://indianclubec.com';
+export const bookingUrl = import.meta.env.VITE_BOOKING_URL || 'https://indianclubec.com';
 
 export const navItems = [
   { label: 'Inicio', to: '/' },
