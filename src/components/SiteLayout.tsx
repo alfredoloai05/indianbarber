@@ -1,11 +1,21 @@
 import { useEffect, useState } from 'react';
-import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion';
+import {
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+} from 'framer-motion';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
-import { bookingUrl, navItems } from '../data/site';
+import { bookingUrl, contact, navItems } from '../data/site';
 
 export function SiteLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
+  const reduceMotion = useReducedMotion();
+  const cursorX = useMotionValue(-500);
+  const cursorY = useMotionValue(-500);
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, {
     stiffness: 140,
@@ -24,10 +34,23 @@ export function SiteLayout() {
     };
   }, [menuOpen]);
 
+  useEffect(() => {
+    if (reduceMotion || !window.matchMedia('(pointer: fine)').matches) return undefined;
+
+    const moveCursor = (event: PointerEvent) => {
+      cursorX.set(event.clientX);
+      cursorY.set(event.clientY);
+    };
+
+    window.addEventListener('pointermove', moveCursor, { passive: true });
+    return () => window.removeEventListener('pointermove', moveCursor);
+  }, [cursorX, cursorY, reduceMotion]);
+
   return (
     <div className="site-shell">
       <a className="skip-link" href="#main-content">Saltar al contenido</a>
       <motion.div className="scroll-progress" style={{ scaleX: progress }} />
+      {!reduceMotion ? <motion.div className="ambient-cursor" style={{ x: cursorX, y: cursorY }} aria-hidden="true" /> : null}
 
       <header className="site-header">
         <Link className="brand" to="/" aria-label="Indian Club, inicio" onClick={() => setMenuOpen(false)}>
@@ -75,9 +98,9 @@ export function SiteLayout() {
               {navItems.map((item, index) => (
                 <motion.div
                   key={item.to}
-                  initial={{ opacity: 0, y: 18 }}
+                  initial={reduceMotion ? false : { opacity: 0, y: 18 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.045 }}
+                  transition={{ delay: reduceMotion ? 0 : index * 0.045 }}
                 >
                   <NavLink to={item.to} onClick={() => setMenuOpen(false)}>
                     <span>0{index + 1}</span>
@@ -97,19 +120,30 @@ export function SiteLayout() {
         <Outlet />
       </main>
 
-      <footer className="site-footer">
-        <div>
+      <footer className="site-footer site-footer--complete">
+        <div className="site-footer__identity">
           <Link className="site-footer__brand" to="/">INDIAN CLUB</Link>
           <span>House of Presence · Loja, Ecuador</span>
+          <address>{contact.address}<br />{contact.city}</address>
         </div>
         <div className="site-footer__links">
           <Link to="/servicios">Servicios</Link>
           <Link to="/equipo">Equipo</Link>
           <Link to="/club">La casa</Link>
+          <Link to="/style-book">Style Book</Link>
+          <Link to="/inspirate">House Notes</Link>
           <Link to="/contacto">Contacto</Link>
-          <a href={bookingUrl} target="_blank" rel="noreferrer">Reservar</a>
         </div>
-        <span>© 2026 Indian Club</span>
+        <div className="site-footer__contact">
+          <a href={contact.phoneHref}>{contact.phone}</a>
+          <a href={contact.whatsappHref} target="_blank" rel="noreferrer">WhatsApp</a>
+          <a href={contact.emailHref}>{contact.email}</a>
+          <a href={bookingUrl} target="_blank" rel="noreferrer">Reservar ↗</a>
+        </div>
+        <div className="site-footer__legal">
+          <span>© 2026 Indian Club</span>
+          <span>Diseñado para cuidar presencia, tiempo y elección.</span>
+        </div>
       </footer>
     </div>
   );
