@@ -36,27 +36,35 @@ export function AdminPage() {
       setMessage(error.message);
     } else {
       const nextItems = (data ?? []) as SiteContent[];
+      const first = nextItems[0] ?? null;
       setItems(nextItems);
-      if (!selectedId && nextItems[0]) {
-        setSelectedId(nextItems[0].id);
-        setDraftValue(JSON.stringify(nextItems[0].value, null, 2));
-      }
+      setSelectedId(first?.id ?? null);
+      setDraftValue(first ? JSON.stringify(first.value, null, 2) : '');
     }
     setLoading(false);
-  }, [selectedId]);
-
-  useEffect(() => {
-    if (!supabase) return;
-    void supabase.auth.getSession().then(({ data }) => setSession(data.session));
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, nextSession) => {
-      setSession(nextSession);
-    });
-    return () => listener.subscription.unsubscribe();
   }, []);
 
   useEffect(() => {
-    if (session) void loadContent();
-  }, [loadContent, session]);
+    if (!supabase) return;
+
+    void supabase.auth.getSession().then(({ data }) => {
+      setSession(data.session);
+      if (data.session) void loadContent();
+    });
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      setSession(nextSession);
+      if (nextSession) {
+        void loadContent();
+      } else {
+        setItems([]);
+        setSelectedId(null);
+        setDraftValue('');
+      }
+    });
+
+    return () => listener.subscription.unsubscribe();
+  }, [loadContent]);
 
   async function handleLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -95,8 +103,6 @@ export function AdminPage() {
   async function signOut() {
     if (!supabase) return;
     await supabase.auth.signOut();
-    setItems([]);
-    setSelectedId(null);
   }
 
   const selected = items.find((item) => item.id === selectedId);
