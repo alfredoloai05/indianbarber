@@ -73,7 +73,7 @@ export function SiteLayout() {
         <div className="compact-actions">
           <a className="compact-booking" href={bookingUrl} target="_blank" rel="noreferrer">Reservar</a>
           <button
-            className="menu-trigger menu-trigger--compact"
+            className={`menu-trigger menu-trigger--compact menu-trigger--clean${menuOpen ? ' is-open' : ''}`}
             type="button"
             aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
             aria-expanded={menuOpen}
