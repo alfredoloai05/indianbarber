@@ -3,8 +3,9 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Seo } from '../components/Seo';
 import { ViewportVideo } from '../components/ViewportVideo';
+import { journalItems } from '../data/journal';
 import { serviceCatalog } from '../data/serviceCatalog';
-import { bookingUrl, brand, contact, journalItems, promotions, services } from '../data/site';
+import { bookingUrl, brand, contact, promotions, services } from '../data/site';
 import { visualMedia } from '../data/visualMedia';
 
 const finderResults = {
