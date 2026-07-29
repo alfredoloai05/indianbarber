@@ -15,6 +15,7 @@ import './styles/art-direction-v3.css';
 import './styles/content-flow-polish.css';
 import './styles/desktop-hero-viewport.css';
 import './styles/services-architecture-v4.css';
+import './styles/global-numbering-cleanup-v5.css';
 
 const root = document.getElementById('root');
 
