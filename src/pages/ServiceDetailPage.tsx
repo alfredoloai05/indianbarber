@@ -1,19 +1,15 @@
 import { Link, useParams } from 'react-router-dom';
 import { BookingBand } from '../components/BookingBand';
 import { Seo } from '../components/Seo';
-import { bookingUrl, services } from '../data/site';
-
-const stepDescriptions = [
-  'Alineamos intención, referencia, mantenimiento y límites antes de comenzar.',
-  'La técnica se adapta a tu rostro, textura, piel o idea; nunca al revés.',
-  'Cerramos con acabado, cuidados y una expectativa clara sobre cómo sostener el resultado.',
-];
+import { ViewportVideo } from '../components/ViewportVideo';
+import { findServiceCatalogArea } from '../data/serviceCatalog';
+import { bookingUrl, contact } from '../data/site';
 
 export function ServiceDetailPage() {
   const { slug } = useParams();
-  const service = services.find((item) => item.slug === slug);
+  const area = findServiceCatalogArea(slug);
 
-  if (!service) {
+  if (!area) {
     return (
       <section className="not-found compact-not-found">
         <span>Servicio no encontrado</span>
@@ -25,63 +21,66 @@ export function ServiceDetailPage() {
 
   return (
     <>
-      <Seo title={service.title} description={service.detail} />
+      <Seo title={area.title} description={area.summary} />
 
-      <section className="service-detail-final">
-        <div className="service-detail-final__media">
-          <img src={service.image} alt={service.imageAlt} loading="eager" />
+      <section className={`catalog-detail-hero catalog-detail-hero--${area.id}`}>
+        <div className="catalog-detail-hero__media">
+          {area.media.kind === 'video' && area.media.video ? (
+            <ViewportVideo
+              src={area.media.video}
+              poster={area.media.poster}
+              label={`${area.title} en Indian Club`}
+              priority
+            />
+          ) : (
+            <img src={area.media.poster} alt={`${area.title} en Indian Club`} loading="eager" />
+          )}
           <div aria-hidden="true" />
-          <span>{service.number} / 06</span>
         </div>
-        <div className="service-detail-final__copy">
+
+        <div className="catalog-detail-hero__copy">
           <Link to="/servicios">← Todos los servicios</Link>
-          <p className="final-kicker">{service.kicker}</p>
-          <h1>{service.title}</h1>
-          <p>{service.detail}</p>
+          <small>{area.eyebrow}</small>
+          <h1>{area.title}</h1>
+          <p>{area.summary}</p>
           <dl>
-            <div><dt>Tiempo estimado</dt><dd>{service.duration}</dd></div>
-            <div><dt>Precio de referencia</dt><dd>{service.price}</dd></div>
-            <div><dt>Firma</dt><dd>{service.signature}</dd></div>
+            <div><dt>Tiempo aproximado</dt><dd>{area.duration}</dd></div>
+            <div><dt>Precio de referencia</dt><dd>{area.price}</dd></div>
           </dl>
-          <a className="final-button" href={bookingUrl} target="_blank" rel="noreferrer">Ver disponibilidad ↗</a>
+          <a href={bookingUrl} target="_blank" rel="noreferrer">Ver disponibilidad ↗</a>
         </div>
       </section>
 
-      <section className="service-ritual service-ritual--final">
-        <div>
-          <p className="final-kicker">La secuencia</p>
-          <h2>El resultado empieza antes de la herramienta.</h2>
-          <p>La consulta inicial ayuda a elegir una referencia que funcione con tu textura, tu rutina y el resultado que quieres mantener.</p>
-        </div>
-        <ol>
-          {service.ritual.map((step, index) => (
-            <li key={step}>
-              <span>0{index + 1}</span>
-              <strong>{step}</strong>
-              <p>{stepDescriptions[index]}</p>
-            </li>
+      <section className="catalog-options" aria-labelledby="catalog-options-title">
+        <header>
+          <span>Opciones disponibles</span>
+          <h2 id="catalog-options-title">Elige lo que necesitas.</h2>
+          <p>El valor y la duración final dependen de la opción elegida y de la disponibilidad del profesional.</p>
+        </header>
+
+        <div className="catalog-options__groups">
+          {area.groups.map((group) => (
+            <section key={group.title}>
+              <h3>{group.title}</h3>
+              <ul>
+                {group.items.map((item) => (
+                  <li key={item}>
+                    <span>{item}</span>
+                    <a href={bookingUrl} target="_blank" rel="noreferrer" aria-label={`Reservar ${item}`}>Reservar ↗</a>
+                  </li>
+                ))}
+              </ul>
+            </section>
           ))}
-        </ol>
-      </section>
-
-      <section className="service-inclusions">
-        <div>
-          <span>Incluye o puede incluir</span>
-          <h2>Todo lo que forma parte del servicio.</h2>
         </div>
-        <ul>
-          {service.inclusions.map((item, index) => (
-            <li key={item}><span>0{index + 1}</span><strong>{item}</strong></li>
-          ))}
-        </ul>
       </section>
 
-      <section className="service-note service-note--complete">
-        <span>Antes de reservar</span>
-        <p>
-          La disponibilidad, profesional y valor final aparecen en AgendaPro. Tattoo, diseños personalizados y algunos tratamientos pueden requerir cotización o conversación previa.
-        </p>
-        <Link to="/contacto">Resolver una duda ↗</Link>
+      <section className="catalog-contact-strip">
+        <div>
+          <span>Consulta directa</span>
+          <h2>¿Necesitas cotización o ayuda para elegir?</h2>
+        </div>
+        <a href={contact.whatsappHref} target="_blank" rel="noreferrer">Escribir por WhatsApp ↗</a>
       </section>
 
       <BookingBand />
