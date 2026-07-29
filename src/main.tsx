@@ -22,6 +22,7 @@ import './styles/club-footer-service-v9.css';
 import './styles/home-service-portals-v10.css';
 import './styles/viewport-service-layouts-v11.css';
 import './styles/service-detail-asymmetry-v12.css';
+import './styles/mobile-menu-team-v13.css';
 
 const root = document.getElementById('root');
 
