@@ -10,22 +10,21 @@ export function ContactPage() {
         description="Dirección, horarios, teléfono, WhatsApp y reservas de Indian Club en Loja, Ecuador."
       />
 
-      <section className="chapter-intro">
-        <div className="chapter-intro__index">07 / LLEGAR</div>
+      <section className="chapter-intro chapter-intro--clean">
         <div>
-          <p className="final-kicker">Contacto Indian Club</p>
-          <h1>La experiencia empieza <em>antes de abrir la puerta.</em></h1>
+          <p className="final-kicker">Contacto</p>
+          <h1>Visítanos en <em>el centro de Loja.</em></h1>
         </div>
         <p className="chapter-intro__aside">
-          Aquí tienes la información necesaria para llegar, consultar y reservar sin buscarla entre promociones o textos decorativos.
+          Encuentra aquí la dirección, horarios y canales de contacto para reservar o resolver una consulta.
         </p>
       </section>
 
       <section className="real-contact-grid">
         <a className="real-contact-grid__map" href={contact.mapHref} target="_blank" rel="noreferrer">
-          <img src={media.exterior} alt="Fachada nocturna de un espacio de cuidado personal" loading="eager" />
+          <img src={media.exterior} alt="Fachada nocturna de Indian Club" loading="eager" />
           <div>
-            <span>LOJA / ECUADOR</span>
+            <span>Loja · Ecuador</span>
             <strong>{contact.address}<br />Abrir ubicación ↗</strong>
           </div>
         </a>
@@ -46,11 +45,11 @@ export function ContactPage() {
         </div>
       </section>
 
-      <section className="contact-journey">
-        <article><span>01</span><h2>Antes</h2><p>Revisa servicio, duración, precio de referencia y disponibilidad.</p></article>
-        <article><span>02</span><h2>Llegar</h2><p>Estamos en el centro de Loja y contamos con parqueo exclusivo para clientes.</p></article>
-        <article><span>03</span><h2>Durante</h2><p>Conversa sobre rutina, expectativas y mantenimiento antes de iniciar.</p></article>
-        <article><span>04</span><h2>Después</h2><p>Conserva las recomendaciones y vuelve cuando la forma o el cuidado lo necesiten.</p></article>
+      <section className="contact-journey contact-journey--clean">
+        <article><h2>Reserva</h2><p>Elige el servicio, profesional, fecha y horario disponibles.</p></article>
+        <article><h2>Llega</h2><p>Estamos en el centro de Loja y contamos con parqueo exclusivo para clientes.</p></article>
+        <article><h2>Consulta</h2><p>Escríbenos por WhatsApp si necesitas cotización o ayuda para elegir.</p></article>
+        <article><h2>Vuelve</h2><p>Agenda tu mantenimiento cuando el corte, la barba o las uñas lo necesiten.</p></article>
       </section>
 
       <BookingBand />

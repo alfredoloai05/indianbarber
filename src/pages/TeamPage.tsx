@@ -13,14 +13,13 @@ export function TeamPage() {
         description="Conoce a René Chamba, César Castejón, Alisson Ruiz, Santiago Vivanco y Adrián Pardo, profesionales de Indian Club Loja."
       />
 
-      <section className="chapter-intro chapter-intro--brand">
-        <div className="chapter-intro__index">02 / PERSONAS</div>
+      <section className="chapter-intro chapter-intro--brand chapter-intro--clean">
         <div>
-          <p className="final-kicker">El equipo Indian</p>
-          <h1>Personas distintas. <em>Un mismo estándar de cuidado.</em></h1>
+          <p className="final-kicker">Equipo Indian Club</p>
+          <h1>Barbería, tattoo y nails. <em>Personas que conocen su oficio.</em></h1>
         </div>
         <p className="chapter-intro__aside">
-          Barbería, tattoo, nails y coordinación se encuentran en un equipo que conoce la casa y acompaña cada servicio de principio a fin.
+          Conoce al equipo y encuentra al profesional adecuado para el servicio que quieres reservar.
         </p>
         <motion.img
           className="chapter-intro__brand-mark"
@@ -50,14 +49,14 @@ export function TeamPage() {
                 whileHover={reduceMotion ? undefined : { scale: 1.04, rotate: index % 2 === 0 ? -1 : 1 }}
                 transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
               />
-              <span>INDIAN / 0{index + 1}</span>
+              <span>INDIAN CLUB</span>
               <i aria-hidden="true" />
             </div>
             <div className="team-portrait__copy">
               <small>{member.role}</small>
               <h2>{member.name}</h2>
               <blockquote>“{member.statement}”</blockquote>
-              <div className="team-portrait__brand-code">
+              <div className="team-portrait__brand-code" aria-hidden="true">
                 <span>R</span><i /><span>B</span>
               </div>
             </div>
@@ -65,24 +64,27 @@ export function TeamPage() {
         ))}
       </section>
 
-      <section className="craft-code craft-code--complete craft-code--brand">
-        <header>
-          <span>El código de la casa</span>
-          <h2>La confianza se construye con conductas visibles.</h2>
-        </header>
-        <div>
-          <article><span>01</span><strong>Escuchar antes</strong><p>La referencia visual abre una conversación; nunca reemplaza el diagnóstico.</p></article>
-          <article><span>02</span><strong>Explicar con claridad</strong><p>Tiempo, alcance, mantenimiento y límites se entienden antes de iniciar.</p></article>
-          <article><span>03</span><strong>Ejecutar con higiene</strong><p>Herramientas, preparación y cuidado responden al servicio y a la persona.</p></article>
-          <article><span>04</span><strong>Cerrar bien</strong><p>El resultado incluye recomendaciones para sostenerlo fuera de Indian.</p></article>
+      <section className="team-collaboration">
+        <div className="team-collaboration__intro">
+          <span>Trabajo en equipo</span>
+          <h2>Cada especialidad se conecta dentro de la misma casa.</h2>
+          <p>
+            Coordinación, barbería, tattoo y nails comparten la agenda, el espacio y la atención para que puedas resolver tu visita de forma clara.
+          </p>
+        </div>
+        <div className="team-collaboration__areas">
+          <article><strong>Barbería</strong><p>Cortes, barba, afeitado y recomendaciones de mantenimiento.</p></article>
+          <article><strong>Tattoo Studio</strong><p>Cotización, diseño, preparación y cuidado posterior.</p></article>
+          <article><strong>Nails Studio</strong><p>Manicura, pedicura, sistemas semipermanentes y retiro.</p></article>
+          <article><strong>Coordinación</strong><p>Orientación, agenda y acompañamiento entre las distintas áreas.</p></article>
         </div>
       </section>
 
       <section className="team-callout team-callout--brand">
         <img src={brand.logoMark} alt="" />
-        <span>Elegir profesional</span>
-        <h2>Encuentra a la persona adecuada para tu servicio.</h2>
-        <p>Consulta la disponibilidad y elige al profesional que mejor corresponda a la experiencia que buscas.</p>
+        <span>Reserva con el equipo</span>
+        <h2>Elige el servicio y revisa quién está disponible.</h2>
+        <p>AgendaPro te permite consultar horarios y seleccionar al profesional para tu próxima visita.</p>
       </section>
 
       <BookingBand />

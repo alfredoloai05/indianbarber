@@ -11,33 +11,31 @@ export function ProductsPage() {
         description="Productos profesionales para cabello, barba y cuidado personal disponibles en Indian Club Loja."
       />
 
-      <section className="chapter-intro">
-        <div className="chapter-intro__index">06 / PRODUCTOS</div>
+      <section className="chapter-intro chapter-intro--clean">
         <div>
-          <p className="final-kicker">Cuidado fuera de la casa</p>
-          <h1>El producto correcto sostiene el resultado. <em>No lo reemplaza.</em></h1>
+          <p className="final-kicker">Productos</p>
+          <h1>Cuidado para el cabello y la barba <em>entre visitas.</em></h1>
         </div>
         <p className="chapter-intro__aside">
-          Esta selección se consulta directamente con Indian Club. El equipo puede recomendar textura, fijación o cuidado según el servicio y tu rutina.
+          Consulta disponibilidad y recibe una recomendación según el acabado, la fijación o el cuidado que necesitas.
         </p>
       </section>
 
-      <section className="product-editorial">
+      <section className="product-editorial product-editorial--clean">
         <div className="product-editorial__visual">
           <img src={media.barber} alt="Detalle de una sesión profesional de barbería" loading="eager" />
-          <span>CARE / 01</span>
+          <span>Productos Indian Club</span>
         </div>
         <div className="product-editorial__intro">
-          <span>Una decisión útil</span>
-          <h2>Primero entiende qué necesita tu cabello o barba.</h2>
-          <p>Brillo, textura, control, volumen e hidratación resuelven problemas distintos. La recomendación evita comprar un producto que no corresponde al acabado o mantenimiento que buscas.</p>
+          <span>Recomendación profesional</span>
+          <h2>Elige el producto según tu cabello, barba y rutina.</h2>
+          <p>Brillo, textura, control, volumen e hidratación resuelven necesidades distintas. Consulta antes de comprar para elegir la opción adecuada.</p>
         </div>
       </section>
 
-      <section className="product-ledger" aria-label="Productos disponibles en Indian Club">
+      <section className="product-ledger product-ledger--clean" aria-label="Productos disponibles en Indian Club">
         {products.map((product) => (
           <a href={contact.whatsappHref} target="_blank" rel="noreferrer" key={product.title}>
-            <span>{product.number}</span>
             <small>{product.category}</small>
             <h2>{product.title}</h2>
             <p>{product.description}</p>
@@ -47,8 +45,8 @@ export function ProductsPage() {
       </section>
 
       <section className="product-guidance">
-        <div><span>Orientación</span><h2>Pregunta antes de elegir.</h2></div>
-        <p>La disponibilidad puede variar. Consulta por WhatsApp o durante tu visita para confirmar inventario y recibir una recomendación según tu rutina.</p>
+        <div><span>Disponibilidad</span><h2>Consulta antes de elegir.</h2></div>
+        <p>El inventario puede variar. Escríbenos por WhatsApp o pregunta durante tu visita para confirmar productos disponibles.</p>
         <a className="final-button" href={contact.whatsappHref} target="_blank" rel="noreferrer">Consultar productos ↗</a>
       </section>
 

@@ -1,36 +1,35 @@
 import { Link } from 'react-router-dom';
 import { PageHero } from '../components/PageHero';
 import { Seo } from '../components/Seo';
-import { journalItems } from '../data/site';
+import { journalItems } from '../data/journal';
 
 export function InspirePage() {
   return (
     <>
       <Seo
-        title="Inspírate"
-        description="Guías de estilo, oficio y cultura de Indian Club para elegir, cuidar y mantener tu imagen."
+        title="Consejos"
+        description="Guías de Indian Club para elegir un corte y cuidar el cabello, la barba y las uñas entre visitas."
       />
       <PageHero
-        index="04 / JOURNAL"
-        eyebrow="Inspírate"
-        title="Ideas para elegir mejor, "
-        accent="cuidar y mantener."
-        description="Guías breves sobre cortes, textura, diagnóstico, cuidado y la experiencia de Indian Club."
+        eyebrow="Consejos Indian Club"
+        title="Ideas prácticas para "
+        accent="cuidar tu estilo."
+        description="Guías breves sobre cortes, cabello, barba y uñas para mantener mejor cada resultado."
       />
 
-      <section className="journal-cover">
+      <section className="journal-cover journal-cover--practical">
         <div className="journal-cover__feature">
-          <span>Edición 01 · House Notes</span>
+          <span>Cuidado y mantenimiento</span>
           <h2>Tu estilo continúa después de salir de Indian.</h2>
-          <p>Consejos sobre forma, mantenimiento, productos y hábitos para sostener mejor cada resultado.</p>
+          <p>Recomendaciones sencillas para elegir mejor y cuidar el resultado entre una visita y la siguiente.</p>
         </div>
-        <div className="journal-cover__mark" aria-hidden="true">HOUSE<br />NOTES</div>
+        <div className="journal-cover__mark" aria-hidden="true">INDIAN<br />TIPS</div>
       </section>
 
-      <section className="article-index" aria-label="Artículos">
+      <section className="article-index article-index--practical" aria-label="Guías de cuidado">
         {journalItems.map((item) => (
           <Link className="article-index__row" to={`/inspirate/${item.slug}`} key={item.slug}>
-            <span>{item.number}</span>
+            <img src={item.image} alt="" loading="lazy" />
             <small>{item.type}</small>
             <div>
               <h2>{item.title}</h2>

@@ -3,7 +3,9 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Seo } from '../components/Seo';
 import { ViewportVideo } from '../components/ViewportVideo';
-import { bookingUrl, brand, contact, journalItems, promotions, services } from '../data/site';
+import { journalItems } from '../data/journal';
+import { serviceCatalog } from '../data/serviceCatalog';
+import { bookingUrl, brand, contact, promotions, services } from '../data/site';
 import { visualMedia } from '../data/visualMedia';
 
 const finderResults = {
@@ -44,8 +46,7 @@ export function HomePage() {
   const [activeService, setActiveService] = useState(0);
   const reduceMotion = useReducedMotion();
   const result = finderResults[intent];
-  const currentService = services[activeService];
-  const currentServiceMedia = visualMedia.services[activeService];
+  const currentService = serviceCatalog[activeService];
 
   return (
     <>
@@ -157,27 +158,31 @@ export function HomePage() {
           </div>
         </section>
 
-        <section className="service-stage" aria-labelledby="service-stage-title">
+        <section className="service-stage service-stage--catalog-preview" aria-labelledby="service-stage-title">
           <div className="service-stage__sticky">
             <AnimatePresence mode="wait">
               <motion.div
                 className="service-stage__visual"
-                key={currentService.slug}
+                key={currentService.id}
                 initial={reduceMotion ? false : { opacity: 0, scale: 1.025, x: -14 }}
                 animate={{ opacity: 1, scale: 1, x: 0 }}
                 exit={reduceMotion ? undefined : { opacity: 0, x: 14 }}
                 transition={{ duration: 0.52, ease: [0.16, 1, 0.3, 1] }}
               >
-                <ViewportVideo
-                  src={currentServiceMedia.video}
-                  poster={currentServiceMedia.poster}
-                  label={currentService.title}
-                />
+                {currentService.media.kind === 'video' && currentService.media.video ? (
+                  <ViewportVideo
+                    src={currentService.media.video}
+                    poster={currentService.media.poster}
+                    label={currentService.title}
+                  />
+                ) : (
+                  <img src={currentService.media.poster} alt={currentService.title} loading="lazy" />
+                )}
                 <div>
-                  <span>{currentService.kicker}</span>
+                  <span>{currentService.eyebrow}</span>
                   <h3>{currentService.title}</h3>
-                  <p>{currentService.detail}</p>
-                  <Link to={`/servicios/${currentService.slug}`}>Conocer el servicio <Arrow /></Link>
+                  <p>{currentService.summary}</p>
+                  <Link to={`/servicios/${currentService.route}`}>Ver todas las opciones <Arrow /></Link>
                 </div>
               </motion.div>
             </AnimatePresence>
@@ -188,22 +193,23 @@ export function HomePage() {
               <span>Servicios</span>
               <h2 id="service-stage-title">Todo lo que puedes hacer en Indian.</h2>
             </header>
-            {services.map((service, index) => (
+            {serviceCatalog.map((area, index) => (
               <Link
-                to={`/servicios/${service.slug}`}
-                key={service.slug}
+                to={`/servicios/${area.route}`}
+                key={area.id}
                 className={activeService === index ? 'is-active' : undefined}
                 onMouseEnter={() => setActiveService(index)}
                 onFocus={() => setActiveService(index)}
               >
-                <div><strong>{service.title}</strong><span>{service.kicker}</span></div>
-                <div><small>{service.duration}</small><small>{service.price}</small></div>
+                <div><strong>{area.title}</strong><span>{area.eyebrow}</span></div>
+                <div><small>{area.duration}</small><small>{area.price}</small></div>
               </Link>
             ))}
+            <Link className="service-stage__all" to="/servicios">Ver catálogo completo ↗</Link>
           </div>
         </section>
 
-        <section className="club-film" aria-labelledby="club-film-title">
+        <section className="club-film club-film--compact" aria-labelledby="club-film-title">
           <ViewportVideo
             src={visualMedia.clubFeature.video}
             poster={visualMedia.clubFeature.poster}
@@ -213,8 +219,8 @@ export function HomePage() {
           <div className="club-film__copy">
             <img src={brand.logoMark} alt="" />
             <span>El Club</span>
-            <h2 id="club-film-title">Tu cita también puede sentirse como una pausa.</h2>
-            <p>Café, parqueo exclusivo y un espacio pensado para llegar sin apuro.</p>
+            <h2 id="club-film-title">Café, parqueo y todo Indian en un solo lugar.</h2>
+            <p>Llega con tiempo, toma algo y disfruta el espacio antes o después de tu servicio.</p>
             <Link to="/club">Conocer el lugar <Arrow /></Link>
           </div>
         </section>
@@ -237,12 +243,12 @@ export function HomePage() {
           </div>
         </section>
 
-        <section className="journal-scene" aria-labelledby="journal-scene-title">
+        <section className="journal-scene journal-scene--practical" aria-labelledby="journal-scene-title">
           <div className="journal-scene__lead">
-            <img src={visualMedia.journal.poster} alt="Ambiente profesional de barbería" loading="lazy" />
+            <img src={journalItems[0].image} alt={journalItems[0].title} loading="lazy" />
             <div>
-              <span>Inspírate</span>
-              <h2 id="journal-scene-title">Consejos que siguen funcionando después de la cita.</h2>
+              <span>Consejos</span>
+              <h2 id="journal-scene-title">Cuida tu corte, tu barba y tus uñas entre visitas.</h2>
               <Link to={`/inspirate/${journalItems[0].slug}`}>{journalItems[0].title} <Arrow /></Link>
             </div>
           </div>
