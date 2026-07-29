@@ -1,87 +1,97 @@
 import { Link } from 'react-router-dom';
-import { BookingBand } from '../components/BookingBand';
 import { Seo } from '../components/Seo';
-import { contact, media } from '../data/site';
+import { ViewportVideo } from '../components/ViewportVideo';
+import { bookingUrl, brand, contact } from '../data/site';
+import { visualMedia } from '../data/visualMedia';
 
 export function ClubPage() {
   return (
     <>
       <Seo
-        title="La casa"
-        description="Descubre Indian Club en Loja: barbería, nails, tattoo studio, cafetería y parqueo exclusivo en una misma casa."
+        title="El Club"
+        description="Conoce Indian Club en Loja: barbería, nails, tattoo studio, cafetería y parqueo exclusivo en una misma casa."
       />
 
-      <section className="chapter-intro chapter-intro--clean">
+      <section className="club-visual-hero" aria-labelledby="club-visual-title">
+        <ViewportVideo
+          src={visualMedia.clubFeature.video}
+          poster={visualMedia.clubFeature.poster}
+          label="Ambiente de Indian Club"
+          priority
+        />
+        <div className="club-visual-hero__veil" />
+        <div className="club-visual-hero__copy">
+          <img src={brand.logoLockup} alt="Indian Club" />
+          <span>El Club · Loja</span>
+          <h1 id="club-visual-title">Todo Indian en un solo lugar.</h1>
+          <p>Barbería, tattoo, nails, café y parqueo para que tu visita sea cómoda desde que llegas.</p>
+          <div>
+            <a href={bookingUrl} target="_blank" rel="noreferrer">Reservar cita ↗</a>
+            <a href={contact.mapHref} target="_blank" rel="noreferrer">Cómo llegar</a>
+          </div>
+        </div>
+      </section>
+
+      <section className="club-visual-grid" aria-label="Espacios y servicios de Indian Club">
+        <article className="club-visual-grid__feature">
+          <ViewportVideo
+            src={visualMedia.hero.club.video}
+            poster={visualMedia.hero.club.poster}
+            label="Cafetería y ambiente del club"
+          />
+          <div><span>Cafetería</span><strong>Llega con tiempo, toma algo y disfruta el espacio.</strong></div>
+        </article>
+
+        <article>
+          <img src={visualMedia.hero.barber.poster} alt="Servicio de barbería" loading="lazy" />
+          <div><span>Barbería</span><strong>Corte, barba y afeitado.</strong></div>
+        </article>
+
+        <article>
+          <img src={visualMedia.hero.tattoo.poster} alt="Tattoo Studio" loading="lazy" />
+          <div><span>Tattoo Studio</span><strong>Diseño, cotización y tatuaje.</strong></div>
+        </article>
+
+        <article>
+          <img src={visualMedia.hero.nails.poster} alt="Nails Studio" loading="lazy" />
+          <div><span>Nails Studio</span><strong>Manicura, pedicura y sistemas semipermanentes.</strong></div>
+        </article>
+      </section>
+
+      <section className="club-amenities" aria-labelledby="club-amenities-title">
         <div>
-          <p className="final-kicker">El Club</p>
-          <h1>Barbería, tattoo, nails y café. <em>Todo en un solo lugar.</em></h1>
+          <span>Antes y después de tu cita</span>
+          <h2 id="club-amenities-title">Un espacio para disfrutar la visita completa.</h2>
         </div>
-        <p className="chapter-intro__aside">
-          Estamos en el centro de Loja y contamos con cafetería, parqueo exclusivo y distintas áreas de servicio dentro de la misma casa.
-        </p>
-      </section>
-
-      <section className="house-film house-film--clean">
-        <div className="house-film__main">
-          <img src={media.cafe} alt="Cafetería de ambiente oscuro y cálido" loading="eager" />
-          <div><span>Cafetería</span><strong>Un espacio para llegar con tiempo</strong></div>
-        </div>
-        <div className="house-film__side">
-          <img src={media.exterior} alt="Fachada nocturna de Indian Club" loading="lazy" />
-          <div><span>Centro de Loja</span><strong>Fácil de encontrar y con parqueo</strong></div>
+        <div className="club-amenities__list">
+          <article><strong>Parqueo exclusivo</strong><p>Estaciona durante tu visita sin buscar espacio en el centro.</p></article>
+          <article><strong>Cafetería</strong><p>Bebidas y un ambiente cómodo para esperar o conversar.</p></article>
+          <article><strong>Todo en la misma casa</strong><p>Barbería, tattoo y nails sin desplazarte a distintos lugares.</p></article>
         </div>
       </section>
 
-      <section className="house-manifesto house-manifesto--direct">
-        <div>
-          <span>La experiencia completa</span>
-          <h2>Tu servicio, la atención y el espacio funcionan juntos.</h2>
-        </div>
-        <p>
-          Puedes reservar barbería, tattoo o nails, llegar con tiempo, usar el parqueo y disfrutar la cafetería antes o después de tu cita.
-        </p>
-      </section>
-
-      <section className="house-program house-program--complete house-program--clean">
-        <article>
-          <h2>Cafetería</h2>
-          <p>Bebidas y un espacio para esperar o conversar antes y después del servicio.</p>
-        </article>
-        <article>
-          <h2>Parqueo</h2>
-          <p>Parqueo exclusivo para clientes durante su visita a Indian Club.</p>
-        </article>
-        <article>
-          <h2>Tattoo Studio</h2>
-          <p>Cotización, diseño y tatuaje dentro de un área especializada.</p>
-        </article>
-        <article>
-          <h2>Nails Studio</h2>
-          <p>Manicura, pedicura y sistemas semipermanentes en la misma casa.</p>
-        </article>
-      </section>
-
-      <section className="house-location">
+      <section className="club-visit-compact" aria-labelledby="club-visit-title">
         <div>
           <span>Visítanos</span>
-          <h2>{contact.address}</h2>
+          <h2 id="club-visit-title">{contact.address}</h2>
           <p>{contact.city}</p>
-          <a className="final-button" href={contact.mapHref} target="_blank" rel="noreferrer">Abrir en Maps ↗</a>
         </div>
-        <div>
+        <div className="club-visit-compact__hours">
           {contact.hours.map((item) => (
-            <div key={item.days}><span>{item.days}</span><strong>{item.value}</strong></div>
+            <p key={item.days}><span>{item.days}</span><strong>{item.value}</strong></p>
           ))}
-          <a href={contact.whatsappHref} target="_blank" rel="noreferrer">Consultar por WhatsApp ↗</a>
+        </div>
+        <div className="club-visit-compact__actions">
+          <a href={contact.mapHref} target="_blank" rel="noreferrer">Abrir mapa ↗</a>
+          <a href={contact.whatsappHref} target="_blank" rel="noreferrer">WhatsApp ↗</a>
+          <a className="club-visit-compact__booking" href={bookingUrl} target="_blank" rel="noreferrer">Reservar ahora ↗</a>
         </div>
       </section>
 
-      <section className="house-quote house-quote--final house-quote--direct">
-        <blockquote>Conoce los trabajos realizados por el equipo de Indian Club.</blockquote>
+      <section className="club-work-link">
+        <span>Conoce el trabajo del equipo</span>
         <Link to="/style-book">Abrir Style Book ↗</Link>
       </section>
-
-      <BookingBand />
     </>
   );
 }
