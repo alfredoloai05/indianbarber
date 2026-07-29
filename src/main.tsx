@@ -14,6 +14,8 @@ import './styles/immersive-home-v2.css';
 import './styles/art-direction-v3.css';
 import './styles/content-flow-polish.css';
 import './styles/desktop-hero-viewport.css';
+import './styles/services-directory.css';
+import './styles/service-detail-cleanup.css';
 
 const root = document.getElementById('root');
 

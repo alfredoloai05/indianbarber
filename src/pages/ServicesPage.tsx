@@ -1,64 +1,114 @@
+import { useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { BookingBand } from '../components/BookingBand';
 import { Seo } from '../components/Seo';
-import { services } from '../data/site';
+import { ViewportVideo } from '../components/ViewportVideo';
+import { serviceCatalogGroups } from '../data/serviceCatalog';
+import { bookingUrl, contact } from '../data/site';
+
+function Arrow() {
+  return <span aria-hidden="true">↗</span>;
+}
 
 export function ServicesPage() {
+  const [activeGroup, setActiveGroup] = useState(0);
+  const reduceMotion = useReducedMotion();
+  const currentGroup = serviceCatalogGroups[activeGroup];
+
   return (
     <>
       <Seo
         title="Servicios"
-        description="Cortes, barba, combos, nails, tattoo y servicios especiales de Indian Club en Loja, con duración y precio de referencia."
+        description="Conoce todos los servicios de peluquería, barbería, combos, tattoo, nails y cuidado especial disponibles en Indian Club Loja."
       />
 
-      <section className="chapter-intro">
-        <div className="chapter-intro__index">01 / OFICIO</div>
+      <section className="services-directory-hero" aria-labelledby="services-page-title">
         <div>
-          <p className="final-kicker">Servicios Indian Club</p>
-          <h1>El catálogo no empieza con una lista. <em>Empieza con una intención.</em></h1>
+          <span>Servicios</span>
+          <h1 id="services-page-title">Todo lo que puedes hacer en Indian Club.</h1>
         </div>
-        <p className="chapter-intro__aside">
-          Revisa qué resuelve cada ritual, cuánto tiempo requiere y su precio de referencia. La disponibilidad definitiva se confirma en AgendaPro.
-        </p>
+        <div>
+          <p>Barbería, combos, tattoo, nails y servicios especiales en un solo lugar.</p>
+          <a href={bookingUrl} target="_blank" rel="noreferrer">Reservar cita <Arrow /></a>
+        </div>
       </section>
 
-      <section className="service-reel service-reel--internal" aria-label="Catálogo completo de servicios">
-        <div className="service-reel__list">
-          {services.map((service) => (
-            <Link className="service-reel__item" to={`/servicios/${service.slug}`} key={service.slug}>
-              <span className="service-reel__number">{service.number}</span>
-              <div className="service-reel__image">
-                <img src={service.image} alt={service.imageAlt} loading="lazy" />
-              </div>
-              <div className="service-reel__copy">
-                <small>{service.kicker}</small>
-                <h2>{service.title}</h2>
-                <p>{service.detail}</p>
-              </div>
-              <div className="service-reel__meta">
-                <span>{service.duration}</span>
-                <strong>{service.price}</strong>
-                <i aria-hidden="true">↗</i>
-              </div>
-            </Link>
+      <section className="services-directory" aria-label="Catálogo completo de Indian Club">
+        <div className="services-directory__visual">
+          <div className="services-directory__sticky">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentGroup.title}
+                initial={reduceMotion ? false : { opacity: 0, scale: 1.025 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={reduceMotion ? undefined : { opacity: 0 }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              >
+                {currentGroup.media.video ? (
+                  <ViewportVideo
+                    src={currentGroup.media.video}
+                    poster={currentGroup.media.poster}
+                    label={currentGroup.title}
+                  />
+                ) : (
+                  <img src={currentGroup.media.poster} alt={currentGroup.title} loading="lazy" />
+                )}
+                <div className="services-directory__veil" />
+                <div className="services-directory__visual-copy">
+                  <span>{currentGroup.eyebrow}</span>
+                  <h2>{currentGroup.title}</h2>
+                  <div>
+                    <small>{currentGroup.service.duration}</small>
+                    <strong>{currentGroup.service.price}</strong>
+                  </div>
+                  <Link to={`/servicios/${currentGroup.service.slug}`}>Ver categoría <Arrow /></Link>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
+
+        <div className="services-directory__groups">
+          {serviceCatalogGroups.map((group, index) => (
+            <article
+              key={group.title}
+              className={activeGroup === index ? 'is-active' : undefined}
+              onMouseEnter={() => setActiveGroup(index)}
+              onFocusCapture={() => setActiveGroup(index)}
+            >
+              <header>
+                <div>
+                  <span>{group.eyebrow}</span>
+                  <h2>{group.title}</h2>
+                </div>
+                <Link to={`/servicios/${group.service.slug}`}>Ver categoría <Arrow /></Link>
+              </header>
+
+              <ul>
+                {group.items.map((item) => (
+                  <li key={item}>
+                    <a href={bookingUrl} target="_blank" rel="noreferrer">
+                      <span>{item}</span>
+                      <small>Reservar</small>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </article>
           ))}
         </div>
       </section>
 
-      <section className="decision-strip decision-strip--complete">
-        <span>Orientación</span>
-        <p>¿Es tu primera visita o no sabes qué servicio elegir? Cuéntanos qué quieres mantener, cambiar o preparar.</p>
-        <Link to="/contacto">Hablar con Indian <span aria-hidden="true">↗</span></Link>
-      </section>
-
-      <section className="service-disclosure">
+      <section className="services-help">
         <div>
-          <span>Precios claros</span>
-          <h2>La referencia aparece antes del compromiso.</h2>
+          <span>¿No sabes cuál elegir?</span>
+          <h2>Cuéntanos qué quieres hacer y te orientamos.</h2>
         </div>
-        <p>
-          Los precios publicados son referencias tomadas del catálogo vigente de Indian Club. Algunos servicios, especialmente tattoo y tratamientos personalizados, requieren evaluación o cotización previa.
-        </p>
+        <div>
+          <p>Escríbenos por WhatsApp o revisa la disponibilidad directamente en AgendaPro.</p>
+          <a href={contact.whatsappHref} target="_blank" rel="noreferrer">Hablar por WhatsApp <Arrow /></a>
+        </div>
       </section>
 
       <BookingBand />

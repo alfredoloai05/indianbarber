@@ -1,0 +1,45 @@
+.service-detail-final--clean .service-detail-final__media > span {
+  display: none;
+}
+
+.service-ritual--clean ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--color-line);
+}
+
+.service-ritual--clean li {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.55fr) minmax(0, 1fr);
+  gap: 2rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.service-ritual--clean li strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3vw, 3rem);
+  font-weight: 500;
+}
+
+.service-ritual--clean li p {
+  margin: 0;
+  color: rgb(241 234 223 / 0.58);
+  line-height: 1.7;
+}
+
+.service-inclusions--clean li {
+  grid-template-columns: 1fr;
+}
+
+.service-inclusions--clean li strong {
+  display: block;
+}
+
+@media (max-width: 720px) {
+  .service-ritual--clean li {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}

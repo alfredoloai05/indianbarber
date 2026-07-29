@@ -4,9 +4,9 @@ import { Seo } from '../components/Seo';
 import { bookingUrl, services } from '../data/site';
 
 const stepDescriptions = [
-  'Alineamos intención, referencia, mantenimiento y límites antes de comenzar.',
-  'La técnica se adapta a tu rostro, textura, piel o idea; nunca al revés.',
-  'Cerramos con acabado, cuidados y una expectativa clara sobre cómo sostener el resultado.',
+  'Revisamos la referencia, tu rutina y el resultado que buscas antes de comenzar.',
+  'Trabajamos la técnica y los detalles necesarios para este servicio.',
+  'Comprobamos el resultado y te explicamos cómo mantenerlo.',
 ];
 
 export function ServiceDetailPage() {
@@ -27,11 +27,10 @@ export function ServiceDetailPage() {
     <>
       <Seo title={service.title} description={service.detail} />
 
-      <section className="service-detail-final">
+      <section className="service-detail-final service-detail-final--clean">
         <div className="service-detail-final__media">
           <img src={service.image} alt={service.imageAlt} loading="eager" />
           <div aria-hidden="true" />
-          <span>{service.number} / 06</span>
         </div>
         <div className="service-detail-final__copy">
           <Link to="/servicios">← Todos los servicios</Link>
@@ -41,37 +40,36 @@ export function ServiceDetailPage() {
           <dl>
             <div><dt>Tiempo estimado</dt><dd>{service.duration}</dd></div>
             <div><dt>Precio de referencia</dt><dd>{service.price}</dd></div>
-            <div><dt>Firma</dt><dd>{service.signature}</dd></div>
+            <div><dt>Especialidad</dt><dd>{service.signature}</dd></div>
           </dl>
           <a className="final-button" href={bookingUrl} target="_blank" rel="noreferrer">Ver disponibilidad ↗</a>
         </div>
       </section>
 
-      <section className="service-ritual service-ritual--final">
+      <section className="service-ritual service-ritual--final service-ritual--clean">
         <div>
-          <p className="final-kicker">La secuencia</p>
-          <h2>El resultado empieza antes de la herramienta.</h2>
-          <p>La consulta inicial ayuda a elegir una referencia que funcione con tu textura, tu rutina y el resultado que quieres mantener.</p>
+          <p className="final-kicker">Cómo funciona</p>
+          <h2>Así trabajamos este servicio.</h2>
+          <p>Revisamos contigo lo que necesitas, realizamos el servicio y cerramos con recomendaciones claras.</p>
         </div>
-        <ol>
+        <ul>
           {service.ritual.map((step, index) => (
             <li key={step}>
-              <span>0{index + 1}</span>
               <strong>{step}</strong>
               <p>{stepDescriptions[index]}</p>
             </li>
           ))}
-        </ol>
+        </ul>
       </section>
 
-      <section className="service-inclusions">
+      <section className="service-inclusions service-inclusions--clean">
         <div>
-          <span>Incluye o puede incluir</span>
-          <h2>Todo lo que forma parte del servicio.</h2>
+          <span>Incluye</span>
+          <h2>Lo que forma parte del servicio.</h2>
         </div>
         <ul>
-          {service.inclusions.map((item, index) => (
-            <li key={item}><span>0{index + 1}</span><strong>{item}</strong></li>
+          {service.inclusions.map((item) => (
+            <li key={item}><strong>{item}</strong></li>
           ))}
         </ul>
       </section>
@@ -79,7 +77,7 @@ export function ServiceDetailPage() {
       <section className="service-note service-note--complete">
         <span>Antes de reservar</span>
         <p>
-          La disponibilidad, profesional y valor final aparecen en AgendaPro. Tattoo, diseños personalizados y algunos tratamientos pueden requerir cotización o conversación previa.
+          La disponibilidad, profesional y valor final aparecen en AgendaPro. Tattoo, diseños personalizados y algunos tratamientos pueden requerir cotización previa.
         </p>
         <Link to="/contacto">Resolver una duda ↗</Link>
       </section>
