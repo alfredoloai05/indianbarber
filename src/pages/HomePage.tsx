@@ -214,21 +214,30 @@ export function HomePage() {
           </div>
         </section>
 
-        <section className="journal-scene journal-scene--practical" aria-labelledby="journal-scene-title">
-          <div className="journal-scene__lead">
-            <img src={journalItems[0].image} alt={journalItems[0].title} loading="lazy" />
+        <section className="home-guides" aria-labelledby="home-guides-title">
+          <header className="home-guides__header">
             <div>
-              <span>Consejos</span>
-              <h2 id="journal-scene-title">Cuida tu corte, tu barba y tus uñas entre visitas.</h2>
-              <Link to={`/inspirate/${journalItems[0].slug}`}>{journalItems[0].title} <Arrow /></Link>
+              <span>Consejos Indian Club</span>
+              <h2 id="home-guides-title">Cuida mejor el resultado entre visitas.</h2>
             </div>
-          </div>
-          <div className="journal-scene__links">
-            {journalItems.slice(1).map((item) => (
-              <Link to={`/inspirate/${item.slug}`} key={item.slug}>
-                <small>{item.type}</small>
-                <strong>{item.title}</strong>
-                <Arrow />
+            <Link to="/inspirate">Ver todos los consejos <Arrow /></Link>
+          </header>
+
+          <div className="home-guides__grid">
+            {journalItems.map((item, index) => (
+              <Link
+                className={`home-guide${index === 0 ? ' home-guide--feature' : ' home-guide--compact'}`}
+                to={`/inspirate/${item.slug}`}
+                key={item.slug}
+              >
+                <img src={item.image} alt="" loading="lazy" />
+                <div className="home-guide__veil" aria-hidden="true" />
+                <div className="home-guide__copy">
+                  <small>{item.type}</small>
+                  <h3>{item.title}</h3>
+                  <p>{item.excerpt}</p>
+                  <span>Leer guía <Arrow /></span>
+                </div>
               </Link>
             ))}
           </div>
