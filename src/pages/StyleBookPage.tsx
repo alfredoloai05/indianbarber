@@ -5,12 +5,12 @@ import { Seo } from '../components/Seo';
 import { brand, media } from '../data/site';
 
 const frames = [
-  { image: media.hero, label: 'Cortes / 01', alt: 'Cliente atendido dentro de Indian Club', className: 'style-book-grid__hero' },
-  { image: media.tattoo, label: 'Tatuajes / 02', alt: 'Tatuaje realizado por Indian Club Tattoo Studio', className: 'style-book-grid__tall' },
-  { image: media.barber, label: 'Cortes / 03', alt: 'Corte realizado por Indian Club', className: 'style-book-grid__wide' },
-  { image: media.nails, label: 'Manicura / 04', alt: 'Diseño de uñas realizado por Indian Club Nails Studio', className: 'style-book-grid__small' },
-  { image: media.barberAlt, label: 'Cortes / 05', alt: 'Resultado de barbería realizado en Indian Club', className: 'style-book-grid__portrait' },
-  { image: media.tattoo, label: 'Detalle / 06', alt: 'Detalle de trabajo del Tattoo Studio', className: 'style-book-grid__small' },
+  { image: media.hero, label: 'Corte y acabado', alt: 'Cliente atendido dentro de Indian Club', className: 'style-book-grid__hero' },
+  { image: media.tattoo, label: 'Tattoo Studio', alt: 'Tatuaje realizado por Indian Club Tattoo Studio', className: 'style-book-grid__tall' },
+  { image: media.barber, label: 'Barbería', alt: 'Corte realizado por Indian Club', className: 'style-book-grid__wide' },
+  { image: media.nails, label: 'Nails Studio', alt: 'Diseño de uñas realizado por Indian Club Nails Studio', className: 'style-book-grid__small' },
+  { image: media.barberAlt, label: 'Barba y perfilado', alt: 'Resultado de barbería realizado en Indian Club', className: 'style-book-grid__portrait' },
+  { image: media.tattoo, label: 'Detalle de tatuaje', alt: 'Detalle de trabajo del Tattoo Studio', className: 'style-book-grid__small' },
 ];
 
 export function StyleBookPage() {
@@ -20,17 +20,16 @@ export function StyleBookPage() {
     <>
       <Seo
         title="Style Book"
-        description="Trabajos reales de cortes, tatuajes y manicura publicados por Indian Club en Loja."
+        description="Trabajos de cortes, tatuajes y manicura realizados por Indian Club en Loja."
       />
 
-      <section className="chapter-intro chapter-intro--brand">
-        <div className="chapter-intro__index">04 / STYLE BOOK</div>
+      <section className="chapter-intro chapter-intro--brand chapter-intro--clean">
         <div>
-          <p className="final-kicker">Archivo visual Indian Club</p>
-          <h1>Cortes, trazos y detalles. <em>Hechos en Indian.</em></h1>
+          <p className="final-kicker">Style Book</p>
+          <h1>Trabajos realizados por <em>el equipo de Indian Club.</em></h1>
         </div>
         <p className="chapter-intro__aside">
-          Una selección de barbería, tattoo y nails realizados por el equipo de Indian Club en Loja.
+          Cortes, perfilados, tatuajes y uñas para que encuentres referencias antes de reservar.
         </p>
         <motion.img
           className="chapter-intro__brand-mark"
@@ -42,13 +41,13 @@ export function StyleBookPage() {
         />
       </section>
 
-      <section className="style-book-opening style-book-opening--brand">
-        <span>ARCHIVO / INDIAN</span>
-        <p>Forma, textura, línea y color en una misma casa.</p>
-        <strong>Loja · Ecuador</strong>
+      <section className="style-book-opening style-book-opening--brand style-book-opening--clean">
+        <span>Indian Club · Loja</span>
+        <p>Cortes, tattoo y nails en una sola galería.</p>
+        <strong>Ver · Elegir · Reservar</strong>
       </section>
 
-      <section className="style-book-grid style-book-grid--official" aria-label="Galería de trabajos reales de Indian Club">
+      <section className="style-book-grid style-book-grid--official" aria-label="Galería de trabajos de Indian Club">
         {frames.map((frame, index) => (
           <motion.figure
             className={frame.className}
@@ -65,10 +64,10 @@ export function StyleBookPage() {
         ))}
       </section>
 
-      <section className="style-book-manifesto style-book-manifesto--brand">
+      <section className="style-book-manifesto style-book-manifesto--brand style-book-manifesto--direct">
         <div>
-          <span>El detalle</span>
-          <h2>Cada servicio deja una firma distinta.</h2>
+          <span>¿Viste algo que te gusta?</span>
+          <h2>Guarda la referencia y coméntala con el profesional.</h2>
         </div>
         <div className="style-book-manifesto__mark">
           <motion.img
@@ -77,12 +76,12 @@ export function StyleBookPage() {
             animate={reduceMotion ? undefined : { rotate: [0, 2, -2, 0] }}
             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
           />
-          <p>Explora resultados reales y encuentra referencias para conversar con el profesional antes de tu cita.</p>
+          <p>El resultado se adapta a tu cabello, tus uñas, tu piel y al tipo de trabajo que quieras realizar.</p>
         </div>
       </section>
 
       <section className="style-book-next style-book-next--brand">
-        <span>¿Qué parte de Indian quieres vivir?</span>
+        <span>Continúa desde aquí</span>
         <Link to="/servicios">Explorar servicios ↗</Link>
         <Link to="/equipo">Conocer al equipo ↗</Link>
       </section>
