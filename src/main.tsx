@@ -19,6 +19,7 @@ import './styles/global-numbering-cleanup-v5.css';
 import './styles/services-cleanup-v6.css';
 import './styles/hero-integrated-ticker-v8.css';
 import './styles/club-footer-service-v9.css';
+import './styles/home-service-portals-v10.css';
 
 const root = document.getElementById('root');
 
