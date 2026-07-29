@@ -67,16 +67,15 @@ export function TeamPage() {
       <section className="team-collaboration">
         <div className="team-collaboration__intro">
           <span>Trabajo en equipo</span>
-          <h2>Cada especialidad se conecta dentro de la misma casa.</h2>
+          <h2>Tres especialidades dentro de la misma casa.</h2>
           <p>
-            Coordinación, barbería, tattoo y nails comparten la agenda, el espacio y la atención para que puedas resolver tu visita de forma clara.
+            Barbería, tattoo y nails comparten el espacio y la atención para que puedas combinar distintos servicios en una sola visita.
           </p>
         </div>
         <div className="team-collaboration__areas">
           <article><strong>Barbería</strong><p>Cortes, barba, afeitado y recomendaciones de mantenimiento.</p></article>
           <article><strong>Tattoo Studio</strong><p>Cotización, diseño, preparación y cuidado posterior.</p></article>
           <article><strong>Nails Studio</strong><p>Manicura, pedicura, sistemas semipermanentes y retiro.</p></article>
-          <article><strong>Coordinación</strong><p>Orientación, agenda y acompañamiento entre las distintas áreas.</p></article>
         </div>
       </section>
 

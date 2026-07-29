@@ -107,10 +107,6 @@ export function HomePage() {
               <span>Servicios</span>
               <h2 id="service-portals-title">Todo Indian, en un solo lugar.</h2>
             </div>
-            <div>
-              <p>Abre una de las cuatro áreas para conocer qué puedes reservar.</p>
-              <Link to="/servicios">Ver catálogo completo <Arrow /></Link>
-            </div>
           </header>
 
           <div className="service-portals__grid" data-active={serviceCatalog[activePortal].id}>

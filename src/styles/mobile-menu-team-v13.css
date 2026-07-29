@@ -1,0 +1,117 @@
+/* Mobile menu isolation, clean service heading and three-area team layout. */
+
+.service-portals__intro {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.service-portals__intro > div:first-child {
+  max-width: 980px;
+}
+
+.team-collaboration__areas {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.menu-overlay--brand {
+  z-index: 140;
+  width: 100vw;
+  height: 100dvh;
+  min-height: 100dvh;
+  max-height: 100dvh;
+  padding: clamp(7.25rem, 17vh, 8.5rem) 1.5rem max(1.25rem, env(safe-area-inset-bottom));
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: #050505 !important;
+  opacity: 1;
+}
+
+.menu-overlay--brand::before,
+.menu-overlay--brand::after {
+  width: 3px;
+}
+
+.menu-overlay__brand-mark {
+  display: none;
+}
+
+.menu-overlay--brand .menu-overlay__index {
+  margin: 0 0 1rem;
+  flex: 0 0 auto;
+}
+
+.menu-overlay--brand nav {
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.menu-overlay--brand nav > div,
+.menu-overlay--brand nav a {
+  width: 100%;
+}
+
+.menu-overlay--brand nav a {
+  display: block;
+  grid-template-columns: none;
+  padding: 0.78rem 0;
+  color: rgb(255 255 255 / 0.82);
+  font-size: clamp(2.1rem, 9.4vw, 3.7rem);
+  line-height: 0.94;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+}
+
+.menu-overlay--brand nav a.is-active {
+  color: white;
+}
+
+.menu-overlay--brand .menu-overlay__booking {
+  margin-top: 1.2rem;
+  padding: 1rem 0 0.4rem;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 780px) {
+  .team-collaboration__areas {
+    grid-template-columns: 1fr;
+  }
+
+  .team-collaboration__areas article {
+    min-height: auto;
+  }
+
+  .menu-overlay--brand {
+    padding-top: 7.4rem;
+  }
+}
+
+@media (max-width: 390px) {
+  .menu-overlay--brand nav a {
+    padding: 0.7rem 0;
+    font-size: clamp(1.95rem, 9.1vw, 2.45rem);
+  }
+
+  .menu-overlay--brand .menu-overlay__booking {
+    margin-top: 0.85rem;
+  }
+}
+
+@media (max-height: 720px) and (max-width: 780px) {
+  .menu-overlay--brand {
+    padding-top: 6.5rem;
+  }
+
+  .menu-overlay--brand .menu-overlay__index {
+    margin-bottom: 0.55rem;
+  }
+
+  .menu-overlay--brand nav a {
+    padding: 0.52rem 0;
+    font-size: clamp(1.8rem, 8.2vw, 2.3rem);
+  }
+
+  .menu-overlay--brand .menu-overlay__booking {
+    margin-top: 0.55rem;
+    padding-top: 0.65rem;
+  }
+}
