@@ -51,7 +51,10 @@ export function ServiceDetailPage() {
         </div>
       </section>
 
-      <section className="catalog-options catalog-options--direct" aria-labelledby="catalog-options-title">
+      <section
+        className={`catalog-options catalog-options--direct catalog-options--${area.id}`}
+        aria-labelledby="catalog-options-title"
+      >
         <header>
           <span>Servicios disponibles</span>
           <h2 id="catalog-options-title">Elige tu servicio.</h2>
@@ -64,7 +67,10 @@ export function ServiceDetailPage() {
               <h3>{group.title}</h3>
               <ul>
                 {group.items.map((item) => (
-                  <li key={item.name}>
+                  <li
+                    key={item.name}
+                    className={`catalog-option${item.note ? ' catalog-option--with-note' : ''}`}
+                  >
                     <div className="catalog-option__content">
                       <strong>{item.name}</strong>
                       {item.note ? <p>{item.note}</p> : null}
