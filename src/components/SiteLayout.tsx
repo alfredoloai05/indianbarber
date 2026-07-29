@@ -119,39 +119,30 @@ export function SiteLayout() {
         <Outlet />
       </main>
 
-      <footer className="site-footer site-footer--complete site-footer--brand">
-        <div className="site-footer__identity">
-          <Link className="site-footer__brand site-footer__brand-lockup" to="/">
+      <footer className="site-footer site-footer--compact-final">
+        <div className="compact-footer__brand">
+          <Link to="/" aria-label="Indian Club, inicio">
             <img src={brand.logoMark} alt="" />
-            <span>INDIAN CLUB</span>
+            <strong>INDIAN CLUB</strong>
           </Link>
           <span>Barbería · Tattoo · Nails · Café</span>
-          <address>{contact.address}<br />{contact.city}</address>
         </div>
-        <div className="site-footer__links">
+
+        <nav className="compact-footer__nav" aria-label="Navegación del pie de página">
           <Link to="/servicios">Servicios</Link>
           <Link to="/equipo">Equipo</Link>
           <Link to="/club">El Club</Link>
           <Link to="/style-book">Style Book</Link>
-          <Link to="/inspirate">Inspírate</Link>
-          <Link to="/contacto">Contacto</Link>
-        </div>
-        <div className="site-footer__links">
-          <Link to="/promociones">Promociones</Link>
-          <Link to="/productos">Productos</Link>
-          <Link to="/tarjetas-regalo">Tarjetas regalo</Link>
-          <Link to="/reservar">Cómo reservar</Link>
-          <a href={contact.mapHref} target="_blank" rel="noreferrer">Abrir mapa ↗</a>
-        </div>
-        <div className="site-footer__contact">
-          <a href={contact.phoneHref}>{contact.phone}</a>
+        </nav>
+
+        <div className="compact-footer__contact">
           <a href={contact.whatsappHref} target="_blank" rel="noreferrer">WhatsApp</a>
-          <a href={contact.emailHref}>{contact.email}</a>
           <a href={bookingUrl} target="_blank" rel="noreferrer">Reservar ↗</a>
         </div>
-        <div className="site-footer__legal">
+
+        <div className="compact-footer__bottom">
+          <span>{contact.address} · {contact.city}</span>
           <span>© 2026 Indian Club</span>
-          <span>Loja, Ecuador</span>
         </div>
       </footer>
     </div>
