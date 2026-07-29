@@ -23,7 +23,7 @@ export function ServiceDetailPage() {
     <>
       <Seo title={area.title} description={area.summary} />
 
-      <section className={`catalog-detail-hero catalog-detail-hero--${area.id}`}>
+      <section className={`catalog-detail-hero catalog-detail-hero--compact catalog-detail-hero--${area.id}`}>
         <div className="catalog-detail-hero__media">
           {area.media.kind === 'video' && area.media.video ? (
             <ViewportVideo
@@ -39,23 +39,23 @@ export function ServiceDetailPage() {
         </div>
 
         <div className="catalog-detail-hero__copy">
-          <Link to="/servicios">← Todos los servicios</Link>
+          <Link to="/servicios">← Servicios</Link>
           <small>{area.eyebrow}</small>
           <h1>{area.title}</h1>
           <p>{area.summary}</p>
-          <dl>
-            <div><dt>Tiempo aproximado</dt><dd>{area.duration}</dd></div>
-            <div><dt>Precio de referencia</dt><dd>{area.price}</dd></div>
-          </dl>
+          <div className="catalog-detail-hero__meta">
+            <span>{area.duration}</span>
+            <strong>{area.price}</strong>
+          </div>
           <a href={bookingUrl} target="_blank" rel="noreferrer">Ver disponibilidad ↗</a>
         </div>
       </section>
 
-      <section className="catalog-options" aria-labelledby="catalog-options-title">
+      <section className="catalog-options catalog-options--direct" aria-labelledby="catalog-options-title">
         <header>
-          <span>Opciones disponibles</span>
-          <h2 id="catalog-options-title">Elige lo que necesitas.</h2>
-          <p>El valor y la duración final dependen de la opción elegida y de la disponibilidad del profesional.</p>
+          <span>Servicios disponibles</span>
+          <h2 id="catalog-options-title">Elige tu servicio.</h2>
+          <p>Selecciona una opción y consulta horarios disponibles en AgendaPro.</p>
         </header>
 
         <div className="catalog-options__groups">
