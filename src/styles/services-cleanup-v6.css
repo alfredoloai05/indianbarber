@@ -1,0 +1,365 @@
+/* Services cleanup: four clear areas, no visible numbering, compact detail pages. */
+
+.services-clean-hero {
+  width: min(1320px, calc(100vw - clamp(2rem, 8vw, 8rem)));
+  margin: 0 auto;
+  padding: clamp(9rem, 15vh, 11rem) 0 clamp(3rem, 6vw, 5rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.42fr);
+  align-items: end;
+  gap: clamp(2rem, 6vw, 7rem);
+}
+
+.services-clean-hero > span {
+  grid-column: 1 / -1;
+  color: var(--color-gold);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.services-clean-hero h1 {
+  max-width: 12ch;
+  margin: 0;
+  font-size: clamp(3.4rem, 6.3vw, 7rem);
+  line-height: 0.88;
+  letter-spacing: -0.05em;
+}
+
+.services-clean-hero p {
+  margin: 0;
+  color: rgb(241 234 223 / 0.62);
+  line-height: 1.75;
+}
+
+.services-catalog-stage {
+  width: min(1320px, calc(100vw - clamp(2rem, 8vw, 8rem)));
+  min-height: 720px;
+  margin: 0 auto clamp(6rem, 11vw, 10rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.85fr);
+  border: 1px solid var(--color-line);
+  background: #080808;
+}
+
+.services-catalog-stage__visual {
+  min-height: 720px;
+  position: relative;
+  overflow: hidden;
+}
+
+.services-catalog-stage__visual > div,
+.services-catalog-stage__visual video,
+.services-catalog-stage__visual img,
+.services-catalog-stage__veil {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.services-catalog-stage__visual video,
+.services-catalog-stage__visual img {
+  object-fit: cover;
+  filter: saturate(0.78) contrast(1.06) brightness(0.68);
+}
+
+.services-catalog-stage__veil {
+  background:
+    linear-gradient(180deg, transparent 38%, rgb(4 4 4 / 0.9)),
+    linear-gradient(90deg, transparent 58%, rgb(4 4 4 / 0.34));
+}
+
+.services-catalog-stage__caption {
+  position: absolute;
+  inset: auto clamp(1.5rem, 4vw, 4rem) clamp(1.5rem, 4vw, 4rem);
+  z-index: 2;
+  max-width: 620px;
+}
+
+.services-catalog-stage__caption small {
+  color: var(--color-gold-bright);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.services-catalog-stage__caption h2 {
+  max-width: 10ch;
+  margin: 0.7rem 0 0.85rem;
+  font-size: clamp(3rem, 5.5vw, 6rem);
+  line-height: 0.86;
+}
+
+.services-catalog-stage__caption p {
+  max-width: 540px;
+  color: rgb(255 255 255 / 0.68);
+  line-height: 1.7;
+}
+
+.services-catalog-stage__caption a {
+  display: inline-flex;
+  margin-top: 1rem;
+  color: white;
+  border-bottom: 1px solid rgb(255 255 255 / 0.5);
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.services-catalog-stage__menu {
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  border-left: 1px solid var(--color-line);
+}
+
+.services-catalog-stage__menu > a {
+  position: relative;
+  min-height: 150px;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid var(--color-line);
+  overflow: hidden;
+  color: rgb(255 255 255 / 0.48);
+  transition: color 220ms ease, padding-left 300ms var(--ease-out-expo);
+}
+
+.services-catalog-stage__menu > a:last-child {
+  border-bottom: 0;
+}
+
+.services-catalog-stage__menu > a::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(110deg, rgb(8 120 185 / 0.2), transparent 48%, rgb(227 27 45 / 0.18));
+  transform: translateX(-102%);
+  transition: transform 520ms var(--ease-out-expo);
+}
+
+.services-catalog-stage__menu > a:hover,
+.services-catalog-stage__menu > a:focus-visible,
+.services-catalog-stage__menu > a.is-active {
+  padding-left: clamp(2rem, 4vw, 3.3rem);
+  color: white;
+}
+
+.services-catalog-stage__menu > a:hover::before,
+.services-catalog-stage__menu > a:focus-visible::before,
+.services-catalog-stage__menu > a.is-active::before {
+  transform: translateX(0);
+}
+
+.services-catalog-stage__menu > a > div,
+.services-catalog-stage__menu > a > i {
+  position: relative;
+  z-index: 1;
+}
+
+.services-catalog-stage__menu strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 3.2rem);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.services-catalog-stage__menu span {
+  display: block;
+  margin-top: 0.55rem;
+  color: rgb(255 255 255 / 0.42);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.services-catalog-stage__menu i {
+  font-style: normal;
+}
+
+.services-help--compact {
+  padding-top: clamp(3rem, 7vw, 6rem);
+}
+
+.services-help--compact h2 {
+  max-width: 12ch;
+  font-size: clamp(2.5rem, 4.5vw, 4.8rem);
+}
+
+.catalog-detail-hero--compact {
+  min-height: min(820px, 86dvh);
+  grid-template-columns: minmax(0, 1.08fr) minmax(400px, 0.92fr);
+}
+
+.catalog-detail-hero--compact .catalog-detail-hero__media {
+  min-height: min(820px, 86dvh);
+}
+
+.catalog-detail-hero--compact .catalog-detail-hero__copy {
+  padding-top: clamp(8rem, 12vh, 10rem);
+  padding-bottom: clamp(3rem, 7vh, 5rem);
+}
+
+.catalog-detail-hero--compact .catalog-detail-hero__copy > a:first-child {
+  margin-bottom: clamp(2rem, 7vh, 5rem);
+}
+
+.catalog-detail-hero--compact .catalog-detail-hero__copy h1 {
+  max-width: 11ch;
+  font-size: clamp(3.6rem, 6vw, 6.8rem);
+}
+
+.catalog-detail-hero__meta {
+  margin: 1.7rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem 1.5rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.catalog-detail-hero__meta span {
+  color: rgb(255 255 255 / 0.52);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.catalog-detail-hero__meta strong {
+  color: white;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.catalog-options--direct > header h2 {
+  max-width: 9ch;
+}
+
+/* Remove obsolete decorative numbering if any legacy component is still rendered. */
+.chapter-intro__index,
+.service-reel__number,
+.final-hero__chapter,
+.style-book-opening > span:first-child,
+.team-portrait__media > span:not(:only-child) {
+  display: none !important;
+}
+
+/* Keep the club scene useful without turning it into an oversized intermission. */
+.club-film--compact {
+  min-height: 560px;
+  max-height: 620px;
+}
+
+.club-film--compact video,
+.club-film--compact > img {
+  min-height: 560px;
+  max-height: 620px;
+}
+
+.club-film--compact .club-film__copy {
+  max-width: 620px;
+}
+
+.club-film--compact .club-film__copy h2 {
+  font-size: clamp(2.8rem, 5vw, 5.5rem);
+}
+
+@media (max-width: 980px) {
+  .services-clean-hero,
+  .services-catalog-stage {
+    grid-template-columns: 1fr;
+  }
+
+  .services-clean-hero > span {
+    grid-column: 1;
+  }
+
+  .services-catalog-stage__visual {
+    min-height: 620px;
+  }
+
+  .services-catalog-stage__menu {
+    border-left: 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .services-catalog-stage__menu > a {
+    min-height: 120px;
+  }
+
+  .catalog-detail-hero--compact {
+    min-height: auto;
+    grid-template-columns: 1fr;
+  }
+
+  .catalog-detail-hero--compact .catalog-detail-hero__media {
+    min-height: 600px;
+  }
+}
+
+@media (max-width: 620px) {
+  .services-clean-hero {
+    padding-top: 8rem;
+  }
+
+  .services-clean-hero h1 {
+    font-size: clamp(3.2rem, 14vw, 5rem);
+  }
+
+  .services-catalog-stage {
+    width: 100%;
+    border-left: 0;
+    border-right: 0;
+  }
+
+  .services-catalog-stage__visual {
+    min-height: 520px;
+  }
+
+  .services-catalog-stage__caption h2 {
+    font-size: clamp(3rem, 14vw, 4.7rem);
+  }
+
+  .services-catalog-stage__menu > a {
+    min-height: 104px;
+    padding: 1.25rem;
+  }
+
+  .services-catalog-stage__menu strong {
+    font-size: clamp(1.7rem, 8vw, 2.5rem);
+  }
+
+  .catalog-detail-hero--compact .catalog-detail-hero__media {
+    min-height: 480px;
+  }
+
+  .catalog-detail-hero--compact .catalog-detail-hero__copy h1 {
+    font-size: clamp(3.4rem, 15vw, 5.5rem);
+  }
+
+  .catalog-options--direct {
+    padding-top: 5rem;
+  }
+
+  .catalog-options--direct .catalog-options__groups li {
+    min-height: 68px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .services-catalog-stage__menu > a,
+  .services-catalog-stage__menu > a::before {
+    transition: none;
+  }
+}

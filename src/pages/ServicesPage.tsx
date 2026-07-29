@@ -1,4 +1,5 @@
-import { motion, useReducedMotion } from 'framer-motion';
+import { useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { BookingBand } from '../components/BookingBand';
 import { Seo } from '../components/Seo';
@@ -6,73 +7,77 @@ import { ViewportVideo } from '../components/ViewportVideo';
 import { serviceCatalog } from '../data/serviceCatalog';
 
 export function ServicesPage() {
+  const [activeArea, setActiveArea] = useState(0);
   const reduceMotion = useReducedMotion();
+  const currentArea = serviceCatalog[activeArea];
 
   return (
     <>
       <Seo
         title="Servicios"
-        description="Barbería, combos, tattoo y nails de Indian Club en Loja. Consulta todas las opciones disponibles y reserva online."
+        description="Barbería, combos, tattoo y nails de Indian Club en Loja. Elige un área y consulta todas sus opciones."
       />
 
-      <section className="services-hub-hero">
-        <div>
-          <span>Servicios Indian Club</span>
-          <h1>Todo lo que puedes hacer en Indian.</h1>
+      <section className="services-clean-hero">
+        <span>Servicios</span>
+        <h1>Todo lo que puedes hacer en Indian.</h1>
+        <p>Elige un área para conocer sus opciones y reservar.</p>
+      </section>
+
+      <section className="services-catalog-stage" aria-label="Áreas de servicio de Indian Club">
+        <div className="services-catalog-stage__visual">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentArea.id}
+              initial={reduceMotion ? false : { opacity: 0, scale: 1.025, x: -18 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              exit={reduceMotion ? undefined : { opacity: 0, x: 18 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            >
+              {currentArea.media.kind === 'video' && currentArea.media.video ? (
+                <ViewportVideo
+                  src={currentArea.media.video}
+                  poster={currentArea.media.poster}
+                  label={`${currentArea.title} en Indian Club`}
+                  priority
+                />
+              ) : (
+                <img src={currentArea.media.poster} alt={`${currentArea.title} en Indian Club`} loading="eager" />
+              )}
+              <div className="services-catalog-stage__veil" />
+              <div className="services-catalog-stage__caption">
+                <small>{currentArea.eyebrow}</small>
+                <h2>{currentArea.title}</h2>
+                <p>{currentArea.summary}</p>
+                <Link to={`/servicios/${currentArea.route}`}>Ver todas las opciones ↗</Link>
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
-        <p>
-          Elige un área para conocer todas sus opciones, duración aproximada y precio de referencia.
-        </p>
-      </section>
 
-      <section className="services-hub-grid" aria-label="Áreas de servicio de Indian Club">
-        {serviceCatalog.map((area, index) => (
-          <motion.article
-            className={`services-hub-card services-hub-card--${area.id}`}
-            key={area.id}
-            initial={reduceMotion ? false : { opacity: 0, y: 42 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.18 }}
-            transition={{ duration: 0.62, delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <Link to={`/servicios/${area.route}`} aria-label={`Ver ${area.title}`}>
-              <div className="services-hub-card__media">
-                {area.media.kind === 'video' && area.media.video ? (
-                  <ViewportVideo
-                    src={area.media.video}
-                    poster={area.media.poster}
-                    label={`${area.title} en Indian Club`}
-                  />
-                ) : (
-                  <img src={area.media.poster} alt={`${area.title} en Indian Club`} loading="lazy" />
-                )}
-                <div className="services-hub-card__veil" />
+        <div className="services-catalog-stage__menu">
+          {serviceCatalog.map((area, index) => (
+            <Link
+              to={`/servicios/${area.route}`}
+              key={area.id}
+              className={activeArea === index ? 'is-active' : undefined}
+              onMouseEnter={() => setActiveArea(index)}
+              onFocus={() => setActiveArea(index)}
+            >
+              <div>
+                <strong>{area.title}</strong>
+                <span>{area.eyebrow}</span>
               </div>
-
-              <div className="services-hub-card__copy">
-                <small>{area.eyebrow}</small>
-                <h2>{area.title}</h2>
-                <p>{area.summary}</p>
-                <div className="services-hub-card__preview">
-                  {area.groups.flatMap((group) => group.items).slice(0, 3).map((item) => (
-                    <span key={item}>{item}</span>
-                  ))}
-                </div>
-                <footer>
-                  <span>{area.duration}</span>
-                  <strong>{area.price}</strong>
-                  <i aria-hidden="true">Ver opciones ↗</i>
-                </footer>
-              </div>
+              <i aria-hidden="true">↗</i>
             </Link>
-          </motion.article>
-        ))}
+          ))}
+        </div>
       </section>
 
-      <section className="services-help">
+      <section className="services-help services-help--compact">
         <div>
-          <span>¿No sabes cuál elegir?</span>
-          <h2>Cuéntanos qué necesitas y te ayudamos a encontrar el servicio adecuado.</h2>
+          <span>¿Necesitas ayuda?</span>
+          <h2>Escríbenos y te orientamos antes de reservar.</h2>
         </div>
         <Link to="/contacto">Hablar con Indian Club ↗</Link>
       </section>
