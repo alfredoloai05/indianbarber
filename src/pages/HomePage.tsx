@@ -56,12 +56,12 @@ export function HomePage() {
       />
 
       <div className="art-home art-home--flow-polish">
-        <section className="film-hero" aria-labelledby="film-hero-title">
+        <section className="film-hero film-hero--integrated" aria-labelledby="film-hero-title">
           <motion.div
             className="film-hero__media"
-            initial={reduceMotion ? false : { opacity: 0, scale: 1.035, filter: 'blur(8px)' }}
+            initial={reduceMotion ? false : { opacity: 0, scale: 1.045, filter: 'blur(10px)' }}
             animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-            transition={{ duration: 0.72, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           >
             <ViewportVideo
               src={visualMedia.hero.barber.video}
@@ -73,34 +73,58 @@ export function HomePage() {
           </motion.div>
 
           <div className="film-hero__content">
-            <div className="film-hero__identity">
+            <motion.div
+              className="film-hero__identity"
+              initial={reduceMotion ? false : { opacity: 0, y: -22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.72, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
+            >
               <img src={brand.logoLockup} alt="Indian Club" />
               <div>
                 <span>Loja · Ecuador</span>
                 <span>Desde 2018</span>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="film-hero__statement">
+            <motion.div
+              className="film-hero__statement"
+              initial={reduceMotion ? false : { opacity: 0, y: 34, clipPath: 'inset(0 0 18% 0)' }}
+              animate={{ opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)' }}
+              transition={{ duration: 0.78, delay: 0.26, ease: [0.16, 1, 0.3, 1] }}
+            >
               <h1 id="film-hero-title">Barbería, tattoo, nails y café.</h1>
               <p>Cortes, barba y acabado con precisión.</p>
-              <div className="film-hero__actions">
+              <motion.div
+                className="film-hero__actions"
+                initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.58, delay: 0.48, ease: [0.16, 1, 0.3, 1] }}
+              >
                 <a href={bookingUrl} target="_blank" rel="noreferrer">Reservar cita <Arrow /></a>
                 <Link to="/style-book">Ver trabajos</Link>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
+          </div>
+
+          <div className="brand-ticker brand-ticker--hero" aria-hidden="true">
+            <motion.div
+              initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+              animate={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: 0, x: ['0%', '-50%'] }}
+              transition={
+                reduceMotion
+                  ? { duration: 0.45 }
+                  : {
+                      opacity: { duration: 0.55, delay: 0.58 },
+                      y: { duration: 0.55, delay: 0.58 },
+                      x: { duration: 34, repeat: Infinity, ease: 'linear', delay: 0.9 },
+                    }
+              }
+            >
+              <span>INDIAN CLUB</span><i>BARBERÍA</i><span>TATTOO</span><i>NAILS</i><span>CAFÉ</span>
+              <span>INDIAN CLUB</span><i>BARBERÍA</i><span>TATTOO</span><i>NAILS</i><span>CAFÉ</span>
+            </motion.div>
           </div>
         </section>
-
-        <div className="brand-ticker" aria-hidden="true">
-          <motion.div
-            animate={reduceMotion ? undefined : { x: ['0%', '-50%'] }}
-            transition={{ duration: 26, repeat: Infinity, ease: 'linear' }}
-          >
-            <span>INDIAN CLUB</span><i>BARBERÍA</i><span>TATTOO</span><i>NAILS</i><span>CAFÉ</span>
-            <span>INDIAN CLUB</span><i>BARBERÍA</i><span>TATTOO</span><i>NAILS</i><span>CAFÉ</span>
-          </motion.div>
-        </div>
 
         <section className="intent-canvas intent-canvas--direct" aria-labelledby="intent-title">
           <div className="intent-canvas__media">
