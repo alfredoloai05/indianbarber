@@ -10,28 +10,25 @@ export function PromotionsPage() {
         description="Promociones vigentes de Indian Club para barbería, nails, tattoo y fechas especiales en Loja."
       />
 
-      <section className="chapter-intro">
-        <div className="chapter-intro__index">05 / PROMOCIONES</div>
+      <section className="chapter-intro chapter-intro--clean">
         <div>
-          <p className="final-kicker">Ahora en Indian</p>
-          <h1>Una buena promoción informa. <em>No persigue.</em></h1>
+          <p className="final-kicker">Promociones</p>
+          <h1>Beneficios disponibles <em>en Indian Club.</em></h1>
         </div>
         <p className="chapter-intro__aside">
-          Todas las promociones se muestran con su condición principal. La aplicación definitiva se confirma directamente con el centro y no son acumulables.
+          Revisa las condiciones principales y confirma disponibilidad directamente con el centro antes de reservar.
         </p>
       </section>
 
-      <section className="promotions-stage">
-        {promotions.map((promotion, index) => (
+      <section className="promotions-stage promotions-stage--clean">
+        {promotions.map((promotion) => (
           <a href={bookingUrl} target="_blank" rel="noreferrer" key={promotion.title}>
-            <span>0{index + 1}</span>
             <div><small>{promotion.eyebrow}</small><h2>{promotion.title}</h2></div>
             <p>{promotion.note}</p>
             <i aria-hidden="true">↗</i>
           </a>
         ))}
         <a href={bookingUrl} target="_blank" rel="noreferrer">
-          <span>05</span>
           <div><small>Mayores de 55 años</small><h2>20% en servicios de barbería</h2></div>
           <p>Beneficio sujeto a validación y preconfirmación del centro.</p>
           <i aria-hidden="true">↗</i>
@@ -39,7 +36,7 @@ export function PromotionsPage() {
       </section>
 
       <section className="promotion-terms">
-        <div><span>Condiciones esenciales</span><h2>Claridad antes que urgencia.</h2></div>
+        <div><span>Condiciones</span><h2>Lo que debes saber antes de reservar.</h2></div>
         <ul>
           <li>Las promociones están sujetas a preconfirmación del centro.</li>
           <li>No son acumulables con otras ofertas.</li>
