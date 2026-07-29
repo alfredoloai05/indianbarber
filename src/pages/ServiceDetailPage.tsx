@@ -55,7 +55,7 @@ export function ServiceDetailPage() {
         <header>
           <span>Servicios disponibles</span>
           <h2 id="catalog-options-title">Elige tu servicio.</h2>
-          <p>Selecciona una opción y consulta horarios disponibles en AgendaPro.</p>
+          <p>Los tiempos marcados como aproximados pueden variar según el trabajo. AgendaPro confirma la disponibilidad y el valor vigente.</p>
         </header>
 
         <div className="catalog-options__groups">
@@ -64,9 +64,16 @@ export function ServiceDetailPage() {
               <h3>{group.title}</h3>
               <ul>
                 {group.items.map((item) => (
-                  <li key={item}>
-                    <span>{item}</span>
-                    <a href={bookingUrl} target="_blank" rel="noreferrer" aria-label={`Reservar ${item}`}>Reservar ↗</a>
+                  <li key={item.name}>
+                    <div className="catalog-option__content">
+                      <strong>{item.name}</strong>
+                      {item.note ? <p>{item.note}</p> : null}
+                    </div>
+                    <div className="catalog-option__meta" aria-label={`Duración ${item.duration}; precio ${item.price}`}>
+                      <span>{item.duration}</span>
+                      <b>{item.price}</b>
+                    </div>
+                    <a href={bookingUrl} target="_blank" rel="noreferrer" aria-label={`Reservar ${item.name}`}>Reservar ↗</a>
                   </li>
                 ))}
               </ul>
