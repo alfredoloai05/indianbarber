@@ -17,6 +17,7 @@ import './styles/desktop-hero-viewport.css';
 import './styles/services-architecture-v4.css';
 import './styles/global-numbering-cleanup-v5.css';
 import './styles/services-cleanup-v6.css';
+import './styles/hero-integrated-ticker-v8.css';
 
 const root = document.getElementById('root');
 
