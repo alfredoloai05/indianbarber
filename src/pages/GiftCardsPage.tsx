@@ -10,14 +10,13 @@ export function GiftCardsPage() {
         description="Tarjetas regalo de Indian Club en valores de USD 10 a USD 50 para servicios de cuidado personal en Loja."
       />
 
-      <section className="chapter-intro">
-        <div className="chapter-intro__index">07 / REGALAR</div>
+      <section className="chapter-intro chapter-intro--clean">
         <div>
-          <p className="final-kicker">Tarjetas Indian Club</p>
-          <h1>No regales una cosa. <em>Regala un momento bien elegido.</em></h1>
+          <p className="final-kicker">Tarjetas regalo</p>
+          <h1>Regala una visita <em>a Indian Club.</em></h1>
         </div>
         <p className="chapter-intro__aside">
-          Elige un valor y confirma la compra con Indian Club. La tarjeta puede aplicarse a servicios disponibles según sus condiciones vigentes.
+          Elige un valor y consulta la forma de entrega, vigencia y condiciones directamente con el centro.
         </p>
       </section>
 
@@ -27,8 +26,8 @@ export function GiftCardsPage() {
         </div>
         <div className="gift-stage__card" aria-label="Vista conceptual de tarjeta Indian Club">
           <span>INDIAN CLUB</span>
-          <strong>HOUSE OF PRESENCE</strong>
-          <small>GIFT CARD / LOJA</small>
+          <strong>GIFT CARD</strong>
+          <small>LOJA · ECUADOR</small>
         </div>
         <div className="gift-stage__copy">
           <span>Valores disponibles</span>
@@ -40,10 +39,10 @@ export function GiftCardsPage() {
         </div>
       </section>
 
-      <section className="gift-ritual">
-        <article><span>01</span><h2>Elige el valor</h2><p>Selecciona entre USD 10, 20, 30, 40 o 50.</p></article>
-        <article><span>02</span><h2>Personaliza</h2><p>Indica para quién es y confirma el mensaje o forma de entrega.</p></article>
-        <article><span>03</span><h2>Entrega presencia</h2><p>La persona podrá consultar el servicio disponible que mejor corresponda a su intención.</p></article>
+      <section className="gift-ritual gift-ritual--clean">
+        <article><h2>Elige el valor</h2><p>Selecciona entre USD 10, 20, 30, 40 o 50.</p></article>
+        <article><h2>Confirma los datos</h2><p>Indica para quién es y consulta la forma de entrega disponible.</p></article>
+        <article><h2>Úsala en Indian</h2><p>La persona podrá aplicarla a los servicios disponibles según las condiciones vigentes.</p></article>
       </section>
     </>
   );
