@@ -6,7 +6,7 @@ export const serviceCatalogGroups = [
     title: 'Peluquería y barbería',
     eyebrow: 'Cabello y barba',
     service: services[0],
-    media: visualMedia.barber,
+    media: visualMedia.services[0],
     items: [
       'Corte de cabello',
       'Rasurado de cabeza al cero',
@@ -19,7 +19,7 @@ export const serviceCatalogGroups = [
     title: 'Combos Indian',
     eyebrow: 'Servicios combinados',
     service: services[2],
-    media: visualMedia.barberDetail,
+    media: visualMedia.services[2],
     items: [
       'Corte Essential (cabello + cejas)',
       'Corte Premium (cabello + barba)',
@@ -32,14 +32,14 @@ export const serviceCatalogGroups = [
     title: 'Tattoo Studio',
     eyebrow: 'Diseño y tatuaje',
     service: services[4],
-    media: visualMedia.tattoo,
+    media: visualMedia.services[4],
     items: ['Cotización gratuita', 'Tatuaje'],
   },
   {
     title: 'Nails Studio',
     eyebrow: 'Manos y pies',
     service: services[3],
-    media: visualMedia.nails,
+    media: visualMedia.services[3],
     items: [
       'Manicura sin esmaltado',
       'Semipermanente con base rubber',
@@ -54,11 +54,7 @@ export const serviceCatalogGroups = [
     title: 'Servicios especiales',
     eyebrow: 'Detalles y cuidado',
     service: services[5],
-    media: {
-      poster: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&q=86&w=2000',
-      video: '',
-      source: 'Unsplash photo 1596462502278',
-    },
+    media: visualMedia.services[5],
     items: [
       'Depilación con cera de nariz',
       'Depilación con cera de orejas',
