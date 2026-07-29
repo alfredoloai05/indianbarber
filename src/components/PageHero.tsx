@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion';
 
 type PageHeroProps = {
-  index: string;
+  index?: string;
   eyebrow: string;
   title: string;
   description: string;
@@ -12,8 +12,8 @@ export function PageHero({ index, eyebrow, title, description, accent }: PageHer
   const reduceMotion = useReducedMotion();
 
   return (
-    <section className="page-hero">
-      <div className="page-hero__index">{index}</div>
+    <section className={`page-hero${index ? '' : ' page-hero--without-index'}`}>
+      {index ? <div className="page-hero__index">{index}</div> : null}
       <motion.div
         className="page-hero__copy"
         initial={reduceMotion ? false : { opacity: 0, y: 28 }}
