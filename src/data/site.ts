@@ -148,8 +148,8 @@ export const services = [
 export const team = [
   {
     name: 'René Chamba',
-    role: 'Coordinador y todólogo',
-    statement: 'Coordina la experiencia de la casa y conecta las distintas disciplinas de Indian Club.',
+    role: 'CEO de Indian Club',
+    statement: 'Lidera Indian Club y su propuesta de barbería, tattoo y nails en Loja.',
     image: 'https://content.app-sources.com/s/249321345646214611/uploads/El_centro/equipo_indian_club_1-8394408.png?format=webp',
   },
   {
