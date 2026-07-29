@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { BookingBand } from '../components/BookingBand';
 import { Seo } from '../components/Seo';
@@ -9,69 +9,67 @@ import { serviceCatalog } from '../data/serviceCatalog';
 export function ServicesPage() {
   const [activeArea, setActiveArea] = useState(0);
   const reduceMotion = useReducedMotion();
-  const currentArea = serviceCatalog[activeArea];
 
   return (
     <>
       <Seo
         title="Servicios"
-        description="Barbería, combos, tattoo y nails de Indian Club en Loja. Elige un área y consulta todas sus opciones."
+        description="Barbería, combos, tattoo y nails de Indian Club en Loja. Conoce todas las opciones, precios y tiempos disponibles."
       />
 
-      <section className="services-clean-hero">
-        <span>Servicios</span>
-        <h1>Todo lo que puedes hacer en Indian.</h1>
-        <p>Elige un área para conocer sus opciones y reservar.</p>
+      <section className="services-clean-hero services-clean-hero--quadrants">
+        <span>Servicios Indian Club</span>
+        <h1>Barbería, combos, tattoo y nails.</h1>
       </section>
 
-      <section className="services-catalog-stage" aria-label="Áreas de servicio de Indian Club">
-        <div className="services-catalog-stage__visual">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentArea.id}
-              initial={reduceMotion ? false : { opacity: 0, scale: 1.025, x: -18 }}
-              animate={{ opacity: 1, scale: 1, x: 0 }}
-              exit={reduceMotion ? undefined : { opacity: 0, x: 18 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            >
-              {currentArea.media.kind === 'video' && currentArea.media.video ? (
-                <ViewportVideo
-                  src={currentArea.media.video}
-                  poster={currentArea.media.poster}
-                  label={`${currentArea.title} en Indian Club`}
-                  priority
-                />
-              ) : (
-                <img src={currentArea.media.poster} alt={`${currentArea.title} en Indian Club`} loading="eager" />
-              )}
-              <div className="services-catalog-stage__veil" />
-              <div className="services-catalog-stage__caption">
-                <small>{currentArea.eyebrow}</small>
-                <h2>{currentArea.title}</h2>
-                <p>{currentArea.summary}</p>
-                <Link to={`/servicios/${currentArea.route}`}>Ver todas las opciones ↗</Link>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
+      <section className="services-quadrants" aria-label="Áreas de servicio de Indian Club">
+        {serviceCatalog.map((area, index) => {
+          const isActive = activeArea === index;
+          const examples = area.groups.flatMap((group) => group.items).slice(0, 3);
 
-        <div className="services-catalog-stage__menu">
-          {serviceCatalog.map((area, index) => (
+          return (
             <Link
               to={`/servicios/${area.route}`}
               key={area.id}
-              className={activeArea === index ? 'is-active' : undefined}
+              className={`services-quadrant services-quadrant--${area.id}${isActive ? ' is-active' : ''}`}
               onMouseEnter={() => setActiveArea(index)}
               onFocus={() => setActiveArea(index)}
             >
-              <div>
-                <strong>{area.title}</strong>
-                <span>{area.eyebrow}</span>
+              <div className="services-quadrant__poster">
+                <img src={area.media.poster} alt="" loading={index < 2 ? 'eager' : 'lazy'} />
               </div>
-              <i aria-hidden="true">↗</i>
+
+              {isActive && area.media.kind === 'video' && area.media.video ? (
+                <motion.div
+                  className="services-quadrant__video"
+                  initial={reduceMotion ? false : { opacity: 0, scale: 1.035 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <ViewportVideo
+                    src={area.media.video}
+                    poster={area.media.poster}
+                    label={`${area.title} en Indian Club`}
+                    priority={index === 0}
+                  />
+                </motion.div>
+              ) : null}
+
+              <div className="services-quadrant__ambient" aria-hidden="true" />
+              <div className="services-quadrant__veil" aria-hidden="true" />
+
+              <div className="services-quadrant__content">
+                <small>{area.eyebrow}</small>
+                <h2>{area.title}</h2>
+                <p>{area.summary}</p>
+                <ul>
+                  {examples.map((item) => <li key={item.name}>{item.name}</li>)}
+                </ul>
+                <span>Ver {area.shortTitle.toLowerCase()} ↗</span>
+              </div>
             </Link>
-          ))}
-        </div>
+          );
+        })}
       </section>
 
       <section className="services-help services-help--compact">
