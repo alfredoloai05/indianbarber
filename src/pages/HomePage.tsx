@@ -1,52 +1,27 @@
 import { useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Seo } from '../components/Seo';
 import { ViewportVideo } from '../components/ViewportVideo';
 import { journalItems } from '../data/journal';
 import { serviceCatalog } from '../data/serviceCatalog';
-import { bookingUrl, brand, contact, promotions, services } from '../data/site';
+import { bookingUrl, brand, contact, promotions } from '../data/site';
 import { visualMedia } from '../data/visualMedia';
 
-const finderResults = {
-  corte: {
-    label: 'Corte',
-    caption: 'Cabello',
-    service: services[0],
-    media: visualMedia.intent.cut,
-  },
-  barba: {
-    label: 'Barba',
-    caption: 'Perfilado y afeitado',
-    service: services[1],
-    media: visualMedia.intent.beard,
-  },
-  nails: {
-    label: 'Nails',
-    caption: 'Manos y pies',
-    service: services[3],
-    media: visualMedia.intent.nails,
-  },
-  tattoo: {
-    label: 'Tattoo',
-    caption: 'Diseño y cotización',
-    service: services[4],
-    media: visualMedia.intent.tattoo,
-  },
+const portalMedia = {
+  barberia: visualMedia.hero.barber,
+  combos: visualMedia.services[2],
+  tattoo: visualMedia.hero.tattoo,
+  nails: visualMedia.hero.nails,
 } as const;
-
-type FinderIntent = keyof typeof finderResults;
 
 function Arrow() {
   return <span aria-hidden="true">↗</span>;
 }
 
 export function HomePage() {
-  const [intent, setIntent] = useState<FinderIntent>('corte');
-  const [activeService, setActiveService] = useState(0);
+  const [activePortal, setActivePortal] = useState(0);
   const reduceMotion = useReducedMotion();
-  const result = finderResults[intent];
-  const currentService = serviceCatalog[activeService];
 
   return (
     <>
@@ -126,110 +101,86 @@ export function HomePage() {
           </div>
         </section>
 
-        <section className="intent-canvas intent-canvas--direct" aria-labelledby="intent-title">
-          <div className="intent-canvas__media">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={intent}
-                initial={reduceMotion ? false : { opacity: 0, clipPath: 'inset(0 0 12% 0)', scale: 1.025 }}
-                animate={{ opacity: 1, clipPath: 'inset(0 0 0% 0)', scale: 1 }}
-                exit={reduceMotion ? undefined : { opacity: 0, clipPath: 'inset(12% 0 0 0)' }}
-                transition={{ duration: 0.58, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <ViewportVideo
-                  src={result.media.video}
-                  poster={result.media.poster}
-                  label={`${result.label} en Indian Club`}
-                />
-              </motion.div>
-            </AnimatePresence>
-
-            <AnimatePresence mode="wait">
-              <motion.div
-                className="intent-canvas__result intent-canvas__result--simple"
-                key={result.service.slug}
-                initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={reduceMotion ? undefined : { opacity: 0, y: -12 }}
-                transition={{ duration: 0.34 }}
-              >
-                <small>{result.caption}</small>
-                <h3>{result.service.title}</h3>
-                <Link to={`/servicios/${result.service.slug}`}>Ver servicio <Arrow /></Link>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          <div className="intent-canvas__choices intent-canvas__choices--direct">
-            <span>Encuentra tu servicio</span>
-            <h2 id="intent-title">¿Qué buscas hoy?</h2>
-            <div role="group" aria-label="Selecciona un servicio">
-              {(Object.keys(finderResults) as FinderIntent[]).map((key) => (
-                <button
-                  type="button"
-                  key={key}
-                  aria-pressed={intent === key}
-                  className={intent === key ? 'is-active' : undefined}
-                  onClick={() => setIntent(key)}
-                  onMouseEnter={() => setIntent(key)}
-                  onFocus={() => setIntent(key)}
-                >
-                  <strong>{finderResults[key].label}</strong>
-                  <small>{finderResults[key].caption}</small>
-                </button>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="service-stage service-stage--catalog-preview" aria-labelledby="service-stage-title">
-          <div className="service-stage__sticky">
-            <AnimatePresence mode="wait">
-              <motion.div
-                className="service-stage__visual"
-                key={currentService.id}
-                initial={reduceMotion ? false : { opacity: 0, scale: 1.025, x: -14 }}
-                animate={{ opacity: 1, scale: 1, x: 0 }}
-                exit={reduceMotion ? undefined : { opacity: 0, x: 14 }}
-                transition={{ duration: 0.52, ease: [0.16, 1, 0.3, 1] }}
-              >
-                {currentService.media.kind === 'video' && currentService.media.video ? (
-                  <ViewportVideo
-                    src={currentService.media.video}
-                    poster={currentService.media.poster}
-                    label={currentService.title}
-                  />
-                ) : (
-                  <img src={currentService.media.poster} alt={currentService.title} loading="lazy" />
-                )}
-                <div>
-                  <span>{currentService.eyebrow}</span>
-                  <h3>{currentService.title}</h3>
-                  <p>{currentService.summary}</p>
-                  <Link to={`/servicios/${currentService.route}`}>Ver todas las opciones <Arrow /></Link>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          <div className="service-stage__list">
-            <header>
+        <section className="service-portals" aria-labelledby="service-portals-title">
+          <header className="service-portals__intro">
+            <div>
               <span>Servicios</span>
-              <h2 id="service-stage-title">Todo lo que puedes hacer en Indian.</h2>
-            </header>
-            {serviceCatalog.map((area, index) => (
-              <Link
-                to={`/servicios/${area.route}`}
-                key={area.id}
-                className={activeService === index ? 'is-active' : undefined}
-                onMouseEnter={() => setActiveService(index)}
-                onFocus={() => setActiveService(index)}
-              >
-                <div><strong>{area.title}</strong><span>{area.eyebrow}</span></div>
-                <div><small>{area.duration}</small><small>{area.price}</small></div>
-              </Link>
-            ))}
-            <Link className="service-stage__all" to="/servicios">Ver catálogo completo ↗</Link>
+              <h2 id="service-portals-title">Todo Indian, en un solo lugar.</h2>
+            </div>
+            <div>
+              <p>Abre una de las cuatro áreas para conocer qué puedes reservar.</p>
+              <Link to="/servicios">Ver catálogo completo <Arrow /></Link>
+            </div>
+          </header>
+
+          <div className="service-portals__grid" data-active={serviceCatalog[activePortal].id}>
+            {serviceCatalog.map((area, index) => {
+              const isActive = activePortal === index;
+              const media = portalMedia[area.id];
+              const examples = area.groups.flatMap((group) => group.items).slice(0, 3);
+
+              return (
+                <article
+                  key={area.id}
+                  className={`service-portal service-portal--${area.id}${isActive ? ' is-active' : ''}`}
+                  onMouseEnter={() => setActivePortal(index)}
+                  onFocusCapture={() => setActivePortal(index)}
+                >
+                  <div className="service-portal__poster">
+                    <img src={media.poster} alt="" loading={index === 0 ? 'eager' : 'lazy'} />
+                  </div>
+
+                  {isActive && media.video ? (
+                    <motion.div
+                      className="service-portal__video"
+                      initial={reduceMotion ? false : { opacity: 0, scale: 1.035 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                      <ViewportVideo
+                        src={media.video}
+                        poster={media.poster}
+                        label={`${area.title} en Indian Club`}
+                      />
+                    </motion.div>
+                  ) : null}
+
+                  <div className="service-portal__ambient" aria-hidden="true" />
+                  <div className="service-portal__veil" aria-hidden="true" />
+
+                  <button
+                    type="button"
+                    className="service-portal__trigger"
+                    aria-expanded={isActive}
+                    aria-controls={`portal-${area.id}`}
+                    onClick={() => setActivePortal(index)}
+                  >
+                    <small>{area.eyebrow}</small>
+                    <strong>{area.shortTitle}</strong>
+                    <span aria-hidden="true">+</span>
+                  </button>
+
+                  <motion.div
+                    id={`portal-${area.id}`}
+                    className="service-portal__details"
+                    initial={false}
+                    animate={
+                      isActive
+                        ? { opacity: 1, y: 0, pointerEvents: 'auto' }
+                        : { opacity: 0, y: 18, pointerEvents: 'none' }
+                    }
+                    transition={{ duration: 0.34, ease: [0.16, 1, 0.3, 1] }}
+                    aria-hidden={!isActive}
+                  >
+                    <p>{area.summary}</p>
+                    <ul>
+                      {examples.map((item) => <li key={item.name}>{item.name}</li>)}
+                    </ul>
+                    <Link to={`/servicios/${area.route}`}>Ver {area.shortTitle.toLowerCase()} <Arrow /></Link>
+                  </motion.div>
+                </article>
+              );
+            })}
           </div>
         </section>
 
