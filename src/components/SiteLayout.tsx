@@ -107,6 +107,13 @@ export function SiteLayout() {
                   <NavLink to={item.to} onClick={() => setMenuOpen(false)}>{item.label}</NavLink>
                 </motion.div>
               ))}
+              <motion.div
+                initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: reduceMotion ? 0 : navItems.length * 0.04 }}
+              >
+                <NavLink to="/tarjetas-regalo" onClick={() => setMenuOpen(false)}>Gift Cards</NavLink>
+              </motion.div>
             </nav>
             <a className="menu-overlay__booking" href={bookingUrl} target="_blank" rel="noreferrer">
               Reservar una cita <span aria-hidden="true">↗</span>
@@ -133,6 +140,7 @@ export function SiteLayout() {
           <Link to="/equipo">Equipo</Link>
           <Link to="/club">El Club</Link>
           <Link to="/style-book">Style Book</Link>
+          <Link to="/tarjetas-regalo">Gift Cards</Link>
         </nav>
 
         <div className="compact-footer__contact">
