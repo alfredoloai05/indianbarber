@@ -24,6 +24,7 @@ import './styles/viewport-service-layouts-v11.css';
 import './styles/service-detail-asymmetry-v12.css';
 import './styles/mobile-menu-team-v13.css';
 import './styles/home-guides-menu-v14.css';
+import './styles/home-gift-cards-v15.css';
 
 const root = document.getElementById('root');
 
