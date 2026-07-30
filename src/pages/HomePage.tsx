@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { HomeGiftCards } from '../components/HomeGiftCards';
 import { Seo } from '../components/Seo';
 import { ViewportVideo } from '../components/ViewportVideo';
 import { journalItems } from '../data/journal';
@@ -213,6 +214,8 @@ export function HomePage() {
             ))}
           </div>
         </section>
+
+        <HomeGiftCards />
 
         <section className="home-guides" aria-labelledby="home-guides-title">
           <header className="home-guides__header">
