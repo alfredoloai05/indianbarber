@@ -2,38 +2,29 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { BookingBand } from '../components/BookingBand';
 import { Seo } from '../components/Seo';
-import { brand, media } from '../data/site';
-
-const frames = [
-  { image: media.hero, label: 'Corte y acabado', alt: 'Cliente atendido dentro de Indian Club', className: 'style-book-grid__hero' },
-  { image: media.tattoo, label: 'Tattoo Studio', alt: 'Tatuaje realizado por Indian Club Tattoo Studio', className: 'style-book-grid__tall' },
-  { image: media.barber, label: 'Barbería', alt: 'Corte realizado por Indian Club', className: 'style-book-grid__wide' },
-  { image: media.nails, label: 'Nails Studio', alt: 'Diseño de uñas realizado por Indian Club Nails Studio', className: 'style-book-grid__small' },
-  { image: media.barberAlt, label: 'Barba y perfilado', alt: 'Resultado de barbería realizado en Indian Club', className: 'style-book-grid__portrait' },
-  { image: media.tattoo, label: 'Detalle de tatuaje', alt: 'Detalle de trabajo del Tattoo Studio', className: 'style-book-grid__small' },
-];
+import { useGlobalSettings, useStyleBookContent } from '../content/useSiteContent';
 
 export function StyleBookPage() {
   const reduceMotion = useReducedMotion();
+  const settings = useGlobalSettings();
+  const content = useStyleBookContent();
 
   return (
     <>
       <Seo
         title="Style Book"
-        description="Trabajos de cortes, tatuajes y manicura realizados por Indian Club en Loja."
+        description={`Trabajos de cortes, tatuajes y manicura realizados por ${settings.brandName} en Loja.`}
       />
 
       <section className="chapter-intro chapter-intro--brand chapter-intro--clean">
         <div>
-          <p className="final-kicker">Style Book</p>
-          <h1>Trabajos realizados por <em>el equipo de Indian Club.</em></h1>
+          <p className="final-kicker">{content.eyebrow}</p>
+          <h1>{content.title}</h1>
         </div>
-        <p className="chapter-intro__aside">
-          Cortes, perfilados, tatuajes y uñas para que encuentres referencias antes de reservar.
-        </p>
+        <p className="chapter-intro__aside">{content.description}</p>
         <motion.img
           className="chapter-intro__brand-mark"
-          src={brand.logoMark}
+          src={settings.logoMark}
           alt=""
           initial={reduceMotion ? false : { opacity: 0, rotate: -8, scale: 0.7 }}
           animate={{ opacity: 0.12, rotate: 0, scale: 1 }}
@@ -42,13 +33,13 @@ export function StyleBookPage() {
       </section>
 
       <section className="style-book-opening style-book-opening--brand style-book-opening--clean">
-        <span>Indian Club · Loja</span>
+        <span>{settings.brandName} · Loja</span>
         <p>Cortes, tattoo y nails en una sola galería.</p>
         <strong>Ver · Elegir · Reservar</strong>
       </section>
 
-      <section className="style-book-grid style-book-grid--official" aria-label="Galería de trabajos de Indian Club">
-        {frames.map((frame, index) => (
+      <section className="style-book-grid style-book-grid--official" aria-label={`Galería de trabajos de ${settings.brandName}`}>
+        {content.frames.map((frame, index) => (
           <motion.figure
             className={frame.className}
             key={`${frame.label}-${index}`}
@@ -71,7 +62,7 @@ export function StyleBookPage() {
         </div>
         <div className="style-book-manifesto__mark">
           <motion.img
-            src={brand.logoMark}
+            src={settings.logoMark}
             alt=""
             animate={reduceMotion ? undefined : { rotate: [0, 2, -2, 0] }}
             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}

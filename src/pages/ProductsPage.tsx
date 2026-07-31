@@ -1,14 +1,17 @@
 import { BookingBand } from '../components/BookingBand';
 import { Seo } from '../components/Seo';
-import { products } from '../data/catalog';
-import { contact, media } from '../data/site';
+import { useGlobalSettings, useProductsContent } from '../content/useSiteContent';
+import { media } from '../data/site';
 
 export function ProductsPage() {
+  const products = useProductsContent();
+  const settings = useGlobalSettings();
+
   return (
     <>
       <Seo
         title="Productos"
-        description="Productos profesionales para cabello, barba y cuidado personal disponibles en Indian Club Loja."
+        description={`Productos profesionales para cabello, barba y cuidado personal disponibles en ${settings.brandName} Loja.`}
       />
 
       <section className="chapter-intro chapter-intro--clean">
@@ -24,7 +27,7 @@ export function ProductsPage() {
       <section className="product-editorial product-editorial--clean">
         <div className="product-editorial__visual">
           <img src={media.barber} alt="Detalle de una sesión profesional de barbería" loading="eager" />
-          <span>Productos Indian Club</span>
+          <span>Productos {settings.brandName}</span>
         </div>
         <div className="product-editorial__intro">
           <span>Recomendación profesional</span>
@@ -33,9 +36,9 @@ export function ProductsPage() {
         </div>
       </section>
 
-      <section className="product-ledger product-ledger--clean" aria-label="Productos disponibles en Indian Club">
+      <section className="product-ledger product-ledger--clean" aria-label={`Productos disponibles en ${settings.brandName}`}>
         {products.map((product) => (
-          <a href={contact.whatsappHref} target="_blank" rel="noreferrer" key={product.title}>
+          <a href={settings.whatsappHref} target="_blank" rel="noreferrer" key={product.title}>
             <small>{product.category}</small>
             <h2>{product.title}</h2>
             <p>{product.description}</p>
@@ -47,7 +50,7 @@ export function ProductsPage() {
       <section className="product-guidance">
         <div><span>Disponibilidad</span><h2>Consulta antes de elegir.</h2></div>
         <p>El inventario puede variar. Escríbenos por WhatsApp o pregunta durante tu visita para confirmar productos disponibles.</p>
-        <a className="final-button" href={contact.whatsappHref} target="_blank" rel="noreferrer">Consultar productos ↗</a>
+        <a className="final-button" href={settings.whatsappHref} target="_blank" rel="noreferrer">Consultar productos ↗</a>
       </section>
 
       <BookingBand />

@@ -1,11 +1,12 @@
 import { Link, useParams } from 'react-router-dom';
 import { BookingBand } from '../components/BookingBand';
 import { Seo } from '../components/Seo';
-import { journalBodies, journalItems } from '../data/journal';
+import { useJournalArticlesContent } from '../content/useSiteContent';
 
 export function ArticlePage() {
   const { slug } = useParams();
-  const article = journalItems.find((item) => item.slug === slug);
+  const articles = useJournalArticlesContent();
+  const article = articles.find((item) => item.slug === slug);
 
   if (!article) {
     return (
@@ -17,7 +18,7 @@ export function ArticlePage() {
     );
   }
 
-  const paragraphs = journalBodies[article.slug] ?? [article.excerpt];
+  const paragraphs = article.body.length > 0 ? article.body : [article.excerpt];
 
   return (
     <>
@@ -41,7 +42,7 @@ export function ArticlePage() {
           </aside>
           <div>
             {paragraphs.map((paragraph, index) => (
-              <p key={paragraph} className={index === 0 ? 'article-page__lead' : undefined}>{paragraph}</p>
+              <p key={`${paragraph}-${index}`} className={index === 0 ? 'article-page__lead' : undefined}>{paragraph}</p>
             ))}
           </div>
         </div>

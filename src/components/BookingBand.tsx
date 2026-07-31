@@ -1,6 +1,8 @@
-import { bookingUrl } from '../data/site';
+import { useGlobalSettings } from '../content/useSiteContent';
 
 export function BookingBand() {
+  const settings = useGlobalSettings();
+
   return (
     <section className="booking-band" aria-labelledby="booking-band-title">
       <div>
@@ -10,7 +12,7 @@ export function BookingBand() {
       <p>
         Consulta la disponibilidad de profesionales, fechas y horarios, y confirma tu cita online.
       </p>
-      <a className="button button--dark" href={bookingUrl} target="_blank" rel="noreferrer">
+      <a className="button button--dark" href={settings.bookingUrl} target="_blank" rel="noreferrer">
         Ver horarios <span aria-hidden="true">↗</span>
       </a>
     </section>

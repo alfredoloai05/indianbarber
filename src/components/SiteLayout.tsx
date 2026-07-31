@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   AnimatePresence,
   motion,
@@ -8,16 +8,17 @@ import {
   useSpring,
 } from 'framer-motion';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
-import { bookingUrl, brand, contact, navItems } from '../data/site';
-
-const desktopItems = navItems.filter((item) =>
-  ['/servicios', '/equipo', '/club', '/style-book'].includes(item.to),
-);
+import { useGlobalSettings } from '../content/useSiteContent';
 
 export function SiteLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const reduceMotion = useReducedMotion();
+  const settings = useGlobalSettings();
+  const desktopItems = useMemo(
+    () => settings.navigation.filter((item) => ['/servicios', '/equipo', '/club', '/style-book'].includes(item.to)),
+    [settings.navigation],
+  );
   const cursorX = useMotionValue(-500);
   const cursorY = useMotionValue(-500);
   const { scrollYProgress } = useScroll();
@@ -57,9 +58,9 @@ export function SiteLayout() {
       {!reduceMotion ? <motion.div className="ambient-cursor" style={{ x: cursorX, y: cursorY }} aria-hidden="true" /> : null}
 
       <header className="site-header site-header--compact">
-        <Link className="compact-brand" to="/" aria-label="Indian Club, inicio" onClick={() => setMenuOpen(false)}>
-          <img src={brand.logoMark} alt="" />
-          <span>INDIAN CLUB</span>
+        <Link className="compact-brand" to="/" aria-label={`${settings.brandName}, inicio`} onClick={() => setMenuOpen(false)}>
+          <img src={settings.logoMark} alt="" />
+          <span>{settings.brandName.toUpperCase()}</span>
         </Link>
 
         <nav className="compact-nav" aria-label="Navegación principal">
@@ -71,7 +72,7 @@ export function SiteLayout() {
         </nav>
 
         <div className="compact-actions">
-          <a className="compact-booking" href={bookingUrl} target="_blank" rel="noreferrer">Reservar</a>
+          <a className="compact-booking" href={settings.bookingUrl} target="_blank" rel="noreferrer">Reservar</a>
           <button
             className={`menu-trigger menu-trigger--compact menu-trigger--clean${menuOpen ? ' is-open' : ''}`}
             type="button"
@@ -94,10 +95,10 @@ export function SiteLayout() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.24 }}
           >
-            <img className="menu-overlay__brand-mark" src={brand.logoMark} alt="" />
-            <div className="menu-overlay__index">INDIAN CLUB · LOJA</div>
+            <img className="menu-overlay__brand-mark" src={settings.logoMark} alt="" />
+            <div className="menu-overlay__index">{settings.brandName.toUpperCase()} · LOJA</div>
             <nav aria-label="Navegación móvil">
-              {navItems.map((item, index) => (
+              {settings.navigation.map((item, index) => (
                 <motion.div
                   key={item.to}
                   initial={reduceMotion ? false : { opacity: 0, y: 18 }}
@@ -110,12 +111,12 @@ export function SiteLayout() {
               <motion.div
                 initial={reduceMotion ? false : { opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: reduceMotion ? 0 : navItems.length * 0.04 }}
+                transition={{ delay: reduceMotion ? 0 : settings.navigation.length * 0.04 }}
               >
                 <NavLink to="/tarjetas-regalo" onClick={() => setMenuOpen(false)}>Gift Cards</NavLink>
               </motion.div>
             </nav>
-            <a className="menu-overlay__booking" href={bookingUrl} target="_blank" rel="noreferrer">
+            <a className="menu-overlay__booking" href={settings.bookingUrl} target="_blank" rel="noreferrer">
               Reservar una cita <span aria-hidden="true">↗</span>
             </a>
           </motion.div>
@@ -128,9 +129,9 @@ export function SiteLayout() {
 
       <footer className="site-footer site-footer--compact-final">
         <div className="compact-footer__brand">
-          <Link to="/" aria-label="Indian Club, inicio">
-            <img src={brand.logoMark} alt="" />
-            <strong>INDIAN CLUB</strong>
+          <Link to="/" aria-label={`${settings.brandName}, inicio`}>
+            <img src={settings.logoMark} alt="" />
+            <strong>{settings.brandName.toUpperCase()}</strong>
           </Link>
           <span>Barbería · Tattoo · Nails · Café</span>
         </div>
@@ -144,13 +145,13 @@ export function SiteLayout() {
         </nav>
 
         <div className="compact-footer__contact">
-          <a href={contact.whatsappHref} target="_blank" rel="noreferrer">WhatsApp</a>
-          <a href={bookingUrl} target="_blank" rel="noreferrer">Reservar ↗</a>
+          <a href={settings.whatsappHref} target="_blank" rel="noreferrer">WhatsApp</a>
+          <a href={settings.bookingUrl} target="_blank" rel="noreferrer">Reservar ↗</a>
         </div>
 
         <div className="compact-footer__bottom">
-          <span>{contact.address} · {contact.city}</span>
-          <span>© 2026 Indian Club</span>
+          <span>{settings.address} · {settings.city}</span>
+          <span>© 2026 {settings.brandName}</span>
         </div>
       </footer>
     </div>

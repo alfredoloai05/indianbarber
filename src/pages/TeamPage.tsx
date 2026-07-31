@@ -1,29 +1,30 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { BookingBand } from '../components/BookingBand';
 import { Seo } from '../components/Seo';
-import { brand, team } from '../data/site';
+import { useGlobalSettings, useTeamMembersContent, useTeamPageContent } from '../content/useSiteContent';
 
 export function TeamPage() {
   const reduceMotion = useReducedMotion();
+  const settings = useGlobalSettings();
+  const team = useTeamMembersContent();
+  const content = useTeamPageContent();
 
   return (
     <>
       <Seo
         title="Equipo"
-        description="Conoce a René Chamba, César Castejón, Alisson Ruiz, Santiago Vivanco y Adrián Pardo, profesionales de Indian Club Loja."
+        description={`Conoce al equipo profesional de ${settings.brandName} en Loja.`}
       />
 
       <section className="chapter-intro chapter-intro--brand chapter-intro--clean">
         <div>
-          <p className="final-kicker">Equipo Indian Club</p>
-          <h1>Barbería, tattoo y nails. <em>Personas que conocen su oficio.</em></h1>
+          <p className="final-kicker">{content.eyebrow}</p>
+          <h1>{content.title}</h1>
         </div>
-        <p className="chapter-intro__aside">
-          Conoce al equipo y encuentra al profesional adecuado para el servicio que quieres reservar.
-        </p>
+        <p className="chapter-intro__aside">{content.description}</p>
         <motion.img
           className="chapter-intro__brand-mark"
-          src={brand.logoMark}
+          src={settings.logoMark}
           alt=""
           initial={reduceMotion ? false : { opacity: 0, scale: 0.72, rotate: -6 }}
           animate={{ opacity: 0.12, scale: 1, rotate: 0 }}
@@ -31,7 +32,7 @@ export function TeamPage() {
         />
       </section>
 
-      <section className="team-portraits team-portraits--official" aria-label="Equipo de Indian Club">
+      <section className="team-portraits team-portraits--official" aria-label={`Equipo de ${settings.brandName}`}>
         {team.map((member, index) => (
           <motion.article
             className="team-portrait"
@@ -49,7 +50,7 @@ export function TeamPage() {
                 whileHover={reduceMotion ? undefined : { scale: 1.04, rotate: index % 2 === 0 ? -1 : 1 }}
                 transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
               />
-              <span>INDIAN CLUB</span>
+              <span>{settings.brandName.toUpperCase()}</span>
               <i aria-hidden="true" />
             </div>
             <div className="team-portrait__copy">
@@ -66,11 +67,9 @@ export function TeamPage() {
 
       <section className="team-collaboration">
         <div className="team-collaboration__intro">
-          <span>Trabajo en equipo</span>
-          <h2>Tres especialidades dentro de la misma casa.</h2>
-          <p>
-            Barbería, tattoo y nails comparten el espacio y la atención para que puedas combinar distintos servicios en una sola visita.
-          </p>
+          <span>{content.collaborationEyebrow}</span>
+          <h2>{content.collaborationTitle}</h2>
+          <p>{content.collaborationDescription}</p>
         </div>
         <div className="team-collaboration__areas">
           <article><strong>Barbería</strong><p>Cortes, barba, afeitado y recomendaciones de mantenimiento.</p></article>
@@ -80,10 +79,10 @@ export function TeamPage() {
       </section>
 
       <section className="team-callout team-callout--brand">
-        <img src={brand.logoMark} alt="" />
+        <img src={settings.logoMark} alt="" />
         <span>Reserva con el equipo</span>
-        <h2>Elige el servicio y revisa quién está disponible.</h2>
-        <p>AgendaPro te permite consultar horarios y seleccionar al profesional para tu próxima visita.</p>
+        <h2>{content.bookingTitle}</h2>
+        <p>{content.bookingDescription}</p>
       </section>
 
       <BookingBand />
