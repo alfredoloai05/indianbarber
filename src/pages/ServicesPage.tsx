@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom';
 import { BookingBand } from '../components/BookingBand';
 import { Seo } from '../components/Seo';
 import { ViewportVideo } from '../components/ViewportVideo';
-import { serviceCatalog } from '../data/serviceCatalog';
+import { useServiceCatalogContent } from '../content/useSiteContent';
 
 export function ServicesPage() {
   const [activeArea, setActiveArea] = useState(0);
   const reduceMotion = useReducedMotion();
+  const serviceCatalog = useServiceCatalogContent();
 
   return (
     <>
