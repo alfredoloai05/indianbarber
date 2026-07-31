@@ -87,7 +87,7 @@ function emptyFromTemplate(value: CmsJson): CmsJson {
         key,
         LOCKED_FIELDS.has(key) ? child : emptyFromTemplate(child),
       ]),
-    );
+    ) as Record<string, CmsJson>;
   }
   if (typeof value === 'boolean') return true;
   if (typeof value === 'number') return 0;
@@ -118,48 +118,49 @@ export function StructuredEditor({
   const currentPath = [...path, fieldKey];
 
   if (Array.isArray(value)) {
+    const arrayValue: CmsJson[] = value;
     const rootCollectionLocked =
       (rootKey === 'services.catalog' && path.length === 0) ||
       (rootKey === 'global.settings' && fieldKey === 'navigation');
 
     function updateAt(index: number, nextValue: CmsJson) {
-      onChange(value.map((item, itemIndex) => (itemIndex === index ? nextValue : item)));
+      onChange(arrayValue.map((item, itemIndex) => (itemIndex === index ? nextValue : item)));
     }
 
     function removeAt(index: number) {
-      onChange(value.filter((_, itemIndex) => itemIndex !== index));
+      onChange(arrayValue.filter((_, itemIndex) => itemIndex !== index));
     }
 
     function move(index: number, direction: -1 | 1) {
       const target = index + direction;
-      if (target < 0 || target >= value.length) return;
-      const next = [...value];
+      if (target < 0 || target >= arrayValue.length) return;
+      const next = [...arrayValue];
       [next[index], next[target]] = [next[target], next[index]];
       onChange(next);
     }
 
-    const template = value[0] ?? '';
+    const template = arrayValue[0] ?? '';
     return (
       <section className="cms-array-field">
         <div className="cms-field-heading">
           <div>
             <span>{humanize(fieldKey)}</span>
-            <small>{value.length} elemento{value.length === 1 ? '' : 's'}</small>
+            <small>{arrayValue.length} elemento{arrayValue.length === 1 ? '' : 's'}</small>
           </div>
           {!rootCollectionLocked && !locked ? (
-            <button type="button" onClick={() => onChange([...value, emptyFromTemplate(template)])}>
+            <button type="button" onClick={() => onChange([...arrayValue, emptyFromTemplate(template)])}>
               Agregar
             </button>
           ) : null}
         </div>
         <div className="cms-array-list">
-          {value.map((item, index) => (
+          {arrayValue.map((item, index) => (
             <article className="cms-array-item" key={`${currentPath.join('.')}-${index}`}>
               <header>
                 <strong>{isRecord(item) && typeof item.title === 'string' ? item.title : isRecord(item) && typeof item.name === 'string' ? item.name : `${humanize(fieldKey)} ${index + 1}`}</strong>
                 <div>
                   <button type="button" onClick={() => move(index, -1)} disabled={index === 0} aria-label="Mover arriba">↑</button>
-                  <button type="button" onClick={() => move(index, 1)} disabled={index === value.length - 1} aria-label="Mover abajo">↓</button>
+                  <button type="button" onClick={() => move(index, 1)} disabled={index === arrayValue.length - 1} aria-label="Mover abajo">↓</button>
                   {!rootCollectionLocked && !locked ? <button type="button" onClick={() => removeAt(index)}>Eliminar</button> : null}
                 </div>
               </header>
@@ -173,7 +174,7 @@ export function StructuredEditor({
               />
             </article>
           ))}
-          {value.length === 0 ? <p className="cms-empty-list">No hay elementos. Usa “Agregar” para crear el primero.</p> : null}
+          {arrayValue.length === 0 ? <p className="cms-empty-list">No hay elementos. Usa “Agregar” para crear el primero.</p> : null}
         </div>
       </section>
     );
