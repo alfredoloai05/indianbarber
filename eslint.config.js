@@ -23,4 +23,11 @@ export default tseslint.config(
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     },
   },
+  {
+    files: ['src/pages/AdminPage.tsx', 'src/content/CmsProvider.tsx'],
+    rules: {
+      // These components synchronize initial state with Supabase Auth and CMS subscriptions.
+      'react-hooks/set-state-in-effect': 'off',
+    },
+  },
 );
