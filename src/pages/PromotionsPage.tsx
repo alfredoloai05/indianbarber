@@ -1,19 +1,22 @@
 import { BookingBand } from '../components/BookingBand';
 import { Seo } from '../components/Seo';
-import { bookingUrl, promotions } from '../data/site';
+import { useGlobalSettings, usePromotionsContent } from '../content/useSiteContent';
 
 export function PromotionsPage() {
+  const promotions = usePromotionsContent();
+  const settings = useGlobalSettings();
+
   return (
     <>
       <Seo
         title="Promociones"
-        description="Promociones vigentes de Indian Club para barbería, nails, tattoo y fechas especiales en Loja."
+        description={`Promociones vigentes de ${settings.brandName} para barbería, nails, tattoo y fechas especiales en Loja.`}
       />
 
       <section className="chapter-intro chapter-intro--clean">
         <div>
           <p className="final-kicker">Promociones</p>
-          <h1>Beneficios disponibles <em>en Indian Club.</em></h1>
+          <h1>Beneficios disponibles <em>en {settings.brandName}.</em></h1>
         </div>
         <p className="chapter-intro__aside">
           Revisa las condiciones principales y confirma disponibilidad directamente con el centro antes de reservar.
@@ -22,17 +25,12 @@ export function PromotionsPage() {
 
       <section className="promotions-stage promotions-stage--clean">
         {promotions.map((promotion) => (
-          <a href={bookingUrl} target="_blank" rel="noreferrer" key={promotion.title}>
+          <a href={settings.bookingUrl} target="_blank" rel="noreferrer" key={promotion.title}>
             <div><small>{promotion.eyebrow}</small><h2>{promotion.title}</h2></div>
             <p>{promotion.note}</p>
             <i aria-hidden="true">↗</i>
           </a>
         ))}
-        <a href={bookingUrl} target="_blank" rel="noreferrer">
-          <div><small>Mayores de 55 años</small><h2>20% en servicios de barbería</h2></div>
-          <p>Beneficio sujeto a validación y preconfirmación del centro.</p>
-          <i aria-hidden="true">↗</i>
-        </a>
       </section>
 
       <section className="promotion-terms">
