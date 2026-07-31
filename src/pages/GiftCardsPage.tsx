@@ -1,48 +1,48 @@
 import { Seo } from '../components/Seo';
-import { giftCards } from '../data/catalog';
-import { contact, media } from '../data/site';
+import { useGiftCardsPageContent, useGlobalSettings } from '../content/useSiteContent';
 
 export function GiftCardsPage() {
+  const content = useGiftCardsPageContent();
+  const settings = useGlobalSettings();
+
   return (
     <>
       <Seo
         title="Tarjetas regalo"
-        description="Tarjetas regalo de Indian Club en valores de USD 10 a USD 50 para servicios de cuidado personal en Loja."
+        description={`Tarjetas regalo de ${settings.brandName} para servicios de cuidado personal en Loja.`}
       />
 
       <section className="chapter-intro chapter-intro--clean">
         <div>
-          <p className="final-kicker">Tarjetas regalo</p>
-          <h1>Regala una visita <em>a Indian Club.</em></h1>
+          <p className="final-kicker">{content.eyebrow}</p>
+          <h1>{content.title}</h1>
         </div>
-        <p className="chapter-intro__aside">
-          Elige un valor y consulta la forma de entrega, vigencia y condiciones directamente con el centro.
-        </p>
+        <p className="chapter-intro__aside">{content.description}</p>
       </section>
 
       <section className="gift-stage">
         <div className="gift-stage__media">
-          <img src={media.cafe} alt="Atmósfera cálida de Indian Club" loading="eager" />
+          <img src={content.image} alt={`Atmósfera de ${settings.brandName}`} loading="eager" />
         </div>
-        <div className="gift-stage__card" aria-label="Vista conceptual de tarjeta Indian Club">
-          <span>INDIAN CLUB</span>
+        <div className="gift-stage__card" aria-label={`Vista conceptual de tarjeta ${settings.brandName}`}>
+          <span>{settings.brandName.toUpperCase()}</span>
           <strong>GIFT CARD</strong>
           <small>LOJA · ECUADOR</small>
         </div>
         <div className="gift-stage__copy">
           <span>Valores disponibles</span>
           <div className="gift-stage__values">
-            {giftCards.map((value) => <strong key={value}>{value}</strong>)}
+            {content.values.map((value) => <strong key={value}>{value}</strong>)}
           </div>
-          <p>Consulta disponibilidad, forma de entrega y condiciones directamente con el centro.</p>
-          <a className="final-button" href={contact.whatsappHref} target="_blank" rel="noreferrer">Solicitar una tarjeta ↗</a>
+          <p>{content.description}</p>
+          <a className="final-button" href={settings.whatsappHref} target="_blank" rel="noreferrer">{content.buttonLabel} ↗</a>
         </div>
       </section>
 
       <section className="gift-ritual gift-ritual--clean">
-        <article><h2>Elige el valor</h2><p>Selecciona entre USD 10, 20, 30, 40 o 50.</p></article>
-        <article><h2>Confirma los datos</h2><p>Indica para quién es y consulta la forma de entrega disponible.</p></article>
-        <article><h2>Úsala en Indian</h2><p>La persona podrá aplicarla a los servicios disponibles según las condiciones vigentes.</p></article>
+        {content.steps.map((step) => (
+          <article key={step.title}><h2>{step.title}</h2><p>{step.description}</p></article>
+        ))}
       </section>
     </>
   );
