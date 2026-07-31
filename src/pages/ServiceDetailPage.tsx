@@ -2,12 +2,13 @@ import { Link, useParams } from 'react-router-dom';
 import { BookingBand } from '../components/BookingBand';
 import { Seo } from '../components/Seo';
 import { ViewportVideo } from '../components/ViewportVideo';
-import { findServiceCatalogArea } from '../data/serviceCatalog';
-import { bookingUrl, contact } from '../data/site';
+import { useGlobalSettings, useServiceCatalogContent } from '../content/useSiteContent';
 
 export function ServiceDetailPage() {
   const { slug } = useParams();
-  const area = findServiceCatalogArea(slug);
+  const serviceCatalog = useServiceCatalogContent();
+  const settings = useGlobalSettings();
+  const area = serviceCatalog.find((item) => slug && item.aliases.includes(slug));
 
   if (!area) {
     return (
@@ -29,11 +30,11 @@ export function ServiceDetailPage() {
             <ViewportVideo
               src={area.media.video}
               poster={area.media.poster}
-              label={`${area.title} en Indian Club`}
+              label={`${area.title} en ${settings.brandName}`}
               priority
             />
           ) : (
-            <img src={area.media.poster} alt={`${area.title} en Indian Club`} loading="eager" />
+            <img src={area.media.poster} alt={`${area.title} en ${settings.brandName}`} loading="eager" />
           )}
           <div aria-hidden="true" />
         </div>
@@ -47,7 +48,7 @@ export function ServiceDetailPage() {
             <span>{area.duration}</span>
             <strong>{area.price}</strong>
           </div>
-          <a href={bookingUrl} target="_blank" rel="noreferrer">Ver disponibilidad ↗</a>
+          <a href={settings.bookingUrl} target="_blank" rel="noreferrer">Ver disponibilidad ↗</a>
         </div>
       </section>
 
@@ -58,7 +59,7 @@ export function ServiceDetailPage() {
         <header>
           <span>Servicios disponibles</span>
           <h2 id="catalog-options-title">Elige tu servicio.</h2>
-          <p>Los tiempos marcados como aproximados pueden variar según el trabajo. AgendaPro confirma la disponibilidad y el valor vigente.</p>
+          <p>Los tiempos marcados como aproximados pueden variar según el trabajo. La plataforma de reservas confirma la disponibilidad y el valor vigente.</p>
         </header>
 
         <div className="catalog-options__groups">
@@ -67,10 +68,7 @@ export function ServiceDetailPage() {
               <h3>{group.title}</h3>
               <ul>
                 {group.items.map((item) => (
-                  <li
-                    key={item.name}
-                    className={`catalog-option${item.note ? ' catalog-option--with-note' : ''}`}
-                  >
+                  <li key={item.name} className={`catalog-option${item.note ? ' catalog-option--with-note' : ''}`}>
                     <div className="catalog-option__content">
                       <strong>{item.name}</strong>
                       {item.note ? <p>{item.note}</p> : null}
@@ -79,7 +77,7 @@ export function ServiceDetailPage() {
                       <span>{item.duration}</span>
                       <b>{item.price}</b>
                     </div>
-                    <a href={bookingUrl} target="_blank" rel="noreferrer" aria-label={`Reservar ${item.name}`}>Reservar ↗</a>
+                    <a href={settings.bookingUrl} target="_blank" rel="noreferrer" aria-label={`Reservar ${item.name}`}>Reservar ↗</a>
                   </li>
                 ))}
               </ul>
@@ -93,7 +91,7 @@ export function ServiceDetailPage() {
           <span>Consulta directa</span>
           <h2>¿Necesitas cotización o ayuda para elegir?</h2>
         </div>
-        <a href={contact.whatsappHref} target="_blank" rel="noreferrer">Escribir por WhatsApp ↗</a>
+        <a href={settings.whatsappHref} target="_blank" rel="noreferrer">Escribir por WhatsApp ↗</a>
       </section>
 
       <BookingBand />
