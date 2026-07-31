@@ -146,7 +146,7 @@ export async function publishCmsEntry(key: string) {
     setDemoRecords(records);
     return;
   }
-  const { error } = await supabase.rpc('publish_cms_entry', { entry_key: key });
+  const { error } = await supabase.rpc('publish_cms_entry', { p_entry_key: key });
   if (error) throw error;
 }
 
