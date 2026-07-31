@@ -20,9 +20,11 @@ La web conserva el contenido incluido en el código como fallback. Si Supabase t
 3. Ejecuta en orden:
    - `supabase/migrations/202607280001_initial_content_admin.sql`
    - `supabase/migrations/202607300002_complete_content_cms.sql`
+   - `supabase/migrations/202607300003_backfill_cms_profiles.sql`
 
-La segunda migración crea:
+Las migraciones crean:
 
+- `profiles`
 - `cms_entries`
 - `content_revisions`
 - `media_assets`
@@ -30,7 +32,7 @@ La segunda migración crea:
 - bucket `site-media`
 - políticas RLS
 - función de publicación
-- creación automática de perfiles
+- creación automática y recuperación de perfiles existentes
 
 ## 2. Crear el usuario administrador
 
@@ -39,18 +41,24 @@ En Supabase:
 1. Ve a `Authentication → Users`.
 2. Crea el usuario `admin@indianclubec.com`.
 3. Utiliza temporalmente una contraseña de al menos 6 caracteres; Supabase no acepta la contraseña `admin` de cinco caracteres.
-4. Después de crear el usuario, ejecuta:
+4. Después de crear el usuario y ejecutar las tres migraciones, ejecuta:
 
 ```sql
-update public.profiles
+insert into public.profiles (id, role, username, display_name, must_change_password)
+select
+  id,
+  'admin',
+  'admin',
+  'Administrador Indian Club',
+  true
+from auth.users
+where email = 'admin@indianclubec.com'
+on conflict (id) do update
 set
-  role = 'admin',
-  username = 'admin',
-  display_name = 'Administrador Indian Club',
-  must_change_password = true
-where id = (
-  select id from auth.users where email = 'admin@indianclubec.com'
-);
+  role = excluded.role,
+  username = excluded.username,
+  display_name = excluded.display_name,
+  must_change_password = excluded.must_change_password;
 ```
 
 El formulario del panel seguirá mostrando `admin` como usuario. Internamente lo convierte al correo definido en `VITE_ADMIN_EMAIL`.
@@ -68,7 +76,7 @@ No habilites `VITE_ADMIN_DEMO=true` en producción.
 
 ## 3. Variables locales
 
-Copia `.env.example` como `.env.local` y completa:
+En la raíz del proyecto, junto a `package.json`, copia `.env.example` como `.env.local` y completa:
 
 ```env
 VITE_SUPABASE_URL=https://TU-PROYECTO.supabase.co
