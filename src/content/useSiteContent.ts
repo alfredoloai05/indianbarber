@@ -34,6 +34,11 @@ export type HomeHeroContent = {
   secondaryLabel: string;
 };
 
+export type HomeProofContent = {
+  title: string;
+  items: { value: string; label: string }[];
+};
+
 export type HomeServicesContent = { eyebrow: string; title: string };
 export type HomeClubContent = { eyebrow: string; title: string; description: string; ctaLabel: string; video: string; poster: string };
 export type PromotionContent = { eyebrow: string; title: string; note: string; visible?: boolean };
@@ -121,6 +126,7 @@ function useDefinition<T>(key: string): T {
 
 export const useGlobalSettings = () => useDefinition<GlobalSettings>('global.settings');
 export const useHomeHero = () => useDefinition<HomeHeroContent>('home.hero');
+export const useHomeProof = () => useDefinition<HomeProofContent>('home.proof');
 export const useHomeServices = () => useDefinition<HomeServicesContent>('home.services');
 export const useHomeClub = () => useDefinition<HomeClubContent>('home.club');
 export const usePromotionsContent = () => useDefinition<PromotionContent[]>('promotions.list').filter((item) => item.visible !== false);
