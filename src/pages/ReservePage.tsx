@@ -93,7 +93,7 @@ export function ReservePage() {
   const settings = useGlobalSettings();
   const catalog = useServiceCatalogContent();
   const team = useTeamMembersContent();
-  const days = useMemo(buildBookingDays, []);
+  const days = useMemo(() => buildBookingDays(), []);
 
   const requestedArea = searchParams.get('area');
   const requestedService = searchParams.get('service');
