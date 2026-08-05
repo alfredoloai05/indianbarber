@@ -73,7 +73,7 @@ export function TeamPage() {
         </div>
         <div className="team-collaboration__areas">
           <article><strong>Barbería</strong><p>Cortes, barba, afeitado y recomendaciones de mantenimiento.</p></article>
-          <article><strong>Tattoo Studio</strong><p>Cotización, diseño, preparación y cuidado posterior.</p></article>
+          <article><strong>SPA</strong><p>Bienestar, relajación y cuidado personal con reserva previa.</p></article>
           <article><strong>Nails Studio</strong><p>Manicura, pedicura, sistemas semipermanentes y retiro.</p></article>
         </div>
       </section>
