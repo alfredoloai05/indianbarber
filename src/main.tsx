@@ -30,6 +30,7 @@ import './styles/spa-photo-layout-v16.css';
 import './styles/experience-polish-v17.css';
 import './styles/editorial-cleanup-v18.css';
 import './styles/home-club-location-v19.css';
+import './styles/home-booking-stylebook-v20.css';
 
 const root = document.getElementById('root');
 
