@@ -15,12 +15,12 @@ export function ServicesPage() {
     <>
       <Seo
         title="Servicios"
-        description="Barbería, combos, tattoo y nails de Indian Club en Loja. Conoce todas las opciones, precios y tiempos disponibles."
+        description="Barbería, combos, SPA y nails de Indian Club en Loja. Conoce todas las opciones, precios y tiempos disponibles."
       />
 
       <section className="services-clean-hero services-clean-hero--quadrants">
         <span>Servicios Indian Club</span>
-        <h1>Barbería, combos, tattoo y nails.</h1>
+        <h1>Barbería, combos, SPA y nails.</h1>
       </section>
 
       <section className="services-quadrants" aria-label="Áreas de servicio de Indian Club">

@@ -13,7 +13,7 @@ export function StyleBookPage() {
     <>
       <Seo
         title="Style Book"
-        description={`Trabajos de cortes, tatuajes y manicura realizados por ${settings.brandName} en Loja.`}
+        description={`Trabajos de barbería, nails, SPA y fotografía de ${settings.brandName} en Loja.`}
       />
 
       <section className="chapter-intro chapter-intro--brand chapter-intro--clean">
@@ -34,7 +34,7 @@ export function StyleBookPage() {
 
       <section className="style-book-opening style-book-opening--brand style-book-opening--clean">
         <span>{settings.brandName} · Loja</span>
-        <p>Cortes, tattoo y nails en una sola galería.</p>
+        <p>Barbería, SPA, nails y fotografía en una sola galería.</p>
         <strong>Ver · Elegir · Reservar</strong>
       </section>
 
@@ -67,7 +67,7 @@ export function StyleBookPage() {
             animate={reduceMotion ? undefined : { rotate: [0, 2, -2, 0] }}
             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
           />
-          <p>El resultado se adapta a tu cabello, tus uñas, tu piel y al tipo de trabajo que quieras realizar.</p>
+          <p>El resultado se adapta a tu cabello, tus uñas, tu piel y al tipo de experiencia que quieras realizar.</p>
         </div>
       </section>
 

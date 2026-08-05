@@ -33,7 +33,7 @@ export function ReservePage() {
       </section>
 
       <section className="reserve-path reserve-path--clean">
-        <article><h2>Elige el área</h2><p>Barbería, combos, tattoo o nails.</p></article>
+        <article><h2>Elige el área</h2><p>Barbería, combos, SPA o nails.</p></article>
         <article><h2>Revisa las opciones</h2><p>Consulta qué incluye cada categoría y su precio de referencia.</p></article>
         <article><h2>Confirma</h2><p>Selecciona profesional, fecha y horario disponibles.</p></article>
         <article><h2>Visítanos</h2><p>Estamos en {settings.address}, con parqueo exclusivo para clientes.</p></article>
@@ -41,7 +41,7 @@ export function ReservePage() {
 
       <section className="reserve-support">
         <div><span>¿Tienes una duda?</span><h2>Te ayudamos a elegir antes de reservar.</h2></div>
-        <p>Escríbenos si necesitas una cotización de tattoo o no sabes qué servicio corresponde a lo que buscas.</p>
+        <p>Escríbenos si necesitas información sobre el SPA o no sabes qué servicio corresponde a lo que buscas.</p>
         <a className="final-button final-button--dark" href={settings.whatsappHref} target="_blank" rel="noreferrer">Consultar por WhatsApp ↗</a>
       </section>
     </>

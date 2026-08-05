@@ -10,7 +10,7 @@ export function PromotionsPage() {
     <>
       <Seo
         title="Promociones"
-        description={`Promociones vigentes de ${settings.brandName} para barbería, nails, tattoo y fechas especiales en Loja.`}
+        description={`Promociones vigentes de ${settings.brandName} para barbería, nails, SPA y fechas especiales en Loja.`}
       />
 
       <section className="chapter-intro chapter-intro--clean">

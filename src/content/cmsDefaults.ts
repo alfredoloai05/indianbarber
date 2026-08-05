@@ -15,6 +15,15 @@ const articles = journalItems.map((item) => ({
   visible: true,
 }));
 
+const spaImage = visualMedia.hero.tattoo.poster;
+const photoStudioImage = visualMedia.hero.club.poster;
+const activeTeam = team.filter((member) => member.name !== 'César Castejón');
+const updatedPromotions = promotions.map((promotion) => ({
+  ...promotion,
+  title: promotion.title.replace(/tattoo/gi, 'SPA'),
+  visible: true,
+}));
+
 export const cmsDefinitions: CmsEntryDefinition[] = [
   {
     key: 'global.settings',
@@ -49,8 +58,8 @@ export const cmsDefinitions: CmsEntryDefinition[] = [
     value: json({
       location: 'Loja · Ecuador',
       founded: 'Desde 2018',
-      title: 'Barbería, tattoo, nails y café.',
-      lead: 'Cortes, barba y acabado con precisión.',
+      title: 'Barbería, SPA, nails y estudio fotográfico.',
+      lead: 'Cuidado, estilo y experiencias en un solo lugar.',
       video: visualMedia.hero.barber.video,
       poster: visualMedia.hero.barber.poster,
       primaryLabel: 'Reservar cita',
@@ -72,15 +81,15 @@ export const cmsDefinitions: CmsEntryDefinition[] = [
     key: 'home.club',
     group: 'Inicio',
     label: 'El Club en Home',
-    description: 'Video, poster y textos del bloque audiovisual del Club.',
+    description: 'Imagen y textos del bloque visual del Club.',
     kind: 'section',
     value: json({
       eyebrow: 'El Club',
-      title: 'Café, parqueo y todo Indian en un solo lugar.',
-      description: 'Llega con tiempo, toma algo y disfruta el espacio antes o después de tu servicio.',
+      title: 'Estudio fotográfico, parqueo y todo Indian en un solo lugar.',
+      description: 'Completa tu visita con un espacio preparado para crear retratos y contenido visual.',
       ctaLabel: 'Conocer el lugar',
-      video: visualMedia.clubFeature.video,
-      poster: visualMedia.clubFeature.poster,
+      video: '',
+      poster: photoStudioImage,
     }),
   },
   {
@@ -89,7 +98,7 @@ export const cmsDefinitions: CmsEntryDefinition[] = [
     label: 'Promociones',
     description: 'Promociones visibles en Home y en la página de promociones. Se pueden agregar, ordenar o desactivar.',
     kind: 'collection',
-    value: json(promotions.map((item) => ({ ...item, visible: true }))),
+    value: json(updatedPromotions),
   },
   {
     key: 'home.giftCards',
@@ -101,7 +110,7 @@ export const cmsDefinitions: CmsEntryDefinition[] = [
       eyebrow: 'Gift Cards Indian Club',
       title: 'Regala Indian Club.',
       description: 'Una visita, un servicio o un detalle para alguien especial.',
-      image: media.cafe,
+      image: photoStudioImage,
       values: giftCards,
       primaryLabel: 'Ver Gift Cards',
       secondaryLabel: 'Solicitar por WhatsApp',
@@ -146,7 +155,7 @@ export const cmsDefinitions: CmsEntryDefinition[] = [
     label: 'Integrantes del equipo',
     description: 'Nombre, cargo, fotografía, descripción, visibilidad y orden.',
     kind: 'collection',
-    value: json(team.map((member) => ({ ...member, visible: true }))),
+    value: json(activeTeam.map((member) => ({ ...member, visible: true }))),
   },
   {
     key: 'team.page',
@@ -156,38 +165,38 @@ export const cmsDefinitions: CmsEntryDefinition[] = [
     kind: 'section',
     value: json({
       eyebrow: 'Equipo Indian Club',
-      title: 'Barbería, tattoo y nails. Personas que conocen su oficio.',
+      title: 'Barbería, SPA y nails. Personas que conocen su oficio.',
       description: 'Conoce al equipo y encuentra al profesional adecuado para el servicio que quieres reservar.',
       collaborationEyebrow: 'Trabajo en equipo',
       collaborationTitle: 'Tres especialidades dentro de la misma casa.',
-      collaborationDescription: 'Barbería, tattoo y nails comparten el espacio y la atención para que puedas combinar distintos servicios en una sola visita.',
+      collaborationDescription: 'Barbería, SPA y nails comparten el espacio y la atención para que puedas combinar distintos servicios en una sola visita.',
       bookingTitle: 'Elige el servicio y revisa quién está disponible.',
-      bookingDescription: 'AgendaPro te permite consultar horarios y seleccionar al profesional para tu próxima visita.',
+      bookingDescription: 'La plataforma de reservas te permite consultar horarios y seleccionar al profesional para tu próxima visita.',
     }),
   },
   {
     key: 'club.page',
     group: 'El Club',
     label: 'Página del Club',
-    description: 'Hero, videos, galería, beneficios y textos del espacio físico.',
+    description: 'Hero, galería, beneficios y textos del espacio físico.',
     kind: 'section',
     value: json({
       eyebrow: 'El Club · Loja',
       title: 'Todo Indian en un solo lugar.',
-      description: 'Barbería, tattoo, nails, café y parqueo para que tu visita sea cómoda desde que llegas.',
-      heroVideo: visualMedia.clubFeature.video,
-      heroPoster: visualMedia.clubFeature.poster,
+      description: 'Barbería, SPA, nails, estudio fotográfico y parqueo para que tu visita sea cómoda desde que llegas.',
+      heroVideo: '',
+      heroPoster: photoStudioImage,
       gallery: [
-        { label: 'Cafetería', title: 'Llega con tiempo, toma algo y disfruta el espacio.', video: visualMedia.hero.club.video, poster: visualMedia.hero.club.poster },
+        { label: 'Estudio fotográfico', title: 'Retratos y contenido visual dentro de Indian Club.', image: photoStudioImage },
         { label: 'Barbería', title: 'Corte, barba y afeitado.', image: visualMedia.hero.barber.poster },
-        { label: 'Tattoo Studio', title: 'Diseño, cotización y tatuaje.', image: visualMedia.hero.tattoo.poster },
+        { label: 'SPA', title: 'Bienestar, relajación y cuidado personal.', image: spaImage },
         { label: 'Nails Studio', title: 'Manicura, pedicura y sistemas semipermanentes.', image: visualMedia.hero.nails.poster },
       ],
       amenitiesTitle: 'Un espacio para disfrutar la visita completa.',
       amenities: [
         { title: 'Parqueo exclusivo', description: 'Estaciona durante tu visita sin buscar espacio en el centro.' },
-        { title: 'Cafetería', description: 'Bebidas y un ambiente cómodo para esperar o conversar.' },
-        { title: 'Todo en la misma casa', description: 'Barbería, tattoo y nails sin desplazarte a distintos lugares.' },
+        { title: 'Estudio fotográfico', description: 'Un espacio preparado para retratos y creación de contenido visual.' },
+        { title: 'Todo en la misma casa', description: 'Barbería, SPA, nails y fotografía sin desplazarte a distintos lugares.' },
       ],
     }),
   },
@@ -199,15 +208,15 @@ export const cmsDefinitions: CmsEntryDefinition[] = [
     kind: 'gallery',
     value: json({
       eyebrow: 'Style Book',
-      title: 'Trabajos realizados por el equipo de Indian Club.',
-      description: 'Cortes, perfilados, tatuajes y uñas para que encuentres referencias antes de reservar.',
+      title: 'Trabajos y experiencias de Indian Club.',
+      description: 'Cortes, perfilados, nails, SPA y fotografía para que conozcas el universo visual de Indian Club.',
       frames: [
         { image: media.hero, label: 'Corte y acabado', alt: 'Cliente atendido dentro de Indian Club', className: 'style-book-grid__hero' },
-        { image: media.tattoo, label: 'Tattoo Studio', alt: 'Tatuaje realizado por Indian Club Tattoo Studio', className: 'style-book-grid__tall' },
+        { image: photoStudioImage, label: 'Estudio fotográfico', alt: 'Estudio fotográfico de Indian Club', className: 'style-book-grid__tall' },
         { image: media.barber, label: 'Barbería', alt: 'Corte realizado por Indian Club', className: 'style-book-grid__wide' },
         { image: media.nails, label: 'Nails Studio', alt: 'Diseño de uñas realizado por Indian Club Nails Studio', className: 'style-book-grid__small' },
         { image: media.barberAlt, label: 'Barba y perfilado', alt: 'Resultado de barbería realizado en Indian Club', className: 'style-book-grid__portrait' },
-        { image: media.tattoo, label: 'Detalle de tatuaje', alt: 'Detalle de trabajo del Tattoo Studio', className: 'style-book-grid__small' },
+        { image: spaImage, label: 'SPA', alt: 'Experiencia SPA en Indian Club', className: 'style-book-grid__small' },
       ],
     }),
   },
@@ -252,7 +261,7 @@ export const cmsDefinitions: CmsEntryDefinition[] = [
       eyebrow: 'Tarjetas regalo',
       title: 'Regala una visita a Indian Club.',
       description: 'Elige un valor y consulta la forma de entrega, vigencia y condiciones directamente con el centro.',
-      image: media.cafe,
+      image: photoStudioImage,
       values: giftCards,
       buttonLabel: 'Solicitar una tarjeta',
       steps: [
@@ -276,8 +285,8 @@ export const cmsDefinitions: CmsEntryDefinition[] = [
       journey: [
         { title: 'Reserva', description: 'Elige el servicio, profesional, fecha y horario disponibles.' },
         { title: 'Llega', description: 'Estamos en el centro de Loja y contamos con parqueo exclusivo para clientes.' },
-        { title: 'Consulta', description: 'Escríbenos por WhatsApp si necesitas cotización o ayuda para elegir.' },
-        { title: 'Vuelve', description: 'Agenda tu mantenimiento cuando el corte, la barba o las uñas lo necesiten.' },
+        { title: 'Consulta', description: 'Escríbenos por WhatsApp si necesitas información o ayuda para elegir.' },
+        { title: 'Vuelve', description: 'Agenda tu mantenimiento o próxima experiencia cuando la necesites.' },
       ],
     }),
   },

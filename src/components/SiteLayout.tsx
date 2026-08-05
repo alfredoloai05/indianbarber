@@ -133,7 +133,7 @@ export function SiteLayout() {
             <img src={settings.logoMark} alt="" />
             <strong>{settings.brandName.toUpperCase()}</strong>
           </Link>
-          <span>Barbería · Tattoo · Nails · Café</span>
+          <span>Barbería · SPA · Nails · Fotografía</span>
         </div>
 
         <nav className="compact-footer__nav" aria-label="Navegación del pie de página">
