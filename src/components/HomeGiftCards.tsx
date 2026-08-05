@@ -12,7 +12,7 @@ export function HomeGiftCards() {
     .join('—');
 
   return (
-    <section className="home-gift" aria-labelledby="home-gift-title">
+    <section className="home-gift home-gift--barber" aria-labelledby="home-gift-title">
       <div className="home-gift__media" aria-hidden="true">
         <img src={content.image} alt="" loading="lazy" />
         <div className="home-gift__veil" />
@@ -43,7 +43,6 @@ export function HomeGiftCards() {
         viewport={{ once: true, amount: 0.35 }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
       >
-        <span>{content.eyebrow}</span>
         <h2 id="home-gift-title">{content.title}</h2>
         <p>{content.description}</p>
         <div className="home-gift__values" aria-label="Valores disponibles">
