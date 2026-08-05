@@ -9,7 +9,6 @@ import {
   useHomeClub,
   useHomeGuides,
   useHomeHero,
-  useHomeProof,
   useHomeServices,
   useHomeVisit,
   useJournalArticlesContent,
@@ -28,7 +27,6 @@ export function HomePage() {
   const reduceMotion = useReducedMotion();
   const settings = useGlobalSettings();
   const hero = useHomeHero();
-  const proof = useHomeProof();
   const servicesIntro = useHomeServices();
   const serviceCatalog = useServiceCatalogContent();
   const styleBook = useStyleBookContent();
@@ -91,18 +89,6 @@ export function HomePage() {
                 <Link to="/style-book">{hero.secondaryLabel}</Link>
               </motion.div>
             </motion.div>
-          </div>
-        </section>
-
-        <section className="home-proof" aria-labelledby="home-proof-title">
-          <h2 id="home-proof-title">{proof.title}</h2>
-          <div className="home-proof__grid">
-            {proof.items.map((item) => (
-              <article key={`${item.value}-${item.label}`}>
-                <strong>{item.value}</strong>
-                <p>{item.label}</p>
-              </article>
-            ))}
           </div>
         </section>
 
