@@ -1,0 +1,307 @@
+/* Cleaner editorial pass: fewer eyebrow labels, no marquee, visible maps and safe service titles. */
+
+.brand-ticker,
+.brand-ticker--hero {
+  display: none !important;
+}
+
+.film-hero--without-ticker {
+  min-height: 100dvh;
+}
+
+.film-hero--without-ticker .film-hero__content {
+  padding-bottom: clamp(3rem, 8vh, 6rem);
+}
+
+/* Remove repetitive section-level eyebrow labels while keeping useful metadata such as dates and hours. */
+.service-portals__intro > div > span,
+.service-portal__trigger small,
+.services-clean-hero > span,
+.services-quadrant__content small,
+.services-help > div > span,
+.club-film__copy > span,
+.promotion-ledger > header > span,
+.home-gift__copy > span,
+.home-guides__header > div > span,
+.visit-terminal__map-copy > span,
+.visit-terminal__booking > span,
+.club-visual-hero__copy > span,
+.club-service-directory > header > span,
+.club-service-directory > div > a > span,
+.club-amenities > div:first-child > span,
+.club-map__content > span,
+.booking-band > div > span,
+.team-collaboration__intro > span,
+.style-book-opening > span,
+.chapter-intro .final-kicker {
+  display: none !important;
+}
+
+.home-guides__header h2,
+.home-gift__copy h2,
+.club-film__copy h2,
+.booking-band h2,
+.club-map__content h2 {
+  margin-top: 0 !important;
+}
+
+/* Home service portals */
+.service-portal__trigger {
+  gap: 0.65rem;
+}
+
+.service-portal.is-active .service-portal__trigger {
+  padding-top: clamp(1.5rem, 3vw, 2.75rem);
+}
+
+.service-portal:not(.is-active) .service-portal__trigger strong {
+  max-height: calc(100% - 5rem);
+}
+
+/* Services overview: both rows remain visible and long names never clip. */
+.services-clean-hero--minimal {
+  width: min(1440px, calc(100vw - clamp(2rem, 7vw, 7rem)));
+  min-height: auto;
+  padding-top: clamp(8rem, 12vh, 10rem);
+  padding-bottom: clamp(2rem, 4vw, 3.5rem);
+  display: block;
+}
+
+.services-clean-hero--minimal h1 {
+  max-width: 12ch;
+  font-size: clamp(3.3rem, 6vw, 6.6rem);
+}
+
+.services-quadrants--clean {
+  min-height: 74dvh;
+  grid-template-rows: repeat(2, minmax(330px, 37dvh));
+}
+
+.services-quadrants--clean .services-quadrant {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.services-quadrants--clean .services-quadrant__content {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding: clamp(1.35rem, 2.6vw, 2.6rem);
+  overflow: hidden;
+}
+
+.services-quadrants--clean .services-quadrant__content h2 {
+  max-width: 11ch;
+  margin: 0;
+  font-size: clamp(2.2rem, 3.35vw, 4.3rem);
+  line-height: 0.9;
+  overflow-wrap: normal;
+}
+
+.services-quadrants--clean .services-quadrant--nails .services-quadrant__content h2,
+.services-quadrants--clean .services-quadrant--fotografia .services-quadrant__content h2 {
+  max-width: 12ch;
+  font-size: clamp(2rem, 3vw, 3.8rem);
+}
+
+.services-quadrants--clean .services-quadrant__content p {
+  max-width: 620px;
+  margin-top: 0.85rem;
+}
+
+.services-quadrants--clean .services-quadrant__content > span {
+  margin-top: 1rem;
+}
+
+.services-help--minimal {
+  padding-top: clamp(3rem, 5vw, 4.5rem);
+  padding-bottom: clamp(3rem, 5vw, 4.5rem);
+}
+
+/* Gift Cards: use Indian/barber imagery, never the camera image. */
+.home-gift--barber .home-gift__media img {
+  object-position: center 34%;
+  filter: grayscale(0.38) saturate(0.72) contrast(1.08) brightness(0.42);
+}
+
+.home-gift--barber .home-gift__veil {
+  background:
+    radial-gradient(circle at 28% 48%, rgb(212 175 104 / 0.13), transparent 30%),
+    linear-gradient(90deg, rgb(4 4 4 / 0.42), rgb(4 4 4 / 0.82) 58%, rgb(4 4 4 / 0.97));
+}
+
+/* Embedded map: clear enough to identify the actual street and marker. */
+.visit-terminal--clean {
+  grid-template-columns: minmax(0, 1.25fr) minmax(390px, 0.75fr) !important;
+}
+
+.visit-terminal--clean .visit-terminal__map,
+.visit-terminal--clean .visit-terminal__map iframe {
+  min-height: 560px;
+}
+
+.visit-terminal--clean .visit-terminal__map iframe,
+.club-map--clean .club-map__frame iframe {
+  filter: grayscale(0.28) saturate(0.72) contrast(1.02) brightness(0.9) !important;
+}
+
+.visit-terminal--clean .visit-terminal__map::after {
+  display: none;
+}
+
+.visit-terminal--clean .visit-terminal__details {
+  min-height: 560px;
+  align-content: center;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  padding: clamp(2.5rem, 4.5vw, 4.5rem);
+}
+
+.visit-terminal__intro h2 {
+  max-width: 11ch;
+  margin: 0 0 1rem;
+  color: white;
+  font-size: clamp(2.7rem, 4.5vw, 4.8rem);
+  line-height: 0.92;
+}
+
+.visit-terminal__intro address {
+  margin-bottom: 1rem;
+  color: rgb(255 255 255 / 0.64);
+  font-style: normal;
+  line-height: 1.65;
+}
+
+.visit-terminal__intro > a {
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.visit-terminal__booking h3 {
+  margin-top: 0;
+}
+
+/* Club page */
+.club-service-directory > header {
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.42fr);
+}
+
+.club-service-directory > div > a > strong {
+  margin-top: 0;
+}
+
+.club-visual-grid--expanded article > div > strong {
+  max-width: 16ch;
+}
+
+.club-map--clean .club-map__frame,
+.club-map--clean .club-map__frame iframe {
+  min-height: 560px;
+}
+
+.club-map--clean .club-map__content h2 {
+  margin-top: 0;
+}
+
+.club-work-link--clean {
+  min-height: auto;
+  padding: clamp(2.5rem, 4vw, 4rem) max(1.25rem, calc((100vw - 1440px) / 2));
+  justify-content: flex-end;
+}
+
+.club-work-link--clean > a {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.5vw, 4rem);
+}
+
+/* Global booking bands should start with the actual message, not a decorative label. */
+.booking-band h2 {
+  margin-top: 0 !important;
+}
+
+@media (max-width: 1100px) {
+  .services-quadrants--clean {
+    min-height: auto;
+    grid-template-rows: none;
+  }
+
+  .services-quadrants--clean .services-quadrant {
+    min-height: 500px;
+  }
+
+  .visit-terminal--clean {
+    grid-template-columns: 1fr !important;
+  }
+
+  .visit-terminal--clean .visit-terminal__details {
+    min-height: auto;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .visit-terminal__intro {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 720px) {
+  .film-hero--without-ticker .film-hero__content {
+    padding-bottom: 2.5rem;
+  }
+
+  .services-clean-hero--minimal {
+    width: calc(100vw - 2.5rem);
+    padding-top: 7rem;
+    padding-bottom: 1.75rem;
+  }
+
+  .services-quadrants--clean .services-quadrant,
+  .services-quadrants--clean .services-quadrant--barberia,
+  .services-quadrants--clean .services-quadrant--fotografia {
+    min-height: 470px;
+  }
+
+  .services-quadrants--clean .services-quadrant__content {
+    padding: 1.5rem 1.25rem 1.75rem;
+  }
+
+  .services-quadrants--clean .services-quadrant__content h2,
+  .services-quadrants--clean .services-quadrant--nails .services-quadrant__content h2,
+  .services-quadrants--clean .services-quadrant--fotografia .services-quadrant__content h2 {
+    max-width: 12ch;
+    font-size: clamp(2.6rem, 12vw, 4.25rem);
+  }
+
+  .visit-terminal--clean .visit-terminal__map,
+  .visit-terminal--clean .visit-terminal__map iframe,
+  .club-map--clean .club-map__frame,
+  .club-map--clean .club-map__frame iframe {
+    min-height: 420px;
+  }
+
+  .visit-terminal--clean .visit-terminal__details {
+    grid-template-columns: 1fr;
+    padding: 2.5rem 1.25rem;
+  }
+
+  .visit-terminal__intro {
+    grid-column: 1;
+  }
+
+  .club-service-directory > header {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .services-quadrants--clean .services-quadrant,
+  .services-quadrants--clean .services-quadrant--barberia,
+  .services-quadrants--clean .services-quadrant--fotografia {
+    min-height: 440px;
+  }
+}
