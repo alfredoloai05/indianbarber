@@ -9,12 +9,15 @@ import {
   useHomeClub,
   useHomeGuides,
   useHomeHero,
+  useHomeProof,
   useHomeServices,
   useHomeVisit,
   useJournalArticlesContent,
   usePromotionsContent,
   useServiceCatalogContent,
+  useStyleBookContent,
 } from '../content/useSiteContent';
+import { bookingPath } from '../utils/booking';
 
 function Arrow() {
   return <span aria-hidden="true">↗</span>;
@@ -25,14 +28,17 @@ export function HomePage() {
   const reduceMotion = useReducedMotion();
   const settings = useGlobalSettings();
   const hero = useHomeHero();
+  const proof = useHomeProof();
   const servicesIntro = useHomeServices();
   const serviceCatalog = useServiceCatalogContent();
+  const styleBook = useStyleBookContent();
   const club = useHomeClub();
   const promotions = usePromotionsContent();
   const guidesIntro = useHomeGuides();
   const journalItems = useJournalArticlesContent();
   const visit = useHomeVisit();
   const activeArea = serviceCatalog[activePortal] ?? serviceCatalog[0];
+  const styleBookFrames = styleBook.frames.slice(0, 3);
 
   return (
     <>
@@ -81,10 +87,22 @@ export function HomePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.58, delay: 0.48, ease: [0.16, 1, 0.3, 1] }}
               >
-                <a href={settings.bookingUrl} target="_blank" rel="noreferrer">{hero.primaryLabel} <Arrow /></a>
+                <Link to="/reservar">{hero.primaryLabel} <Arrow /></Link>
                 <Link to="/style-book">{hero.secondaryLabel}</Link>
               </motion.div>
             </motion.div>
+          </div>
+        </section>
+
+        <section className="home-proof" aria-labelledby="home-proof-title">
+          <h2 id="home-proof-title">{proof.title}</h2>
+          <div className="home-proof__grid">
+            {proof.items.map((item) => (
+              <article key={`${item.value}-${item.label}`}>
+                <strong>{item.value}</strong>
+                <p>{item.label}</p>
+              </article>
+            ))}
           </div>
         </section>
 
@@ -147,7 +165,10 @@ export function HomePage() {
                     >
                       <p>{area.summary}</p>
                       <ul>{examples.map((item) => <li key={item.name}>{item.name}</li>)}</ul>
-                      <Link to={`/servicios/${area.route}`}>Ver {area.shortTitle.toLowerCase()} <Arrow /></Link>
+                      <div className="service-portal__actions">
+                        <Link to={`/servicios/${area.route}`}>Ver {area.shortTitle.toLowerCase()} <Arrow /></Link>
+                        <Link to={bookingPath(area.id)}>Reservar <Arrow /></Link>
+                      </div>
                     </motion.div>
                   </article>
                 );
@@ -155,6 +176,28 @@ export function HomePage() {
             </div>
           ) : null}
         </section>
+
+        {styleBookFrames[0] ? (
+          <section className="home-stylebook-entry" aria-labelledby="home-stylebook-title">
+            <Link className="home-stylebook-entry__feature" to="/style-book">
+              <img src={styleBookFrames[0].image} alt={styleBookFrames[0].alt} loading="lazy" />
+              <div aria-hidden="true" />
+              <section>
+                <h2 id="home-stylebook-title">Antes de elegir, mira lo que hacemos.</h2>
+                <p>{styleBook.description}</p>
+                <span>Entrar al Style Book <Arrow /></span>
+              </section>
+            </Link>
+            <div className="home-stylebook-entry__reel" aria-hidden="true">
+              {styleBookFrames.slice(1).map((frame) => (
+                <figure key={frame.label}>
+                  <img src={frame.image} alt="" loading="lazy" />
+                  <figcaption>{frame.label}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </section>
+        ) : null}
 
         <section className="club-film club-film--compact club-film--safe-copy" aria-labelledby="club-film-title">
           {club.video ? (
@@ -177,12 +220,12 @@ export function HomePage() {
           </header>
           <div>
             {promotions.map((promotion) => (
-              <a href={settings.bookingUrl} target="_blank" rel="noreferrer" key={promotion.title}>
+              <Link to="/reservar" key={promotion.title}>
                 <small>{promotion.eyebrow}</small>
                 <strong>{promotion.title}</strong>
                 <p>{promotion.note}</p>
                 <i aria-hidden="true">↗</i>
-              </a>
+              </Link>
             ))}
           </div>
         </section>
@@ -227,7 +270,7 @@ export function HomePage() {
 
           <div className="home-visit-strip__actions">
             <a href={settings.whatsappHref} target="_blank" rel="noreferrer">WhatsApp {settings.whatsapp}</a>
-            <a className="home-visit-strip__booking" href={settings.bookingUrl} target="_blank" rel="noreferrer">{visit.bookingLabel} <Arrow /></a>
+            <Link className="home-visit-strip__booking" to="/reservar">{visit.bookingLabel} <Arrow /></Link>
           </div>
         </section>
       </div>
