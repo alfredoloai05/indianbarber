@@ -1,5 +1,6 @@
 import type { Session } from '@supabase/supabase-js';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
+import { normalizeCmsEntries, normalizeCmsValue, normalizePublishedCmsMap } from './cmsCompatibility';
 import { cmsDefaultMap, cmsDefinitions } from './cmsDefaults';
 import type { CmsEntryRecord, CmsJson, CmsMediaAsset, CmsPublishedMap } from './cmsTypes';
 
@@ -17,19 +18,21 @@ function clone<T>(value: T): T {
 
 function defaultRecords(): CmsEntryRecord[] {
   const timestamp = new Date().toISOString();
-  return cmsDefinitions.map((definition, index) => ({
-    id: `demo-${definition.key}`,
-    key: definition.key,
-    group_name: definition.group,
-    label: definition.label,
-    description: definition.description,
-    kind: definition.kind,
-    sort_order: index,
-    draft_value: clone(definition.value),
-    published_value: clone(definition.value),
-    updated_at: timestamp,
-    published_at: timestamp,
-  }));
+  return normalizeCmsEntries(
+    cmsDefinitions.map((definition, index) => ({
+      id: `demo-${definition.key}`,
+      key: definition.key,
+      group_name: definition.group,
+      label: definition.label,
+      description: definition.description,
+      kind: definition.kind,
+      sort_order: index,
+      draft_value: clone(definition.value),
+      published_value: clone(definition.value),
+      updated_at: timestamp,
+      published_at: timestamp,
+    })),
+  );
 }
 
 function getDemoRecords() {
@@ -37,7 +40,7 @@ function getDemoRecords() {
   const saved = window.localStorage.getItem(DEMO_ENTRIES_KEY);
   if (!saved) return defaultRecords();
   try {
-    return JSON.parse(saved) as CmsEntryRecord[];
+    return normalizeCmsEntries(JSON.parse(saved) as CmsEntryRecord[]);
   } catch {
     return defaultRecords();
   }
@@ -45,7 +48,7 @@ function getDemoRecords() {
 
 function setDemoRecords(records: CmsEntryRecord[]) {
   if (typeof window === 'undefined') return;
-  window.localStorage.setItem(DEMO_ENTRIES_KEY, JSON.stringify(records));
+  window.localStorage.setItem(DEMO_ENTRIES_KEY, JSON.stringify(normalizeCmsEntries(records)));
 }
 
 export function hasDemoSession() {
@@ -108,30 +111,31 @@ export async function loadCmsEntries(): Promise<CmsEntryRecord[]> {
     .select('id,key,group_name,label,description,kind,sort_order,draft_value,published_value,updated_at,published_at')
     .order('sort_order');
   if (error) throw error;
-  return (data ?? []) as CmsEntryRecord[];
+  return normalizeCmsEntries((data ?? []) as CmsEntryRecord[]);
 }
 
 export async function loadPublishedCmsMap(): Promise<CmsPublishedMap> {
-  if (!supabase) return clone(cmsDefaultMap) as CmsPublishedMap;
+  if (!supabase) return normalizePublishedCmsMap(clone(cmsDefaultMap) as CmsPublishedMap);
   const { data, error } = await supabase.from('cms_entries').select('key,published_value');
   if (error) throw error;
   const map: CmsPublishedMap = clone(cmsDefaultMap) as CmsPublishedMap;
   for (const row of data ?? []) {
     if (row.published_value !== null) map[row.key] = row.published_value as CmsJson;
   }
-  return map;
+  return normalizePublishedCmsMap(map);
 }
 
 export async function saveCmsDraft(key: string, value: CmsJson) {
+  const normalizedValue = normalizeCmsValue(key, value);
   if (!supabase) {
     const timestamp = new Date().toISOString();
     const records = getDemoRecords().map((entry) =>
-      entry.key === key ? { ...entry, draft_value: clone(value), updated_at: timestamp } : entry,
+      entry.key === key ? { ...entry, draft_value: clone(normalizedValue), updated_at: timestamp } : entry,
     );
     setDemoRecords(records);
     return;
   }
-  const { error } = await supabase.from('cms_entries').update({ draft_value: value }).eq('key', key);
+  const { error } = await supabase.from('cms_entries').update({ draft_value: normalizedValue }).eq('key', key);
   if (error) throw error;
 }
 
@@ -162,9 +166,10 @@ export async function resetCmsDraft(key: string) {
   }
   const { data, error } = await supabase.from('cms_entries').select('published_value').eq('key', key).single();
   if (error) throw error;
+  const normalizedValue = normalizeCmsValue(key, data.published_value as CmsJson);
   const { error: updateError } = await supabase
     .from('cms_entries')
-    .update({ draft_value: data.published_value })
+    .update({ draft_value: normalizedValue })
     .eq('key', key);
   if (updateError) throw updateError;
 }
