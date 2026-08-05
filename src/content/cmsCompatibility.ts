@@ -156,7 +156,9 @@ function normalizeStyleBook(value: CmsJson): CmsJson {
 function normalizeGiftCardImage(value: CmsJson): CmsJson {
   if (!isRecord(value)) return value;
   const normalized = normalizeTextFields(value) as { [key: string]: CmsJson };
-  if (normalized.image === LEGACY_CAFE_IMAGE) normalized.image = PHOTO_STUDIO_IMAGE;
+  if (normalized.image === LEGACY_CAFE_IMAGE || normalized.image === PHOTO_STUDIO_IMAGE) {
+    normalized.image = CLUB_HERO_IMAGE;
+  }
   return normalized;
 }
 
