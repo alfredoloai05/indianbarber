@@ -31,6 +31,7 @@ export function ClubPage() {
           <div>
             <a href={settings.bookingUrl} target="_blank" rel="noreferrer">Reservar cita ↗</a>
             <Link to="/servicios">Explorar servicios</Link>
+            <a href="#ubicacion">Ubícanos</a>
           </div>
         </div>
       </section>
@@ -75,8 +76,15 @@ export function ClubPage() {
         </div>
       </section>
 
-      <section className="club-map club-map--clean" aria-labelledby="club-map-title">
+      <section id="ubicacion" className="club-map club-map--clean club-map--app" aria-labelledby="club-map-title">
         <div className="club-map__frame">
+          <div className="club-map__chrome">
+            <div>
+              <img src={settings.logoMark} alt="" />
+              <span>Indian Club · Loja</span>
+            </div>
+            <a href={settings.mapHref} target="_blank" rel="noreferrer">Abrir ruta ↗</a>
+          </div>
           <iframe
             src={mapEmbedUrl}
             title={`Mapa de ${settings.brandName}`}
@@ -86,7 +94,7 @@ export function ClubPage() {
           />
         </div>
         <div className="club-map__content">
-          <h2 id="club-map-title">Estamos en el centro de Loja.</h2>
+          <h2 id="club-map-title">Ubícanos en el centro de Loja.</h2>
           <address>{settings.address}<br />{settings.city}</address>
           <div className="club-map__hours">
             {settings.hours.map((item) => (
