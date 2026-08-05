@@ -72,7 +72,7 @@ export function SiteLayout() {
         </nav>
 
         <div className="compact-actions">
-          <a className="compact-booking" href={settings.bookingUrl} target="_blank" rel="noreferrer">Reservar</a>
+          <Link className="compact-booking" to="/reservar">Reservar</Link>
           <button
             className={`menu-trigger menu-trigger--compact menu-trigger--clean${menuOpen ? ' is-open' : ''}`}
             type="button"
@@ -116,9 +116,9 @@ export function SiteLayout() {
                 <NavLink to="/tarjetas-regalo" onClick={() => setMenuOpen(false)}>Gift Cards</NavLink>
               </motion.div>
             </nav>
-            <a className="menu-overlay__booking" href={settings.bookingUrl} target="_blank" rel="noreferrer">
+            <Link className="menu-overlay__booking" to="/reservar" onClick={() => setMenuOpen(false)}>
               Reservar una cita <span aria-hidden="true">↗</span>
-            </a>
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>
@@ -146,7 +146,7 @@ export function SiteLayout() {
 
         <div className="compact-footer__contact">
           <a href={settings.whatsappHref} target="_blank" rel="noreferrer">WhatsApp</a>
-          <a href={settings.bookingUrl} target="_blank" rel="noreferrer">Reservar ↗</a>
+          <Link to="/reservar">Reservar ↗</Link>
         </div>
 
         <div className="compact-footer__bottom">
