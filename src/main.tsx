@@ -28,6 +28,7 @@ import './styles/home-guides-menu-v14.css';
 import './styles/home-gift-cards-v15.css';
 import './styles/spa-photo-layout-v16.css';
 import './styles/experience-polish-v17.css';
+import './styles/editorial-cleanup-v18.css';
 
 const root = document.getElementById('root');
 
