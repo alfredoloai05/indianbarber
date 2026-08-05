@@ -11,11 +11,15 @@ export function ClubPage() {
     <>
       <Seo
         title="El Club"
-        description={`Conoce ${settings.brandName} en Loja: barbería, nails, tattoo studio, cafetería y parqueo exclusivo en una misma casa.`}
+        description={`Conoce ${settings.brandName} en Loja: barbería, SPA, nails, estudio fotográfico y parqueo exclusivo en una misma casa.`}
       />
 
       <section className="club-visual-hero" aria-labelledby="club-visual-title">
-        <ViewportVideo src={content.heroVideo} poster={content.heroPoster} label={`Ambiente de ${settings.brandName}`} priority />
+        {content.heroVideo ? (
+          <ViewportVideo src={content.heroVideo} poster={content.heroPoster} label={`Ambiente de ${settings.brandName}`} priority />
+        ) : (
+          <img src={content.heroPoster} alt={`Estudio fotográfico de ${settings.brandName}`} loading="eager" />
+        )}
         <div className="club-visual-hero__veil" />
         <div className="club-visual-hero__copy">
           <img src={settings.logoLockup} alt={settings.brandName} />
