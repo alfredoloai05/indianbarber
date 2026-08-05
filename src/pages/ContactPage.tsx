@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { BookingBand } from '../components/BookingBand';
 import { Seo } from '../components/Seo';
 import { useContactPageContent, useGlobalSettings } from '../content/useSiteContent';
@@ -40,7 +41,7 @@ export function ContactPage() {
             {settings.hours.map((item) => <strong key={item.days}>{item.days}: {item.value}<br /></strong>)}
           </div>
           <div className="real-contact-grid__actions">
-            <a className="final-button" href={settings.bookingUrl} target="_blank" rel="noreferrer">Reservar cita ↗</a>
+            <Link className="final-button" to="/reservar">Reservar cita ↗</Link>
             <a className="final-link" href={settings.whatsappHref} target="_blank" rel="noreferrer">Hacer una consulta</a>
           </div>
         </div>
