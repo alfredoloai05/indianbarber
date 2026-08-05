@@ -37,8 +37,8 @@ export function HomePage() {
   return (
     <>
       <Seo
-        title={`${settings.brandName} · Barbería, tattoo, nails y café`}
-        description={`${settings.brandName} reúne barbería, tattoo, nails y café en el centro de Loja. Conoce servicios, promociones, trabajos y reservas.`}
+        title={`${settings.brandName} · Barbería, SPA, nails y fotografía`}
+        description={`${settings.brandName} reúne barbería, SPA, nails y estudio fotográfico en el centro de Loja. Conoce servicios, promociones, trabajos y reservas.`}
       />
 
       <div className="art-home art-home--flow-polish">
@@ -101,8 +101,8 @@ export function HomePage() {
                     }
               }
             >
-              <span>INDIAN CLUB</span><i>BARBERÍA</i><span>TATTOO</span><i>NAILS</i><span>CAFÉ</span>
-              <span>INDIAN CLUB</span><i>BARBERÍA</i><span>TATTOO</span><i>NAILS</i><span>CAFÉ</span>
+              <span>INDIAN CLUB</span><i>BARBERÍA</i><span>SPA</span><i>NAILS</i><span>FOTOGRAFÍA</span>
+              <span>INDIAN CLUB</span><i>BARBERÍA</i><span>SPA</span><i>NAILS</i><span>FOTOGRAFÍA</span>
             </motion.div>
           </div>
         </section>
@@ -178,7 +178,11 @@ export function HomePage() {
         </section>
 
         <section className="club-film club-film--compact" aria-labelledby="club-film-title">
-          <ViewportVideo src={club.video} poster={club.poster} label="Ambiente social de café y club" />
+          {club.video ? (
+            <ViewportVideo src={club.video} poster={club.poster} label="Estudio fotográfico de Indian Club" />
+          ) : (
+            <img src={club.poster} alt="Estudio fotográfico de Indian Club" loading="lazy" />
+          )}
           <div className="club-film__veil" />
           <div className="club-film__copy">
             <img src={settings.logoMark} alt="" />
