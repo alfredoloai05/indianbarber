@@ -22,12 +22,14 @@ export const visualMedia = {
       source: 'Pexels 9738001 / Unsplash 1621605815971',
     },
     spa: spaMedia,
+    tattoo: spaMedia,
     nails: {
       poster: unsplashImage('photo-1604654894610-df63bc536371'),
       video: pexelsVideo('30706938'),
       source: 'Pexels 30706938 / Unsplash 1604654894610',
     },
     photoStudio: photoStudioMedia,
+    club: photoStudioMedia,
   },
   intent: {
     cut: {
@@ -46,6 +48,7 @@ export const visualMedia = {
       source: 'Pexels 7754409 / Unsplash 1610992015732',
     },
     spa: spaMedia,
+    tattoo: spaMedia,
   },
   services: [
     {
