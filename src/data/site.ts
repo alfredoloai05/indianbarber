@@ -35,13 +35,16 @@ export const navItems = [
   { label: 'Contacto', to: '/contacto' },
 ];
 
+const spaImage = 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&q=88&w=2200';
+const photoStudioImage = 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=88&w=2200';
+
 export const media = {
   hero: 'https://content.app-sources.com/s/249321345646214611/uploads/Nuevo_Portafolio/IMG_2623-4450906.jpg?format=webp',
   barber: 'https://content.app-sources.com/s/249321345646214611/uploads/Nuevo_Portafolio/IMG_2597-4450906.png?format=webp',
   barberAlt: 'https://content.app-sources.com/s/249321345646214611/uploads/Nuevo_Portafolio/IMG_2212-4450905.jpg?format=webp',
-  tattoo: 'https://content.app-sources.com/s/249321345646214611/uploads/Nuevo_Portafolio/IMG_1156-4450899.jpg?format=webp',
+  spa: spaImage,
   nails: 'https://content.app-sources.com/s/249321345646214611/uploads/Nuevo_Portafolio/IMG_9109.JPG-4450892.jpeg?format=webp',
-  cafe: 'https://images.unsplash.com/photo-1780398645489-85968d809196?auto=format&fit=crop&q=82&w=1800',
+  photoStudio: photoStudioImage,
   exterior: 'https://images.unsplash.com/photo-1771865600306-d4ef4c06ae16?auto=format&fit=crop&q=82&w=1800',
   parking: 'https://content.app-sources.com/s/249321345646214611/uploads/El_centro/7bd8d8dc-a404-4fa3-ba04-0420ee94de1d-8326539.jpeg?format=webp',
 };
@@ -96,7 +99,7 @@ export const services = [
     image: media.hero,
     imageAlt: 'Cliente dentro de Indian Club después de un servicio de barbería',
     ritual: ['Consulta integral', 'Servicio combinado', 'Styling y cuidado posterior'],
-    inclusions: ['Cabello', 'Barba o cejas', 'Opciones de limpieza facial', 'Bebida en servicio VIP'],
+    inclusions: ['Cabello', 'Barba o cejas', 'Opciones de limpieza facial', 'Atención personalizada'],
   },
   {
     slug: 'nails-studio',
@@ -114,19 +117,19 @@ export const services = [
     inclusions: ['Manicura', 'Pedicura', 'Semipermanente', 'Soft Gel'],
   },
   {
-    slug: 'tattoo-studio',
+    slug: 'spa',
     number: '05',
-    title: 'Tattoo Studio',
-    kicker: 'Idea, trazo y permanencia.',
+    title: 'SPA',
+    kicker: 'Bienestar, relajación y cuidado.',
     detail:
-      'Cotización, conversación creativa y ejecución responsable para convertir una idea en una pieza con intención y cuidado posterior.',
-    duration: 'Según pieza',
-    signature: 'Lenguaje propio',
-    price: 'Cotización gratuita',
-    image: media.tattoo,
-    imageAlt: 'Tatuaje realizado por Indian Club Tattoo Studio',
-    ritual: ['Brief y cotización', 'Diseño y preparación', 'Ejecución y guía de cuidado'],
-    inclusions: ['Cotización', 'Diseño', 'Preparación higiénica', 'Guía posterior'],
+      'Experiencias de cuidado personal con valoración previa, preparación y atención adaptada al tratamiento disponible.',
+    duration: 'Según tratamiento',
+    signature: 'Bienestar consciente',
+    price: 'Consultar',
+    image: media.spa,
+    imageAlt: 'Experiencia SPA en Indian Club',
+    ritual: ['Valoración', 'Preparación', 'Tratamiento y recomendaciones'],
+    inclusions: ['Atención previa', 'Cuidado personal', 'Reserva directa', 'Recomendaciones'],
   },
   {
     slug: 'servicios-especiales',
@@ -149,14 +152,8 @@ export const team = [
   {
     name: 'René Chamba',
     role: 'CEO de Indian Club',
-    statement: 'Lidera Indian Club y su propuesta de barbería, tattoo y nails en Loja.',
+    statement: 'Lidera Indian Club y su propuesta de barbería, SPA, nails y fotografía en Loja.',
     image: 'https://content.app-sources.com/s/249321345646214611/uploads/El_centro/equipo_indian_club_1-8394408.png?format=webp',
-  },
-  {
-    name: 'César Castejón',
-    role: 'Tatuador especializado en diseños personalizados',
-    statement: 'Convierte ideas personales en piezas trabajadas con conversación, criterio y cuidado.',
-    image: 'https://content.app-sources.com/s/249321345646214611/uploads/El_centro/equipo_indian_club_5-8394408.png?format=webp',
   },
   {
     name: 'Alisson Ruiz',
@@ -181,7 +178,7 @@ export const team = [
 export const promotions = [
   {
     eyebrow: 'Primera visita',
-    title: '20% en tu primer servicio de tattoo o nails',
+    title: '20% en tu primer servicio de SPA o nails',
     note: 'Disponible para nuevos clientes y sujeto a preconfirmación del centro.',
   },
   {
@@ -219,12 +216,12 @@ export const journalItems = [
     image: media.barberAlt,
   },
   {
-    slug: 'cafe-conversacion-y-ritmo',
+    slug: 'estudio-fotografico-indian',
     number: '03',
     type: 'Casa',
-    title: 'Café, conversación y el valor de bajar el ritmo',
-    excerpt: 'Por qué Indian Club se diseña como un lugar para llegar, no solo como una cita que cumplir.',
-    image: media.cafe,
+    title: 'Un estudio fotográfico dentro de Indian Club',
+    excerpt: 'Un espacio para crear retratos y contenido visual antes o después de tu servicio.',
+    image: media.photoStudio,
   },
 ];
 
