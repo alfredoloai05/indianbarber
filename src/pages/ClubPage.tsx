@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Seo } from '../components/Seo';
 import { ViewportVideo } from '../components/ViewportVideo';
 import { useClubPageContent, useGlobalSettings, useServiceCatalogContent } from '../content/useSiteContent';
@@ -7,8 +8,19 @@ export function ClubPage() {
   const content = useClubPageContent();
   const settings = useGlobalSettings();
   const serviceCatalog = useServiceCatalogContent();
+  const location = useLocation();
   const mapQuery = `Indian Club, ${settings.address}, ${settings.city}`;
   const mapEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&t=&z=17&ie=UTF8&iwloc=&output=embed`;
+
+  useEffect(() => {
+    if (location.hash !== '#ubicacion') return;
+
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById('ubicacion')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [location.hash]);
 
   return (
     <>
