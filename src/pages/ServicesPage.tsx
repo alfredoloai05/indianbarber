@@ -15,15 +15,15 @@ export function ServicesPage() {
     <>
       <Seo
         title="Servicios"
-        description="Barbería, combos, SPA y nails de Indian Club en Loja. Conoce todas las opciones, precios y tiempos disponibles."
+        description="Barbería, combos, SPA, nails y estudio fotográfico de Indian Club en Loja. Conoce las opciones, tiempos y formas de reserva."
       />
 
       <section className="services-clean-hero services-clean-hero--quadrants">
         <span>Servicios Indian Club</span>
-        <h1>Barbería, combos, SPA y nails.</h1>
+        <h1>Barbería, SPA, nails y fotografía.</h1>
       </section>
 
-      <section className="services-quadrants" aria-label="Áreas de servicio de Indian Club">
+      <section className="services-quadrants services-quadrants--five" aria-label="Áreas de servicio de Indian Club">
         {serviceCatalog.map((area, index) => {
           const isActive = activeArea === index;
           const examples = area.groups.flatMap((group) => group.items).slice(0, 3);

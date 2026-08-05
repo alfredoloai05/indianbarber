@@ -71,10 +71,11 @@ export function TeamPage() {
           <h2>{content.collaborationTitle}</h2>
           <p>{content.collaborationDescription}</p>
         </div>
-        <div className="team-collaboration__areas">
+        <div className="team-collaboration__areas team-collaboration__areas--four">
           <article><strong>Barbería</strong><p>Cortes, barba, afeitado y recomendaciones de mantenimiento.</p></article>
           <article><strong>SPA</strong><p>Bienestar, relajación y cuidado personal con reserva previa.</p></article>
           <article><strong>Nails Studio</strong><p>Manicura, pedicura, sistemas semipermanentes y retiro.</p></article>
+          <article><strong>Estudio Fotográfico</strong><p>Retrato, marca personal y contenido visual dentro de Indian Club.</p></article>
         </div>
       </section>
 

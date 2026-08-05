@@ -1,4 +1,5 @@
 import { serviceCatalog } from '../data/serviceCatalog';
+import { media } from '../data/site';
 import { visualMedia } from '../data/visualMedia';
 import type { CmsEntryRecord, CmsJson, CmsPublishedMap } from './cmsTypes';
 
@@ -6,6 +7,7 @@ const LEGACY_CAFE_IMAGE =
   'https://images.unsplash.com/photo-1780398645489-85968d809196?auto=format&fit=crop&q=82&w=1800';
 const PHOTO_STUDIO_IMAGE = visualMedia.hero.photoStudio.poster;
 const SPA_IMAGE = visualMedia.hero.spa.poster;
+const CLUB_HERO_IMAGE = media.hero;
 
 function clone<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
@@ -39,21 +41,33 @@ function normalizeTextFields(value: CmsJson, field = ''): CmsJson {
 }
 
 function normalizeServices(value: CmsJson): CmsJson {
-  if (!Array.isArray(value)) return clone(serviceCatalog) as unknown as CmsJson;
   const spaArea = serviceCatalog.find((area) => area.id === 'spa');
-  if (!spaArea) return normalizeTextFields(value);
+  const photoArea = serviceCatalog.find((area) => area.id === 'fotografia');
+  if (!Array.isArray(value) || !spaArea || !photoArea) return clone(serviceCatalog) as unknown as CmsJson;
 
+  let hasSpa = false;
+  let hasPhoto = false;
   const normalized = value.map((item) => {
     if (!isRecord(item)) return item;
     const id = typeof item.id === 'string' ? item.id.toLowerCase() : '';
     const title = typeof item.title === 'string' ? item.title.toLowerCase() : '';
     const route = typeof item.route === 'string' ? item.route.toLowerCase() : '';
-    if (id === 'tattoo' || id === 'spa' || title.includes('tattoo') || route === 'tattoo-studio') {
+
+    if (id === 'tattoo' || id === 'spa' || title.includes('tattoo') || route === 'tattoo-studio' || route === 'spa') {
+      hasSpa = true;
       return clone(spaArea) as unknown as CmsJson;
     }
+
+    if (id === 'fotografia' || title.includes('fotográf') || route === 'estudio-fotografico') {
+      hasPhoto = true;
+      return clone(photoArea) as unknown as CmsJson;
+    }
+
     return normalizeTextFields(item);
   });
 
+  if (!hasSpa) normalized.splice(Math.min(2, normalized.length), 0, clone(spaArea) as unknown as CmsJson);
+  if (!hasPhoto) normalized.push(clone(photoArea) as unknown as CmsJson);
   return normalized as CmsJson;
 }
 
@@ -72,10 +86,10 @@ function normalizeTeam(value: CmsJson): CmsJson {
 function normalizeHomeClub(value: CmsJson): CmsJson {
   if (!isRecord(value)) return value;
   const normalized = normalizeTextFields(value) as { [key: string]: CmsJson };
-  const serialized = JSON.stringify(value).toLowerCase();
-  if (serialized.includes('café') || serialized.includes('cafetería')) {
+  const poster = typeof normalized.poster === 'string' ? normalized.poster : '';
+  if (poster === PHOTO_STUDIO_IMAGE || poster === LEGACY_CAFE_IMAGE || JSON.stringify(value).toLowerCase().includes('cafeter')) {
     normalized.video = '';
-    normalized.poster = PHOTO_STUDIO_IMAGE;
+    normalized.poster = CLUB_HERO_IMAGE;
   }
   return normalized;
 }
@@ -83,11 +97,11 @@ function normalizeHomeClub(value: CmsJson): CmsJson {
 function normalizeClub(value: CmsJson): CmsJson {
   if (!isRecord(value)) return value;
   const normalized = normalizeTextFields(value) as { [key: string]: CmsJson };
-  const serialized = JSON.stringify(value).toLowerCase();
+  const heroPoster = typeof normalized.heroPoster === 'string' ? normalized.heroPoster : '';
 
-  if (serialized.includes('café') || serialized.includes('cafetería')) {
+  if (heroPoster === PHOTO_STUDIO_IMAGE || heroPoster === LEGACY_CAFE_IMAGE || JSON.stringify(value).toLowerCase().includes('cafeter')) {
     normalized.heroVideo = '';
-    normalized.heroPoster = PHOTO_STUDIO_IMAGE;
+    normalized.heroPoster = CLUB_HERO_IMAGE;
   }
 
   if (Array.isArray(normalized.gallery)) {
@@ -97,7 +111,7 @@ function normalizeClub(value: CmsJson): CmsJson {
       if (source.includes('café') || source.includes('cafetería')) {
         return {
           label: 'Estudio Fotográfico',
-          title: 'Retratos y contenido visual dentro de Indian Club.',
+          title: 'Retratos, marca personal y contenido visual dentro de Indian Club.',
           image: PHOTO_STUDIO_IMAGE,
         };
       }

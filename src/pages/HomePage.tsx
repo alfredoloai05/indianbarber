@@ -33,6 +33,7 @@ export function HomePage() {
   const journalItems = useJournalArticlesContent();
   const visit = useHomeVisit();
   const activeArea = serviceCatalog[activePortal] ?? serviceCatalog[0];
+  const mapEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(`${settings.address}, ${settings.city}`)}&output=embed`;
 
   return (
     <>
@@ -179,9 +180,9 @@ export function HomePage() {
 
         <section className="club-film club-film--compact" aria-labelledby="club-film-title">
           {club.video ? (
-            <ViewportVideo src={club.video} poster={club.poster} label="Estudio fotográfico de Indian Club" />
+            <ViewportVideo src={club.video} poster={club.poster} label="Espacios y servicios de Indian Club" />
           ) : (
-            <img src={club.poster} alt="Estudio fotográfico de Indian Club" loading="lazy" />
+            <img src={club.poster} alt="Espacios y servicios de Indian Club" loading="lazy" />
           )}
           <div className="club-film__veil" />
           <div className="club-film__copy">
@@ -238,22 +239,35 @@ export function HomePage() {
           </div>
         </section>
 
-        <section className="visit-terminal" aria-labelledby="visit-terminal-title">
-          <div>
-            <span>{visit.eyebrow}</span>
-            <h2 id="visit-terminal-title">{visit.title}</h2>
-            <address>{settings.address}<br />{settings.city}</address>
-            <a href={settings.mapHref} target="_blank" rel="noreferrer">Abrir mapa <Arrow /></a>
+        <section className="visit-terminal visit-terminal--embedded" aria-labelledby="visit-terminal-title">
+          <div className="visit-terminal__map">
+            <iframe
+              src={mapEmbedUrl}
+              title={`Mapa de ${settings.brandName}`}
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+            <div className="visit-terminal__map-copy">
+              <span>{visit.eyebrow}</span>
+              <h2 id="visit-terminal-title">{visit.title}</h2>
+              <address>{settings.address}<br />{settings.city}</address>
+              <a href={settings.mapHref} target="_blank" rel="noreferrer">Abrir en Google Maps <Arrow /></a>
+            </div>
           </div>
-          <div>
-            {settings.hours.map((item) => (
-              <p key={item.days}><span>{item.days}</span><strong>{item.value}</strong></p>
-            ))}
-            <a href={settings.whatsappHref} target="_blank" rel="noreferrer">WhatsApp {settings.whatsapp}</a>
-          </div>
-          <div>
-            <h3>{visit.bookingTitle}</h3>
-            <a href={settings.bookingUrl} target="_blank" rel="noreferrer">{visit.bookingLabel} <Arrow /></a>
+
+          <div className="visit-terminal__details">
+            <div className="visit-terminal__hours">
+              {settings.hours.map((item) => (
+                <p key={item.days}><span>{item.days}</span><strong>{item.value}</strong></p>
+              ))}
+              <a href={settings.whatsappHref} target="_blank" rel="noreferrer">WhatsApp {settings.whatsapp}</a>
+            </div>
+            <div className="visit-terminal__booking">
+              <span>Reservas</span>
+              <h3>{visit.bookingTitle}</h3>
+              <a href={settings.bookingUrl} target="_blank" rel="noreferrer">{visit.bookingLabel} <Arrow /></a>
+            </div>
           </div>
         </section>
       </div>

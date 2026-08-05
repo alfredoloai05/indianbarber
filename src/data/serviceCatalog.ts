@@ -13,7 +13,7 @@ export type ServiceOptionGroup = {
 };
 
 export type ServiceCatalogArea = {
-  id: 'barberia' | 'combos' | 'spa' | 'nails';
+  id: 'barberia' | 'combos' | 'spa' | 'nails' | 'fotografia';
   route: string;
   aliases: string[];
   eyebrow: string;
@@ -113,8 +113,8 @@ export const serviceCatalog: ServiceCatalogArea[] = [
     eyebrow: 'Bienestar y cuidado',
     title: 'SPA',
     shortTitle: 'SPA',
-    summary: 'Experiencias de relajación y cuidado personal con atención previa y reserva directa.',
-    duration: 'Según tratamiento',
+    summary: 'Rituales de bienestar, relajación y cuidado personal coordinados según la experiencia que buscas.',
+    duration: '30–75 min aprox.',
     price: 'Consultar',
     media: {
       kind: 'image',
@@ -122,13 +122,25 @@ export const serviceCatalog: ServiceCatalogArea[] = [
     },
     groups: [
       {
-        title: 'Experiencias disponibles',
+        title: 'Cuidado y relajación',
         items: [
           {
-            name: 'Valoración y reserva SPA',
-            duration: 'Según tratamiento',
+            name: 'Ritual facial',
+            duration: '45–60 min aprox.',
             price: 'Consultar',
-            note: 'Los servicios, tiempos y valores se confirman directamente con el centro.',
+            note: 'La técnica y los productos se coordinan según la valoración previa y la disponibilidad del centro.',
+          },
+          {
+            name: 'Masaje de relajación',
+            duration: '30–60 min aprox.',
+            price: 'Consultar',
+            note: 'Duración y modalidad sujetas a la experiencia seleccionada.',
+          },
+          {
+            name: 'Experiencia SPA personalizada',
+            duration: '60–75 min aprox.',
+            price: 'Consultar',
+            note: 'Una combinación de cuidado y relajación definida directamente con el centro.',
           },
         ],
       },
@@ -164,6 +176,52 @@ export const serviceCatalog: ServiceCatalogArea[] = [
         items: [
           { name: 'Pedicura sin esmaltado', duration: '45–60 min aprox.', price: 'USD 10' },
           { name: 'Pedicura con esmaltado semipermanente', duration: '60–75 min aprox.', price: 'USD 15' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'fotografia',
+    route: 'estudio-fotografico',
+    aliases: ['estudio-fotografico', 'fotografia'],
+    eyebrow: 'Retrato y contenido',
+    title: 'Estudio Fotográfico',
+    shortTitle: 'Fotografía',
+    summary: 'Sesiones para retrato, marca personal y contenido visual realizadas dentro de Indian Club.',
+    duration: '30–90 min aprox.',
+    price: 'Consultar',
+    media: {
+      kind: 'image',
+      poster: visualMedia.hero.photoStudio.poster,
+    },
+    groups: [
+      {
+        title: 'Sesiones disponibles',
+        items: [
+          {
+            name: 'Retrato personal express',
+            duration: '30 min aprox.',
+            price: 'Consultar',
+            note: 'Sesión breve para fotografías personales o actualización de perfil.',
+          },
+          {
+            name: 'Marca personal',
+            duration: '60 min aprox.',
+            price: 'Consultar',
+            note: 'Retratos pensados para perfiles profesionales, portafolios y presencia digital.',
+          },
+          {
+            name: 'Contenido para redes',
+            duration: '45–90 min aprox.',
+            price: 'Consultar',
+            note: 'Producción de una selección visual para publicaciones y comunicación de marca.',
+          },
+          {
+            name: 'Fotografía de producto',
+            duration: 'Según proyecto',
+            price: 'Consultar',
+            note: 'La propuesta se define según cantidad de productos, estilo y formato de entrega.',
+          },
         ],
       },
     ],
