@@ -18,12 +18,11 @@ export function ServicesPage() {
         description="Barbería, combos, SPA, nails y estudio fotográfico de Indian Club en Loja. Conoce las opciones, tiempos y formas de reserva."
       />
 
-      <section className="services-clean-hero services-clean-hero--quadrants">
-        <span>Servicios Indian Club</span>
+      <section className="services-clean-hero services-clean-hero--quadrants services-clean-hero--minimal">
         <h1>Barbería, SPA, nails y fotografía.</h1>
       </section>
 
-      <section className="services-quadrants services-quadrants--five" aria-label="Áreas de servicio de Indian Club">
+      <section className="services-quadrants services-quadrants--five services-quadrants--clean" aria-label="Áreas de servicio de Indian Club">
         {serviceCatalog.map((area, index) => {
           const isActive = activeArea === index;
           const examples = area.groups.flatMap((group) => group.items).slice(0, 3);
@@ -60,7 +59,6 @@ export function ServicesPage() {
               <div className="services-quadrant__veil" aria-hidden="true" />
 
               <div className="services-quadrant__content">
-                <small>{area.eyebrow}</small>
                 <h2>{area.title}</h2>
                 <p>{area.summary}</p>
                 <ul>
@@ -73,9 +71,8 @@ export function ServicesPage() {
         })}
       </section>
 
-      <section className="services-help services-help--compact">
+      <section className="services-help services-help--compact services-help--minimal">
         <div>
-          <span>¿Necesitas ayuda?</span>
           <h2>Escríbenos y te orientamos antes de reservar.</h2>
         </div>
         <Link to="/contacto">Hablar con Indian Club ↗</Link>
