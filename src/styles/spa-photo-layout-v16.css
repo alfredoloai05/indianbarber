@@ -1,0 +1,49 @@
+/* SPA and photo-studio cleanup: remove the empty desktop prelude before service portals. */
+
+.service-portal--spa,
+.service-portal--tattoo {
+  --portal-blue: 38 111 126;
+  --portal-red: 184 132 92;
+}
+
+.services-quadrant--spa,
+.services-quadrant--tattoo {
+  --tile-blue: 38 111 126;
+  --tile-red: 184 132 92;
+}
+
+@media (min-width: 1001px) {
+  .service-portals {
+    height: 100dvh;
+    display: block;
+  }
+
+  .service-portals__intro {
+    display: none;
+  }
+
+  .service-portals__grid {
+    height: 100dvh;
+    min-height: 0;
+  }
+}
+
+@media (max-width: 1000px) {
+  .service-portals {
+    padding-top: clamp(2.5rem, 8vw, 4rem);
+  }
+
+  .service-portals__intro {
+    margin-bottom: clamp(1.25rem, 5vw, 2.25rem);
+  }
+}
+
+@media (max-width: 640px) {
+  .service-portals {
+    padding-top: 2.25rem;
+  }
+
+  .service-portals__intro h2 {
+    font-size: clamp(2.65rem, 13vw, 4rem);
+  }
+}

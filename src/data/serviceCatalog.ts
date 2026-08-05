@@ -13,7 +13,7 @@ export type ServiceOptionGroup = {
 };
 
 export type ServiceCatalogArea = {
-  id: 'barberia' | 'combos' | 'tattoo' | 'nails';
+  id: 'barberia' | 'combos' | 'spa' | 'nails';
   route: string;
   aliases: string[];
   eyebrow: string;
@@ -107,7 +107,7 @@ export const serviceCatalog: ServiceCatalogArea[] = [
     ],
   },
   {
-    id: 'tattoo',
+    id: 'spa',
     route: 'spa',
     aliases: ['spa', 'tattoo-studio'],
     eyebrow: 'Bienestar y cuidado',
@@ -118,7 +118,7 @@ export const serviceCatalog: ServiceCatalogArea[] = [
     price: 'Consultar',
     media: {
       kind: 'image',
-      poster: visualMedia.hero.tattoo.poster,
+      poster: visualMedia.hero.spa.poster,
     },
     groups: [
       {
