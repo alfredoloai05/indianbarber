@@ -26,7 +26,7 @@ export function ClubPage() {
     <>
       <Seo
         title="El Club"
-        description={`Conoce ${settings.brandName} en Loja: barbería, SPA, nails, estudio fotográfico y parqueo exclusivo en una misma casa.`}
+        description={`Conoce ${settings.brandName} en Loja: barbería, SPA, nails y estudio fotográfico dentro de una misma casa.`}
       />
 
       <section className="club-visual-hero club-visual-hero--house" aria-labelledby="club-visual-title">
@@ -41,7 +41,7 @@ export function ClubPage() {
           <h1 id="club-visual-title">{content.title}</h1>
           <p>{content.description}</p>
           <div>
-            <a href={settings.bookingUrl} target="_blank" rel="noreferrer">Reservar cita ↗</a>
+            <Link to="/reservar">Reservar cita ↗</Link>
             <Link to="/servicios">Explorar servicios</Link>
             <a href="#ubicacion">Ubícanos</a>
           </div>
@@ -116,7 +116,7 @@ export function ClubPage() {
           <div className="club-map__actions">
             <a href={settings.mapHref} target="_blank" rel="noreferrer">Abrir en Google Maps ↗</a>
             <a href={settings.whatsappHref} target="_blank" rel="noreferrer">WhatsApp ↗</a>
-            <a className="club-map__booking" href={settings.bookingUrl} target="_blank" rel="noreferrer">Reservar ahora ↗</a>
+            <Link className="club-map__booking" to="/reservar">Reservar ahora ↗</Link>
           </div>
         </div>
       </section>
