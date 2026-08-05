@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Seo } from '../components/Seo';
 import { ViewportVideo } from '../components/ViewportVideo';
 import { useClubPageContent, useGlobalSettings, useServiceCatalogContent } from '../content/useSiteContent';
@@ -7,8 +8,19 @@ export function ClubPage() {
   const content = useClubPageContent();
   const settings = useGlobalSettings();
   const serviceCatalog = useServiceCatalogContent();
+  const location = useLocation();
   const mapQuery = `Indian Club, ${settings.address}, ${settings.city}`;
   const mapEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&t=&z=17&ie=UTF8&iwloc=&output=embed`;
+
+  useEffect(() => {
+    if (location.hash !== '#ubicacion') return;
+
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById('ubicacion')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [location.hash]);
 
   return (
     <>
@@ -31,6 +43,7 @@ export function ClubPage() {
           <div>
             <a href={settings.bookingUrl} target="_blank" rel="noreferrer">Reservar cita ↗</a>
             <Link to="/servicios">Explorar servicios</Link>
+            <a href="#ubicacion">Ubícanos</a>
           </div>
         </div>
       </section>
@@ -75,8 +88,15 @@ export function ClubPage() {
         </div>
       </section>
 
-      <section className="club-map club-map--clean" aria-labelledby="club-map-title">
+      <section id="ubicacion" className="club-map club-map--clean club-map--app" aria-labelledby="club-map-title">
         <div className="club-map__frame">
+          <div className="club-map__chrome">
+            <div>
+              <img src={settings.logoMark} alt="" />
+              <span>Indian Club · Loja</span>
+            </div>
+            <a href={settings.mapHref} target="_blank" rel="noreferrer">Abrir ruta ↗</a>
+          </div>
           <iframe
             src={mapEmbedUrl}
             title={`Mapa de ${settings.brandName}`}
@@ -86,7 +106,7 @@ export function ClubPage() {
           />
         </div>
         <div className="club-map__content">
-          <h2 id="club-map-title">Estamos en el centro de Loja.</h2>
+          <h2 id="club-map-title">Ubícanos en el centro de Loja.</h2>
           <address>{settings.address}<br />{settings.city}</address>
           <div className="club-map__hours">
             {settings.hours.map((item) => (
