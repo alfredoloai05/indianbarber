@@ -2,6 +2,18 @@ const pexelsVideo = (id: string) => `https://www.pexels.com/download/video/${id}
 const unsplashImage = (id: string, width = 2200) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&q=88&w=${width}`;
 
+const spaMedia = {
+  poster: unsplashImage('photo-1540555700478-4be289fbecef'),
+  video: '',
+  source: 'Unsplash 1540555700478',
+} as const;
+
+const photoStudioMedia = {
+  poster: unsplashImage('photo-1516035069371-29a1b244cc32'),
+  video: '',
+  source: 'Unsplash 1516035069371',
+} as const;
+
 export const visualMedia = {
   hero: {
     barber: {
@@ -9,21 +21,13 @@ export const visualMedia = {
       video: pexelsVideo('9738001'),
       source: 'Pexels 9738001 / Unsplash 1621605815971',
     },
-    tattoo: {
-      poster: unsplashImage('photo-1540555700478-4be289fbecef'),
-      video: '',
-      source: 'Unsplash 1540555700478',
-    },
+    spa: spaMedia,
     nails: {
       poster: unsplashImage('photo-1604654894610-df63bc536371'),
       video: pexelsVideo('30706938'),
       source: 'Pexels 30706938 / Unsplash 1604654894610',
     },
-    club: {
-      poster: unsplashImage('photo-1516035069371-29a1b244cc32'),
-      video: '',
-      source: 'Unsplash 1516035069371',
-    },
+    photoStudio: photoStudioMedia,
   },
   intent: {
     cut: {
@@ -41,11 +45,7 @@ export const visualMedia = {
       video: pexelsVideo('7754409'),
       source: 'Pexels 7754409 / Unsplash 1610992015732',
     },
-    tattoo: {
-      poster: unsplashImage('photo-1540555700478-4be289fbecef'),
-      video: '',
-      source: 'Unsplash 1540555700478',
-    },
+    spa: spaMedia,
   },
   services: [
     {
@@ -68,22 +68,14 @@ export const visualMedia = {
       video: pexelsVideo('7754413'),
       source: 'Pexels 7754413 / Unsplash 1607779097040',
     },
-    {
-      poster: unsplashImage('photo-1540555700478-4be289fbecef'),
-      video: '',
-      source: 'Unsplash 1540555700478',
-    },
+    spaMedia,
     {
       poster: unsplashImage('photo-1487412912498-0447578fcca8'),
       video: pexelsVideo('7697135'),
       source: 'Pexels 7697135 / Unsplash 1487412912498',
     },
   ],
-  clubFeature: {
-    poster: unsplashImage('photo-1516035069371-29a1b244cc32'),
-    video: '',
-    source: 'Unsplash 1516035069371',
-  },
+  clubFeature: photoStudioMedia,
   journal: {
     poster: unsplashImage('photo-1521590832167-7bcbfaa6381f', 1800),
     source: 'Unsplash 1521590832167',
