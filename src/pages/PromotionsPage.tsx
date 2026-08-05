@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { BookingBand } from '../components/BookingBand';
 import { Seo } from '../components/Seo';
 import { useGlobalSettings, usePromotionsContent } from '../content/useSiteContent';
@@ -19,17 +20,17 @@ export function PromotionsPage() {
           <h1>Beneficios disponibles <em>en {settings.brandName}.</em></h1>
         </div>
         <p className="chapter-intro__aside">
-          Revisa las condiciones principales y confirma disponibilidad directamente con el centro antes de reservar.
+          Revisa las condiciones principales y envía tu solicitud desde la reserva interna.
         </p>
       </section>
 
       <section className="promotions-stage promotions-stage--clean">
         {promotions.map((promotion) => (
-          <a href={settings.bookingUrl} target="_blank" rel="noreferrer" key={promotion.title}>
+          <Link to="/reservar" key={promotion.title}>
             <div><small>{promotion.eyebrow}</small><h2>{promotion.title}</h2></div>
             <p>{promotion.note}</p>
             <i aria-hidden="true">↗</i>
-          </a>
+          </Link>
         ))}
       </section>
 

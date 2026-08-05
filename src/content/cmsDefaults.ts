@@ -1,7 +1,7 @@
 import { giftCards, products } from '../data/catalog';
 import { journalBodies, journalItems } from '../data/journal';
 import { serviceCatalog } from '../data/serviceCatalog';
-import { bookingUrl, brand, contact, media, navItems, promotions, team } from '../data/site';
+import { bookingUrl, brand, contact, media, navItems, promotions, stats, team } from '../data/site';
 import { visualMedia } from '../data/visualMedia';
 import type { CmsEntryDefinition, CmsJson } from './cmsTypes';
 
@@ -68,6 +68,17 @@ export const cmsDefinitions: CmsEntryDefinition[] = [
     }),
   },
   {
+    key: 'home.proof',
+    group: 'Inicio',
+    label: 'Trayectoria y confianza',
+    description: 'Datos reales de experiencia, reseñas y clientes mostrados después del Hero.',
+    kind: 'section',
+    value: json({
+      title: 'Una trayectoria construida en Loja.',
+      items: stats,
+    }),
+  },
+  {
     key: 'home.services',
     group: 'Inicio',
     label: 'Portales de servicios',
@@ -75,7 +86,7 @@ export const cmsDefinitions: CmsEntryDefinition[] = [
     kind: 'section',
     value: json({
       eyebrow: 'Servicios',
-      title: 'Cinco formas de vivir Indian.',
+      title: 'Empieza por lo que quieres hacerte.',
     }),
   },
   {
@@ -86,8 +97,8 @@ export const cmsDefinitions: CmsEntryDefinition[] = [
     kind: 'section',
     value: json({
       eyebrow: 'La casa',
-      title: 'Barbería, SPA, nails, fotografía y parqueo en un mismo lugar.',
-      description: 'Conoce un espacio pensado para resolver tu visita completa sin salir de Indian Club.',
+      title: 'Barbería, SPA, nails y fotografía en una misma casa.',
+      description: 'Conoce todos los espacios de Indian Club y llega con mayor comodidad gracias al parqueo exclusivo para clientes.',
       ctaLabel: 'Conocer la casa',
       video: '',
       poster: clubHeroImage,
@@ -111,7 +122,7 @@ export const cmsDefinitions: CmsEntryDefinition[] = [
       eyebrow: 'Gift Cards Indian Club',
       title: 'Regala Indian Club.',
       description: 'Una visita, un servicio o un detalle para alguien especial.',
-      image: photoStudioImage,
+      image: media.hero,
       values: giftCards,
       primaryLabel: 'Ver Gift Cards',
       secondaryLabel: 'Solicitar por WhatsApp',
@@ -172,7 +183,7 @@ export const cmsDefinitions: CmsEntryDefinition[] = [
       collaborationTitle: 'Servicios que pueden convivir en una sola visita.',
       collaborationDescription: 'Barbería, SPA, nails y fotografía comparten la misma experiencia Indian Club.',
       bookingTitle: 'Elige el servicio y revisa quién está disponible.',
-      bookingDescription: 'La plataforma de reservas te permite consultar horarios y seleccionar al profesional para tu próxima visita.',
+      bookingDescription: 'La reserva interna te permite elegir servicio, profesional, fecha y hora antes de solicitar la confirmación.',
     }),
   },
   {
@@ -184,7 +195,7 @@ export const cmsDefinitions: CmsEntryDefinition[] = [
     value: json({
       eyebrow: 'Indian Club · Loja',
       title: 'Una casa para cuidar, crear y volver.',
-      description: 'Barbería, SPA, nails, estudio fotográfico y parqueo dentro de una misma experiencia en el centro de Loja.',
+      description: 'Barbería, SPA, nails y estudio fotográfico dentro de una misma experiencia en el centro de Loja. El parqueo exclusivo facilita tu llegada.',
       heroVideo: '',
       heroPoster: clubHeroImage,
       gallery: [
@@ -213,8 +224,8 @@ export const cmsDefinitions: CmsEntryDefinition[] = [
     kind: 'gallery',
     value: json({
       eyebrow: 'Style Book',
-      title: 'Trabajos y experiencias de Indian Club.',
-      description: 'Barbería, barba, nails, SPA y fotografía para conocer mejor todo lo que sucede dentro de Indian Club.',
+      title: 'Mira el resultado antes de elegir.',
+      description: 'Una selección de barbería, barba, nails, SPA y fotografía para encontrar una referencia y reservar desde ella.',
       frames: [
         { image: media.hero, label: 'Indian Club', alt: 'Cliente atendido dentro de Indian Club', className: 'style-book-grid__hero' },
         { image: media.barber, label: 'Corte y acabado', alt: 'Corte realizado por Indian Club', className: 'style-book-grid__wide' },
@@ -268,7 +279,7 @@ export const cmsDefinitions: CmsEntryDefinition[] = [
       eyebrow: 'Tarjetas regalo',
       title: 'Regala una visita a Indian Club.',
       description: 'Elige un valor y consulta la forma de entrega, vigencia y condiciones directamente con el centro.',
-      image: photoStudioImage,
+      image: media.hero,
       values: giftCards,
       buttonLabel: 'Solicitar una tarjeta',
       steps: [
@@ -290,7 +301,7 @@ export const cmsDefinitions: CmsEntryDefinition[] = [
       description: 'Encuentra aquí la dirección, horarios y canales de contacto para reservar o resolver una consulta.',
       image: media.exterior,
       journey: [
-        { title: 'Reserva', description: 'Elige el servicio, profesional, fecha y horario disponibles.' },
+        { title: 'Reserva', description: 'Elige el servicio, profesional, fecha y horario que quieres solicitar.' },
         { title: 'Llega', description: 'Estamos en el centro de Loja y contamos con parqueo exclusivo para clientes.' },
         { title: 'Consulta', description: 'Escríbenos por WhatsApp si necesitas información o ayuda para elegir.' },
         { title: 'Vuelve', description: 'Agenda tu mantenimiento o próxima experiencia cuando la necesites.' },

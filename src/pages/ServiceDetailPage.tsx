@@ -3,6 +3,7 @@ import { BookingBand } from '../components/BookingBand';
 import { Seo } from '../components/Seo';
 import { ViewportVideo } from '../components/ViewportVideo';
 import { useGlobalSettings, useServiceCatalogContent } from '../content/useSiteContent';
+import { bookingPath } from '../utils/booking';
 
 export function ServiceDetailPage() {
   const { slug } = useParams();
@@ -48,7 +49,7 @@ export function ServiceDetailPage() {
             <span>{area.duration}</span>
             <strong>{area.price}</strong>
           </div>
-          <a href={settings.bookingUrl} target="_blank" rel="noreferrer">Ver disponibilidad ↗</a>
+          <Link to={bookingPath(area.id)}>Elegir cita ↗</Link>
         </div>
       </section>
 
@@ -59,7 +60,7 @@ export function ServiceDetailPage() {
         <header>
           <span>Servicios disponibles</span>
           <h2 id="catalog-options-title">Elige tu servicio.</h2>
-          <p>Los tiempos marcados como aproximados pueden variar según el trabajo. La plataforma de reservas confirma la disponibilidad y el valor vigente.</p>
+          <p>Los tiempos marcados como aproximados pueden variar según el trabajo. La fecha y la hora se confirman directamente con Indian Club.</p>
         </header>
 
         <div className="catalog-options__groups">
@@ -77,7 +78,7 @@ export function ServiceDetailPage() {
                       <span>{item.duration}</span>
                       <b>{item.price}</b>
                     </div>
-                    <a href={settings.bookingUrl} target="_blank" rel="noreferrer" aria-label={`Reservar ${item.name}`}>Reservar ↗</a>
+                    <Link to={bookingPath(area.id, item.name)} aria-label={`Reservar ${item.name}`}>Reservar ↗</Link>
                   </li>
                 ))}
               </ul>
@@ -94,7 +95,7 @@ export function ServiceDetailPage() {
         <a href={settings.whatsappHref} target="_blank" rel="noreferrer">Escribir por WhatsApp ↗</a>
       </section>
 
-      <BookingBand />
+      <BookingBand area={area.id} />
     </>
   );
 }
