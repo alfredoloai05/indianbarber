@@ -33,7 +33,8 @@ export function HomePage() {
   const journalItems = useJournalArticlesContent();
   const visit = useHomeVisit();
   const activeArea = serviceCatalog[activePortal] ?? serviceCatalog[0];
-  const mapEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(`${settings.address}, ${settings.city}`)}&output=embed`;
+  const mapQuery = `Indian Club, ${settings.address}, ${settings.city}`;
+  const mapEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&t=&z=17&ie=UTF8&iwloc=&output=embed`;
 
   return (
     <>
@@ -43,7 +44,7 @@ export function HomePage() {
       />
 
       <div className="art-home art-home--flow-polish">
-        <section className="film-hero film-hero--integrated" aria-labelledby="film-hero-title">
+        <section className="film-hero film-hero--integrated film-hero--without-ticker" aria-labelledby="film-hero-title">
           <motion.div
             className="film-hero__media"
             initial={reduceMotion ? false : { opacity: 0, scale: 1.045, filter: 'blur(10px)' }}
@@ -87,31 +88,11 @@ export function HomePage() {
               </motion.div>
             </motion.div>
           </div>
-
-          <div className="brand-ticker brand-ticker--hero" aria-hidden="true">
-            <motion.div
-              initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-              animate={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: 0, x: ['0%', '-50%'] }}
-              transition={
-                reduceMotion
-                  ? { duration: 0.45 }
-                  : {
-                      opacity: { duration: 0.55, delay: 0.58 },
-                      y: { duration: 0.55, delay: 0.58 },
-                      x: { duration: 34, repeat: Infinity, ease: 'linear', delay: 0.9 },
-                    }
-              }
-            >
-              <span>INDIAN CLUB</span><i>BARBERÍA</i><span>SPA</span><i>NAILS</i><span>FOTOGRAFÍA</span>
-              <span>INDIAN CLUB</span><i>BARBERÍA</i><span>SPA</span><i>NAILS</i><span>FOTOGRAFÍA</span>
-            </motion.div>
-          </div>
         </section>
 
         <section className="service-portals" aria-labelledby="service-portals-title">
           <header className="service-portals__intro">
             <div>
-              <span>{servicesIntro.eyebrow}</span>
               <h2 id="service-portals-title">{servicesIntro.title}</h2>
             </div>
           </header>
@@ -154,7 +135,6 @@ export function HomePage() {
                       aria-controls={`portal-${area.id}`}
                       onClick={() => setActivePortal(index)}
                     >
-                      <small>{area.eyebrow}</small>
                       <strong>{area.shortTitle}</strong>
                       <span aria-hidden="true">+</span>
                     </button>
@@ -187,7 +167,6 @@ export function HomePage() {
           <div className="club-film__veil" />
           <div className="club-film__copy">
             <img src={settings.logoMark} alt="" />
-            <span>{club.eyebrow}</span>
             <h2 id="club-film-title">{club.title}</h2>
             <p>{club.description}</p>
             <Link to="/club">{club.ctaLabel} <Arrow /></Link>
@@ -196,7 +175,6 @@ export function HomePage() {
 
         <section className="promotion-ledger promotion-ledger--beam" aria-labelledby="promotion-ledger-title">
           <header>
-            <span>Promociones</span>
             <h2 id="promotion-ledger-title">Beneficios vigentes en {settings.brandName}.</h2>
             <p>Confirma disponibilidad y condiciones directamente con el centro.</p>
           </header>
@@ -217,7 +195,6 @@ export function HomePage() {
         <section className="home-guides" aria-labelledby="home-guides-title">
           <header className="home-guides__header">
             <div>
-              <span>{guidesIntro.eyebrow}</span>
               <h2 id="home-guides-title">{guidesIntro.title}</h2>
             </div>
             <Link to="/inspirate">{guidesIntro.ctaLabel} <Arrow /></Link>
@@ -239,7 +216,7 @@ export function HomePage() {
           </div>
         </section>
 
-        <section className="visit-terminal visit-terminal--embedded" aria-labelledby="visit-terminal-title">
+        <section className="visit-terminal visit-terminal--embedded visit-terminal--clean" aria-labelledby="visit-terminal-title">
           <div className="visit-terminal__map">
             <iframe
               src={mapEmbedUrl}
@@ -248,15 +225,14 @@ export function HomePage() {
               allowFullScreen
               referrerPolicy="no-referrer-when-downgrade"
             />
-            <div className="visit-terminal__map-copy">
-              <span>{visit.eyebrow}</span>
+          </div>
+
+          <div className="visit-terminal__details">
+            <div className="visit-terminal__intro">
               <h2 id="visit-terminal-title">{visit.title}</h2>
               <address>{settings.address}<br />{settings.city}</address>
               <a href={settings.mapHref} target="_blank" rel="noreferrer">Abrir en Google Maps <Arrow /></a>
             </div>
-          </div>
-
-          <div className="visit-terminal__details">
             <div className="visit-terminal__hours">
               {settings.hours.map((item) => (
                 <p key={item.days}><span>{item.days}</span><strong>{item.value}</strong></p>
@@ -264,7 +240,6 @@ export function HomePage() {
               <a href={settings.whatsappHref} target="_blank" rel="noreferrer">WhatsApp {settings.whatsapp}</a>
             </div>
             <div className="visit-terminal__booking">
-              <span>Reservas</span>
               <h3>{visit.bookingTitle}</h3>
               <a href={settings.bookingUrl} target="_blank" rel="noreferrer">{visit.bookingLabel} <Arrow /></a>
             </div>
