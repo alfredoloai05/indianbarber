@@ -4,19 +4,16 @@ import { Link } from 'react-router-dom';
 import { HomeGiftCards } from '../components/HomeGiftCards';
 import { Seo } from '../components/Seo';
 import { ViewportVideo } from '../components/ViewportVideo';
+import { WhatsappInquiryForm } from '../components/WhatsappInquiryForm';
 import {
   useGlobalSettings,
   useHomeClub,
-  useHomeGuides,
   useHomeHero,
-  useHomeServices,
   useHomeVisit,
-  useJournalArticlesContent,
-  usePromotionsContent,
   useServiceCatalogContent,
-  useStyleBookContent,
 } from '../content/useSiteContent';
 import { bookingPath } from '../utils/booking';
+import { spacePath } from '../utils/spaces';
 
 function Arrow() {
   return <span aria-hidden="true">↗</span>;
@@ -27,25 +24,19 @@ export function HomePage() {
   const reduceMotion = useReducedMotion();
   const settings = useGlobalSettings();
   const hero = useHomeHero();
-  const servicesIntro = useHomeServices();
   const serviceCatalog = useServiceCatalogContent();
-  const styleBook = useStyleBookContent();
   const club = useHomeClub();
-  const promotions = usePromotionsContent();
-  const guidesIntro = useHomeGuides();
-  const journalItems = useJournalArticlesContent();
   const visit = useHomeVisit();
   const activeArea = serviceCatalog[activePortal] ?? serviceCatalog[0];
-  const styleBookFrames = styleBook.frames.slice(0, 3);
 
   return (
     <>
       <Seo
-        title={`${settings.brandName} · Barbería, SPA, nails y fotografía`}
-        description={`${settings.brandName} reúne barbería, SPA, nails y estudio fotográfico en el centro de Loja. Conoce servicios, promociones, trabajos y reservas.`}
+        title={`${settings.brandName} · Indian House en Loja`}
+        description={`Indian House reúne barbería, estudio fotográfico, nails y SPA en el centro de Loja.`}
       />
 
-      <div className="art-home art-home--flow-polish">
+      <div className="art-home art-home--house">
         <section className="film-hero film-hero--integrated film-hero--without-ticker" aria-labelledby="film-hero-title">
           <motion.div
             className="film-hero__media"
@@ -53,7 +44,7 @@ export function HomePage() {
             animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           >
-            <ViewportVideo src={hero.video} poster={hero.poster} label={`Barbería en ${settings.brandName}`} priority />
+            <ViewportVideo src={hero.video} poster={hero.poster} label={`Indian House en ${settings.brandName}`} priority />
             <div className="film-hero__veil" />
           </motion.div>
 
@@ -65,10 +56,7 @@ export function HomePage() {
               transition={{ duration: 0.72, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
             >
               <img src={settings.logoLockup} alt={settings.brandName} />
-              <div>
-                <span>{hero.location}</span>
-                <span>{hero.founded}</span>
-              </div>
+              <div><span>{hero.location}</span><span>{hero.founded}</span></div>
             </motion.div>
 
             <motion.div
@@ -86,17 +74,15 @@ export function HomePage() {
                 transition={{ duration: 0.58, delay: 0.48, ease: [0.16, 1, 0.3, 1] }}
               >
                 <Link to="/reservar">{hero.primaryLabel} <Arrow /></Link>
-                <Link to="/style-book">{hero.secondaryLabel}</Link>
+                <a href="#espacios">Conocer los espacios</a>
               </motion.div>
             </motion.div>
           </div>
         </section>
 
-        <section className="service-portals" aria-labelledby="service-portals-title">
+        <section id="espacios" className="service-portals service-portals--house" aria-labelledby="service-portals-title">
           <header className="service-portals__intro">
-            <div>
-              <h2 id="service-portals-title">{servicesIntro.title}</h2>
-            </div>
+            <div><h2 id="service-portals-title">Cuatro espacios. Una sola Indian House.</h2></div>
           </header>
 
           {activeArea ? (
@@ -104,7 +90,6 @@ export function HomePage() {
               {serviceCatalog.map((area, index) => {
                 const isActive = activePortal === index;
                 const examples = area.groups.flatMap((group) => group.items).slice(0, 3);
-
                 return (
                   <article
                     key={area.id}
@@ -112,10 +97,7 @@ export function HomePage() {
                     onMouseEnter={() => setActivePortal(index)}
                     onFocusCapture={() => setActivePortal(index)}
                   >
-                    <div className="service-portal__poster">
-                      <img src={area.media.poster} alt="" loading={index === 0 ? 'eager' : 'lazy'} />
-                    </div>
-
+                    <div className="service-portal__poster"><img src={area.media.poster} alt="" loading={index === 0 ? 'eager' : 'lazy'} /></div>
                     {isActive && area.media.video ? (
                       <motion.div
                         className="service-portal__video"
@@ -126,10 +108,8 @@ export function HomePage() {
                         <ViewportVideo src={area.media.video} poster={area.media.poster} label={`${area.title} en ${settings.brandName}`} />
                       </motion.div>
                     ) : null}
-
                     <div className="service-portal__ambient" aria-hidden="true" />
                     <div className="service-portal__veil" aria-hidden="true" />
-
                     <button
                       type="button"
                       className="service-portal__trigger"
@@ -137,10 +117,8 @@ export function HomePage() {
                       aria-controls={`portal-${area.id}`}
                       onClick={() => setActivePortal(index)}
                     >
-                      <strong>{area.shortTitle}</strong>
-                      <span aria-hidden="true">+</span>
+                      <strong>{area.title}</strong><span aria-hidden="true">+</span>
                     </button>
-
                     <motion.div
                       id={`portal-${area.id}`}
                       className="service-portal__details"
@@ -152,7 +130,7 @@ export function HomePage() {
                       <p>{area.summary}</p>
                       <ul>{examples.map((item) => <li key={item.name}>{item.name}</li>)}</ul>
                       <div className="service-portal__actions">
-                        <Link to={`/servicios/${area.route}`}>Ver {area.shortTitle.toLowerCase()} <Arrow /></Link>
+                        <Link to={spacePath(area.id)}>Entrar al espacio <Arrow /></Link>
                         <Link to={bookingPath(area.id)}>Reservar <Arrow /></Link>
                       </div>
                     </motion.div>
@@ -163,33 +141,11 @@ export function HomePage() {
           ) : null}
         </section>
 
-        {styleBookFrames[0] ? (
-          <section className="home-stylebook-entry" aria-labelledby="home-stylebook-title">
-            <Link className="home-stylebook-entry__feature" to="/style-book">
-              <img src={styleBookFrames[0].image} alt={styleBookFrames[0].alt} loading="lazy" />
-              <div aria-hidden="true" />
-              <section>
-                <h2 id="home-stylebook-title">Antes de elegir, mira lo que hacemos.</h2>
-                <p>{styleBook.description}</p>
-                <span>Entrar al Style Book <Arrow /></span>
-              </section>
-            </Link>
-            <div className="home-stylebook-entry__reel" aria-hidden="true">
-              {styleBookFrames.slice(1).map((frame) => (
-                <figure key={frame.label}>
-                  <img src={frame.image} alt="" loading="lazy" />
-                  <figcaption>{frame.label}</figcaption>
-                </figure>
-              ))}
-            </div>
-          </section>
-        ) : null}
-
         <section className="club-film club-film--compact club-film--safe-copy" aria-labelledby="club-film-title">
           {club.video ? (
-            <ViewportVideo src={club.video} poster={club.poster} label="Espacios y servicios de Indian Club" />
+            <ViewportVideo src={club.video} poster={club.poster} label="Espacios de Indian House" />
           ) : (
-            <img src={club.poster} alt="Espacios y servicios de Indian Club" loading="lazy" />
+            <img src={club.poster} alt="Espacios de Indian House" loading="lazy" />
           )}
           <div className="club-film__veil" />
           <div className="club-film__copy">
@@ -200,57 +156,33 @@ export function HomePage() {
           </div>
         </section>
 
-        <section className="promotion-ledger promotion-ledger--beam promotion-ledger--compact" aria-labelledby="promotion-ledger-title">
-          <header>
-            <h2 id="promotion-ledger-title">Beneficios vigentes en {settings.brandName}.</h2>
-          </header>
-          <div>
-            {promotions.map((promotion) => (
-              <Link to="/reservar" key={promotion.title}>
-                <small>{promotion.eyebrow}</small>
-                <strong>{promotion.title}</strong>
-                <p>{promotion.note}</p>
-                <i aria-hidden="true">↗</i>
-              </Link>
-            ))}
-          </div>
-        </section>
-
         <HomeGiftCards />
 
-        <section className="home-guides" aria-labelledby="home-guides-title">
-          <header className="home-guides__header">
-            <div>
-              <h2 id="home-guides-title">{guidesIntro.title}</h2>
-            </div>
-            <Link to="/inspirate">{guidesIntro.ctaLabel} <Arrow /></Link>
-          </header>
+        <WhatsappInquiryForm
+          title="¿Tienes una sugerencia para Indian House?"
+          lead="Déjanos tu nombre, teléfono y mensaje. La sugerencia llegará directamente por WhatsApp."
+          context="Sugerencia general para Indian House"
+        />
 
-          <div className="home-guides__grid">
-            {journalItems.map((item, index) => (
-              <Link className={`home-guide${index === 0 ? ' home-guide--feature' : ' home-guide--compact'}`} to={`/inspirate/${item.slug}`} key={item.slug}>
-                <img src={item.image} alt="" loading="lazy" />
-                <div className="home-guide__veil" aria-hidden="true" />
-                <div className="home-guide__copy">
-                  <small>{item.type}</small>
-                  <h3>{item.title}</h3>
-                  <p>{item.excerpt}</p>
-                  <span>Leer guía <Arrow /></span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <section className="home-visit-strip" aria-labelledby="home-visit-strip-title">
+        <section className="home-visit-strip home-visit-strip--social" aria-labelledby="home-visit-strip-title">
           <div className="home-visit-strip__intro">
             <h2 id="home-visit-strip-title">{visit.title}</h2>
             <Link to="/club#ubicacion">Ubícanos <Arrow /></Link>
           </div>
 
+          <div className="home-visit-strip__contact">
+            <p><span>Teléfono</span><a href={settings.phoneHref}>{settings.phone}</a></p>
+            <p><span>Correo</span><a href={settings.emailHref}>{settings.email}</a></p>
+            <p><span>Dirección</span><strong>{settings.address}<br />{settings.city}</strong></p>
+          </div>
+
           <div className="home-visit-strip__hours">
-            {settings.hours.map((item) => (
-              <p key={item.days}><span>{item.days}</span><strong>{item.value}</strong></p>
+            {settings.hours.map((item) => <p key={item.days}><span>{item.days}</span><strong>{item.value}</strong></p>)}
+          </div>
+
+          <div className="home-visit-strip__socials">
+            {(settings.socialLinks ?? []).map((social) => (
+              <a href={social.href} target="_blank" rel="noreferrer" key={social.label}>{social.label} ↗</a>
             ))}
           </div>
 
