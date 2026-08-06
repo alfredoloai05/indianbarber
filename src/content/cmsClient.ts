@@ -116,8 +116,12 @@ export async function loadCmsEntries(): Promise<CmsEntryRecord[]> {
 
 export async function loadPublishedCmsMap(): Promise<CmsPublishedMap> {
   if (!supabase) return normalizePublishedCmsMap(clone(cmsDefaultMap) as CmsPublishedMap);
-  const { data, error } = await supabase.from('cms_entries').select('key,published_value');
+  const { data, error } = await supabase
+    .from('cms_entries')
+    .select('key,published_value')
+    .not('published_at', 'is', null);
   if (error) throw error;
+
   const map: CmsPublishedMap = clone(cmsDefaultMap) as CmsPublishedMap;
   for (const row of data ?? []) {
     if (row.published_value !== null) map[row.key] = row.published_value as CmsJson;
