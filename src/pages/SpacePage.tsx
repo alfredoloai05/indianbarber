@@ -1,6 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BookingBand } from '../components/BookingBand';
 import { Seo } from '../components/Seo';
 import { ViewportVideo } from '../components/ViewportVideo';
 import { WhatsappInquiryForm } from '../components/WhatsappInquiryForm';
@@ -17,9 +16,37 @@ import {
   useStyleBookContent,
   useTeamMembersContent,
 } from '../content/useSiteContent';
-import type { ServiceCatalogArea, SpaceId } from '../data/serviceCatalog';
+import { genericTeamBySpace } from '../data/experienceMedia';
+import type { SpaceId } from '../data/serviceCatalog';
 import { bookingPath } from '../utils/booking';
 import { spacePath } from '../utils/spaces';
+
+const sectionDescriptions: Record<SpaceId, {
+  team: string;
+  styleBook: string;
+  advice: string;
+}> = {
+  barberia: {
+    team: 'Conoce a quienes trabajan forma, textura y detalle detrás de cada resultado.',
+    styleBook: 'Referencias de corte, barba y acabado para llegar con una idea más clara.',
+    advice: 'Guías breves para mantener el corte y la barba mejor entre una visita y la siguiente.',
+  },
+  fotografia: {
+    team: 'Dirección y acompañamiento para convertir una idea en una sesión con intención.',
+    styleBook: 'Retratos, producto y contenido visual que ayudan a definir el lenguaje de tu sesión.',
+    advice: 'Preparación, vestuario y decisiones prácticas antes de entrar al estudio.',
+  },
+  nails: {
+    team: 'Técnica, preparación e higiene aplicadas a cada sistema y acabado.',
+    styleBook: 'Diseños, largos y acabados para elegir una referencia que funcione contigo.',
+    advice: 'Cuidados sencillos para prolongar el resultado y proteger la uña natural.',
+  },
+  spa: {
+    team: 'Atención coordinada según el ritual, la valoración y el horario seleccionado.',
+    styleBook: 'Una mirada al ambiente, los procesos y el ritmo de una experiencia de cuidado.',
+    advice: 'Recomendaciones para llegar preparado y prolongar el bienestar después de la visita.',
+  },
+};
 
 function memberMatchesSpace(member: TeamMemberContent, id: SpaceId) {
   if (member.areas?.length) return member.areas.includes(id);
@@ -59,16 +86,6 @@ function promotionMatchesSpace(promotion: PromotionContent, id: SpaceId) {
   return true;
 }
 
-function fallbackProfessional(area: ServiceCatalogArea): TeamMemberContent {
-  return {
-    name: `Equipo ${area.shortTitle} Indian`,
-    role: 'Profesional asignado según disponibilidad',
-    statement: 'La persona responsable se confirma junto con la fecha, el servicio y el horario solicitado.',
-    image: area.media.poster,
-    areas: [area.id],
-  };
-}
-
 export function SpacePage({ spaceId }: { spaceId: SpaceId }) {
   const settings = useGlobalSettings();
   const catalog = useServiceCatalogContent();
@@ -83,17 +100,26 @@ export function SpacePage({ spaceId }: { spaceId: SpaceId }) {
     () => area?.groups.flatMap((group) => group.items.map((item) => ({ ...item, group: group.title }))) ?? [],
     [area],
   );
-  const [selectedName, setSelectedName] = useState(services[0]?.name ?? '');
+  const firstGroupTitle = area?.groups[0]?.title ?? '';
+  const firstServiceName = area?.groups[0]?.items[0]?.name ?? '';
+  const [openGroup, setOpenGroup] = useState(firstGroupTitle);
+  const [selectedName, setSelectedName] = useState(firstServiceName);
   const selectedService = services.find((item) => item.name === selectedName) ?? services[0];
+
+  useEffect(() => {
+    setOpenGroup(firstGroupTitle);
+    setSelectedName(firstServiceName);
+  }, [firstGroupTitle, firstServiceName, spaceId]);
 
   if (!area || !page) return null;
 
   const team = allTeam.filter((member) => memberMatchesSpace(member, spaceId));
-  const visibleTeam = team.length ? team : [fallbackProfessional(area)];
+  const visibleTeam: TeamMemberContent[] = team.length ? team : [genericTeamBySpace[spaceId]];
   const frames = styleBook.frames.filter((frame) => frameMatchesSpace(frame, spaceId));
   const articles = allArticles.filter((article) => articleMatchesSpace(article, spaceId));
   const promotions = allPromotions.filter((promotion) => promotionMatchesSpace(promotion, spaceId));
   const activeMedia = selectedService?.media ?? area.media;
+  const descriptions = sectionDescriptions[spaceId];
 
   return (
     <>
@@ -119,20 +145,12 @@ export function SpacePage({ spaceId }: { spaceId: SpaceId }) {
         </div>
       </section>
 
-      <nav className="space-local-nav" aria-label={`Secciones de ${area.title}`}>
-        <a href="#servicios">Servicios</a>
-        <a href="#equipo">Equipo</a>
-        <a href="#style-book">Style Book</a>
-        <a href="#consejos">Consejos</a>
-        <a href="#beneficios">Beneficios</a>
-        <a href="#consulta">Consulta</a>
-      </nav>
-
       <section id="servicios" className="space-services" aria-labelledby="space-services-title">
-        <header>
+        <header className="space-section-heading">
           <h2 id="space-services-title">{page.servicesTitle}</h2>
           <p>{area.summary}</p>
         </header>
+
         <div className="space-services__workspace">
           <div className="space-service-preview" key={selectedService?.name}>
             {activeMedia.video ? (
@@ -154,25 +172,50 @@ export function SpacePage({ spaceId }: { spaceId: SpaceId }) {
             </div>
           </div>
 
-          <div className="space-service-list" role="list">
-            {services.map((service) => (
-              <button
-                type="button"
-                className={service.name === selectedService?.name ? 'is-active' : undefined}
-                key={service.name}
-                onClick={() => setSelectedName(service.name)}
-              >
-                <span>{service.group}</span>
-                <strong>{service.name}</strong>
-                <small>{service.duration} · {service.price}</small>
-              </button>
-            ))}
+          <div className="space-service-list" role="list" aria-label={`Servicios de ${area.title}`}>
+            {area.groups.map((group) => {
+              const isOpen = openGroup === group.title;
+              return (
+                <section className={`space-service-group${isOpen ? ' is-open' : ''}`} key={group.title} role="listitem">
+                  <button
+                    type="button"
+                    className="space-service-group__toggle"
+                    aria-expanded={isOpen}
+                    onClick={() => setOpenGroup(isOpen ? '' : group.title)}
+                  >
+                    <span>{group.title}</span>
+                    <small>{group.items.length} {group.items.length === 1 ? 'opción' : 'opciones'}</small>
+                    <i aria-hidden="true">{isOpen ? '−' : '+'}</i>
+                  </button>
+
+                  {isOpen ? (
+                    <div className="space-service-group__items">
+                      {group.items.map((service) => (
+                        <button
+                          type="button"
+                          className={service.name === selectedService?.name ? 'is-active' : undefined}
+                          key={service.name}
+                          onClick={() => setSelectedName(service.name)}
+                        >
+                          <strong>{service.name}</strong>
+                          <small>{service.duration} · {service.price}</small>
+                          <i aria-hidden="true">↗</i>
+                        </button>
+                      ))}
+                    </div>
+                  ) : null}
+                </section>
+              );
+            })}
           </div>
         </div>
       </section>
 
       <section id="equipo" className="space-team" aria-labelledby="space-team-title">
-        <header><h2 id="space-team-title">{page.teamTitle}</h2></header>
+        <header className="space-section-heading">
+          <h2 id="space-team-title">{page.teamTitle}</h2>
+          <p>{descriptions.team}</p>
+        </header>
         <div className="space-team__grid">
           {visibleTeam.map((member) => (
             <article key={member.name}>
@@ -184,9 +227,12 @@ export function SpacePage({ spaceId }: { spaceId: SpaceId }) {
       </section>
 
       <section id="style-book" className="space-stylebook" aria-labelledby="space-stylebook-title">
-        <header>
+        <header className="space-section-heading space-section-heading--with-link">
           <h2 id="space-stylebook-title">{page.styleBookTitle}</h2>
-          <Link to={bookingPath(spaceId)}>Reservar desde una referencia ↗</Link>
+          <div>
+            <p>{descriptions.styleBook}</p>
+            <Link to={bookingPath(spaceId)}>Reservar desde una referencia ↗</Link>
+          </div>
         </header>
         <div className="space-stylebook__grid">
           {(frames.length ? frames : styleBook.frames.slice(0, 3)).slice(0, 6).map((frame, index) => (
@@ -199,7 +245,10 @@ export function SpacePage({ spaceId }: { spaceId: SpaceId }) {
       </section>
 
       <section id="consejos" className="space-journal" aria-labelledby="space-journal-title">
-        <header><h2 id="space-journal-title">{page.adviceTitle}</h2></header>
+        <header className="space-section-heading">
+          <h2 id="space-journal-title">{page.adviceTitle}</h2>
+          <p>{descriptions.advice}</p>
+        </header>
         <div className="space-journal__grid">
           {articles.slice(0, 3).map((article) => (
             <Link to={`/inspirate/${article.slug}`} key={article.slug}>
@@ -210,33 +259,26 @@ export function SpacePage({ spaceId }: { spaceId: SpaceId }) {
         </div>
       </section>
 
-      <section id="beneficios" className="space-benefits" aria-labelledby="space-benefits-title">
-        <header><h2 id="space-benefits-title">{page.benefitsTitle}</h2></header>
-        <div className="space-benefits__grid">
-          {page.benefits.map((benefit) => (
-            <article key={benefit.title}><h3>{benefit.title}</h3><p>{benefit.description}</p></article>
-          ))}
-        </div>
-        {promotions.length ? (
+      {promotions.length ? (
+        <section id="beneficios" className="space-benefits space-benefits--promotions-only" aria-label="Promociones disponibles">
           <div className="space-promotions">
             {promotions.map((promotion) => (
-              <Link to={bookingPath(spaceId)} key={promotion.title}>
+              <Link to={bookingPath(spaceId)} key={`${promotion.eyebrow}-${promotion.title}`}>
                 <span>{promotion.eyebrow}</span><strong>{promotion.title}</strong><p>{promotion.note}</p><i>↗</i>
               </Link>
             ))}
           </div>
-        ) : null}
-      </section>
+        </section>
+      ) : null}
 
       <div id="consulta" className="space-inquiry-wrap">
         <WhatsappInquiryForm
           title={page.inquiryTitle}
           lead={page.inquiryLead}
           context={area.title}
+          compact
         />
       </div>
-
-      <BookingBand area={spaceId} service={selectedService?.name} />
 
       <nav className="space-next" aria-label="Explorar otros espacios de Indian House">
         {catalog.filter((item) => item.id !== spaceId).map((item) => (
