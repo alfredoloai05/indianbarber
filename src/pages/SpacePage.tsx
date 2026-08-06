@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Seo } from '../components/Seo';
 import { ViewportVideo } from '../components/ViewportVideo';
@@ -102,14 +102,11 @@ export function SpacePage({ spaceId }: { spaceId: SpaceId }) {
   );
   const firstGroupTitle = area?.groups[0]?.title ?? '';
   const firstServiceName = area?.groups[0]?.items[0]?.name ?? '';
-  const [openGroup, setOpenGroup] = useState(firstGroupTitle);
-  const [selectedName, setSelectedName] = useState(firstServiceName);
+  const [openGroups, setOpenGroups] = useState<Partial<Record<SpaceId, string>>>({});
+  const [selectedServices, setSelectedServices] = useState<Partial<Record<SpaceId, string>>>({});
+  const openGroup = openGroups[spaceId] ?? firstGroupTitle;
+  const selectedName = selectedServices[spaceId] ?? firstServiceName;
   const selectedService = services.find((item) => item.name === selectedName) ?? services[0];
-
-  useEffect(() => {
-    setOpenGroup(firstGroupTitle);
-    setSelectedName(firstServiceName);
-  }, [firstGroupTitle, firstServiceName, spaceId]);
 
   if (!area || !page) return null;
 
@@ -181,7 +178,10 @@ export function SpacePage({ spaceId }: { spaceId: SpaceId }) {
                     type="button"
                     className="space-service-group__toggle"
                     aria-expanded={isOpen}
-                    onClick={() => setOpenGroup(isOpen ? '' : group.title)}
+                    onClick={() => setOpenGroups((current) => ({
+                      ...current,
+                      [spaceId]: isOpen ? '' : group.title,
+                    }))}
                   >
                     <span>{group.title}</span>
                     <small>{group.items.length} {group.items.length === 1 ? 'opción' : 'opciones'}</small>
@@ -195,7 +195,10 @@ export function SpacePage({ spaceId }: { spaceId: SpaceId }) {
                           type="button"
                           className={service.name === selectedService?.name ? 'is-active' : undefined}
                           key={service.name}
-                          onClick={() => setSelectedName(service.name)}
+                          onClick={() => setSelectedServices((current) => ({
+                            ...current,
+                            [spaceId]: service.name,
+                          }))}
                         >
                           <strong>{service.name}</strong>
                           <small>{service.duration} · {service.price}</small>
