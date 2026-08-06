@@ -1,5 +1,7 @@
 import { serviceCatalog as defaultCatalog, type ServiceCatalogArea, type SpaceId } from '../data/serviceCatalog';
 
+type LegacyCatalogArea = Omit<ServiceCatalogArea, 'id'> & { id: string };
+
 export const spaceOrder: SpaceId[] = ['barberia', 'fotografia', 'nails', 'spa'];
 
 export const spaceRoutes: Record<SpaceId, string> = {
@@ -41,13 +43,15 @@ function hydrateMedia(area: ServiceCatalogArea) {
 }
 
 export function normalizeServiceCatalog(catalog: ServiceCatalogArea[]) {
-  const rawCatalog = catalog as Array<ServiceCatalogArea & { id: string }>;
+  const rawCatalog = catalog as unknown as LegacyCatalogArea[];
   const legacyCombos = rawCatalog.find((area) => area.id === 'combos');
 
   const normalized = rawCatalog
     .filter((area) => spaceOrder.includes(area.id as SpaceId))
     .map((area) => {
-      if (area.id !== 'barberia' || !legacyCombos) return hydrateMedia(area as ServiceCatalogArea);
+      if (area.id !== 'barberia' || !legacyCombos) {
+        return hydrateMedia(area as ServiceCatalogArea);
+      }
 
       const alreadyMerged = area.groups.some((group) => group.title.toLowerCase().includes('combo'));
       const mergedArea = alreadyMerged ? area : {
