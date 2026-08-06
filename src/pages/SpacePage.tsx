@@ -48,6 +48,15 @@ const sectionDescriptions: Record<SpaceId, {
   },
 };
 
+function serviceGroupId(title: string) {
+  return title
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 function memberMatchesSpace(member: TeamMemberContent, id: SpaceId) {
   if (member.areas?.length) return member.areas.includes(id);
   if (/ceo|coordinador/i.test(member.role)) return false;
@@ -173,7 +182,12 @@ export function SpacePage({ spaceId }: { spaceId: SpaceId }) {
             {area.groups.map((group) => {
               const isOpen = openGroup === group.title;
               return (
-                <section className={`space-service-group${isOpen ? ' is-open' : ''}`} key={group.title} role="listitem">
+                <section
+                  id={serviceGroupId(group.title)}
+                  className={`space-service-group${isOpen ? ' is-open' : ''}`}
+                  key={group.title}
+                  role="listitem"
+                >
                   <button
                     type="button"
                     className="space-service-group__toggle"
