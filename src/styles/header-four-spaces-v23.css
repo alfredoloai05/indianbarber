@@ -1,0 +1,200 @@
+/* Header v23 — four spaces always visible on desktop, Barbería owns its service submenu. */
+
+.site-header--four-spaces {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: clamp(1rem, 2.4vw, 2.5rem);
+  overflow: visible;
+}
+
+.compact-spaces-selector {
+  display: none !important;
+}
+
+.compact-space-nav {
+  position: relative;
+  z-index: 5;
+  min-width: 0;
+  justify-self: center;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: clamp(0.85rem, 2.25vw, 2.7rem);
+}
+
+.compact-space-nav__item {
+  position: relative;
+  min-height: 3.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.compact-space-nav__item > a {
+  position: relative;
+  padding: 0.8rem 0;
+  color: rgb(255 255 255 / 0.68);
+  font-size: clamp(0.61rem, 0.76vw, 0.74rem);
+  font-weight: 800;
+  letter-spacing: 0.075em;
+  line-height: 1.2;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color 180ms ease;
+}
+
+.compact-space-nav__item > a::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0.35rem;
+  left: 0;
+  height: 1px;
+  background: var(--color-white);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 220ms var(--ease-brand);
+}
+
+.compact-space-nav__item > a:hover,
+.compact-space-nav__item > a:focus-visible,
+.compact-space-nav__item > a.is-active {
+  color: var(--color-white);
+}
+
+.compact-space-nav__item > a:hover::after,
+.compact-space-nav__item > a:focus-visible::after,
+.compact-space-nav__item > a.is-active::after {
+  transform: scaleX(1);
+}
+
+.compact-space-nav__item--barber {
+  gap: 0.28rem;
+}
+
+.compact-space-nav__item--barber > button {
+  width: 1.65rem;
+  height: 1.65rem;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: rgb(255 255 255 / 0.65);
+  cursor: pointer;
+}
+
+.compact-space-nav__item--barber > button span {
+  display: block;
+  font-size: 0.85rem;
+  line-height: 1;
+  transition: transform 220ms ease;
+}
+
+.compact-space-nav__item--barber.is-open > button span,
+.compact-space-nav__item--barber:hover > button span,
+.compact-space-nav__item--barber:focus-within > button span {
+  transform: rotate(180deg);
+}
+
+.compact-space-nav__submenu {
+  position: absolute;
+  top: calc(100% + 0.15rem);
+  left: -1rem;
+  width: min(19rem, calc(100vw - 2rem));
+  padding: 0.55rem;
+  display: grid;
+  gap: 0.2rem;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  background: rgb(7 7 7 / 0.97);
+  box-shadow: 0 2rem 5rem rgb(0 0 0 / 0.42);
+  backdrop-filter: blur(24px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-0.45rem);
+  transition: opacity 180ms ease, transform 220ms ease, visibility 180ms ease;
+}
+
+.compact-space-nav__item--barber.is-open .compact-space-nav__submenu,
+.compact-space-nav__item--barber:hover .compact-space-nav__submenu,
+.compact-space-nav__item--barber:focus-within .compact-space-nav__submenu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.compact-space-nav__submenu a {
+  min-height: 3.2rem;
+  padding: 0.8rem 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: rgb(255 255 255 / 0.68);
+  text-decoration: none;
+  font-size: 0.69rem;
+  font-weight: 750;
+  letter-spacing: 0.065em;
+  text-transform: uppercase;
+  transition: color 180ms ease, background 180ms ease, padding-left 180ms ease;
+}
+
+.compact-space-nav__submenu a:hover,
+.compact-space-nav__submenu a:focus-visible {
+  padding-left: 1.15rem;
+  color: var(--color-white);
+  background: rgb(255 255 255 / 0.08);
+}
+
+.compact-space-nav__submenu i {
+  color: var(--color-gold-bright);
+  font-style: normal;
+}
+
+.space-service-group {
+  scroll-margin-top: 7.5rem;
+}
+
+.menu-overlay__subnav {
+  padding: 0.55rem 0 1rem 1rem;
+  display: grid;
+  gap: 0.5rem;
+  border-left: 1px solid rgb(255 255 255 / 0.16);
+}
+
+.menu-overlay__subnav a {
+  color: rgb(255 255 255 / 0.52) !important;
+  font-family: var(--font-ui) !important;
+  font-size: 0.68rem !important;
+  font-weight: 750 !important;
+  letter-spacing: 0.08em !important;
+  line-height: 1.25 !important;
+  text-transform: uppercase;
+}
+
+.menu-overlay__subnav a:hover,
+.menu-overlay__subnav a:focus-visible {
+  color: var(--color-white) !important;
+}
+
+@media (max-width: 1040px) {
+  .site-header--four-spaces {
+    gap: 1rem;
+  }
+
+  .compact-space-nav {
+    gap: clamp(0.7rem, 1.55vw, 1.25rem);
+  }
+
+  .compact-space-nav__item > a {
+    font-size: 0.61rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .compact-space-nav {
+    display: none;
+  }
+}

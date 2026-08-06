@@ -33,6 +33,7 @@ import './styles/home-club-location-v19.css';
 import './styles/home-booking-stylebook-v20.css';
 import './styles/four-spaces-house-v21.css';
 import './styles/experience-fixes-v22.css';
+import './styles/header-four-spaces-v23.css';
 
 const root = document.getElementById('root');
 

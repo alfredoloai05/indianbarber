@@ -17,8 +17,16 @@ const secondaryNavigation = [
   { label: 'Contacto', to: '/contacto' },
 ];
 
+const barberNavigation = [
+  { label: 'Cabello', to: '/barberia#cabello' },
+  { label: 'Barba y afeitado', to: '/barberia#barba-y-afeitado' },
+  { label: 'Combos Indian', to: '/barberia#combos-indian' },
+  { label: 'Servicios especiales', to: '/barberia#servicios-especiales' },
+];
+
 export function SiteLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [barberMenuOpen, setBarberMenuOpen] = useState(false);
   const location = useLocation();
   const reduceMotion = useReducedMotion();
   const settings = useGlobalSettings();
@@ -28,8 +36,16 @@ export function SiteLayout() {
   const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 30, restDelta: 0.001 });
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }, [location.pathname]);
+    const frame = window.requestAnimationFrame(() => {
+      if (location.hash) {
+        const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+        target?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+        return;
+      }
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [location.hash, location.pathname, reduceMotion]);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
@@ -46,12 +62,7 @@ export function SiteLayout() {
     return () => window.removeEventListener('pointermove', moveCursor);
   }, [cursorX, cursorY, reduceMotion]);
 
-  const primaryNavigation = spaceOrder.map((id) => ({ label: spaceLabels[id], to: spacePath(id) }));
-  const activeSpace = primaryNavigation.find((item) => item.to === location.pathname);
-
-  const closeSpacesSelector = (target: HTMLElement) => {
-    target.closest('details')?.removeAttribute('open');
-  };
+  const primaryNavigation = spaceOrder.map((id) => ({ label: spaceLabels[id], to: spacePath(id), id }));
 
   return (
     <div className="site-shell site-shell--brand">
@@ -65,24 +76,45 @@ export function SiteLayout() {
           <span>{settings.brandName.toUpperCase()}</span>
         </Link>
 
-        <details className="compact-spaces-selector">
-          <summary>
-            <span>{activeSpace?.label ?? 'Espacios'}</span>
-            <i aria-hidden="true">⌄</i>
-          </summary>
-          <nav aria-label="Espacios de Indian House">
-            {primaryNavigation.map((item) => (
+        <nav className="compact-space-nav" aria-label="Espacios de Indian House">
+          {primaryNavigation.map((item) => item.id === 'barberia' ? (
+            <div
+              className={`compact-space-nav__item compact-space-nav__item--barber${barberMenuOpen ? ' is-open' : ''}`}
+              key={item.to}
+              onMouseLeave={() => setBarberMenuOpen(false)}
+            >
               <NavLink
-                key={item.to}
                 to={item.to}
                 className={({ isActive }) => (isActive ? 'is-active' : undefined)}
-                onClick={(event) => closeSpacesSelector(event.currentTarget)}
+                onFocus={() => setBarberMenuOpen(true)}
               >
-                <span>{item.label}</span><i aria-hidden="true">↗</i>
+                {item.label}
               </NavLink>
-            ))}
-          </nav>
-        </details>
+              <button
+                type="button"
+                aria-label={barberMenuOpen ? 'Cerrar submenú de Barbería' : 'Abrir submenú de Barbería'}
+                aria-expanded={barberMenuOpen}
+                onClick={() => setBarberMenuOpen((current) => !current)}
+              >
+                <span aria-hidden="true">⌄</span>
+              </button>
+
+              <div className="compact-space-nav__submenu" aria-label="Servicios de Barbería">
+                {barberNavigation.map((subItem) => (
+                  <Link key={subItem.to} to={subItem.to} onClick={() => setBarberMenuOpen(false)}>
+                    <span>{subItem.label}</span><i aria-hidden="true">↘</i>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="compact-space-nav__item" key={item.to}>
+              <NavLink to={item.to} className={({ isActive }) => (isActive ? 'is-active' : undefined)}>
+                {item.label}
+              </NavLink>
+            </div>
+          ))}
+        </nav>
 
         <div className="compact-actions">
           <Link className="compact-booking" to="/reservar">Reservar</Link>
@@ -107,12 +139,29 @@ export function SiteLayout() {
             <img className="menu-overlay__brand-mark" src={settings.logoMark} alt="" />
             <div className="menu-overlay__index">INDIAN HOUSE · LOJA</div>
             <nav aria-label="Navegación móvil">
-              {[...primaryNavigation, ...secondaryNavigation].map((item, index) => (
+              {primaryNavigation.map((item, index) => (
                 <motion.div
                   key={item.to}
                   initial={reduceMotion ? false : { opacity: 0, y: 18 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: reduceMotion ? 0 : index * 0.04 }}
+                >
+                  <NavLink to={item.to} onClick={() => setMenuOpen(false)}>{item.label}</NavLink>
+                  {item.id === 'barberia' ? (
+                    <div className="menu-overlay__subnav">
+                      {barberNavigation.map((subItem) => (
+                        <Link to={subItem.to} key={subItem.to} onClick={() => setMenuOpen(false)}>{subItem.label}</Link>
+                      ))}
+                    </div>
+                  ) : null}
+                </motion.div>
+              ))}
+              {secondaryNavigation.map((item, index) => (
+                <motion.div
+                  key={item.to}
+                  initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: reduceMotion ? 0 : (primaryNavigation.length + index) * 0.04 }}
                 >
                   <NavLink to={item.to} onClick={() => setMenuOpen(false)}>{item.label}</NavLink>
                 </motion.div>
