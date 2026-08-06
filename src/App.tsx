@@ -1,8 +1,7 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { SiteLayout } from './components/SiteLayout';
 import { AdminPage } from './pages/AdminPage';
 import { ArticlePage } from './pages/ArticlePage';
-import { ClubPage } from './pages/ClubPage';
 import { ContactPage } from './pages/ContactPage';
 import { GiftCardsPage } from './pages/GiftCardsPage';
 import { HomePage } from './pages/HomePage';
@@ -30,7 +29,7 @@ function App() {
         <Route path="servicios" element={<ServicesPage />} />
         <Route path="servicios/:slug" element={<ServiceDetailPage />} />
         <Route path="equipo" element={<TeamPage />} />
-        <Route path="club" element={<ClubPage />} />
+        <Route path="club" element={<Navigate to="/#espacios" replace />} />
         <Route path="style-book" element={<StyleBookPage />} />
         <Route path="promociones" element={<PromotionsPage />} />
         <Route path="productos" element={<ProductsPage />} />
