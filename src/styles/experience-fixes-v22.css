@@ -1,0 +1,516 @@
+/* Experience polish v22 — single navigation, natural page scroll and denser editorial rhythm */
+
+html {
+  overflow-x: clip;
+  scrollbar-width: thin;
+  scrollbar-color: #aa8a52 #090909;
+}
+
+body,
+.site-shell {
+  overflow-x: clip;
+}
+
+html::-webkit-scrollbar {
+  width: 10px;
+}
+
+html::-webkit-scrollbar-track {
+  background: #090909;
+}
+
+html::-webkit-scrollbar-thumb {
+  border: 2px solid #090909;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #d5bb83, #7f653c);
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ead8ae, #a88953);
+}
+
+/* One global navigation: the four spaces live inside a compact selector. */
+.compact-spaces-selector {
+  position: relative;
+  z-index: 4;
+  justify-self: center;
+  min-width: 13rem;
+  color: var(--color-white);
+}
+
+.compact-spaces-selector summary {
+  min-height: 2.8rem;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid rgb(255 255 255 / 0.16);
+  border-radius: 999px;
+  background: rgb(8 8 8 / 0.38);
+  backdrop-filter: blur(18px);
+  cursor: pointer;
+  list-style: none;
+  font-size: 0.69rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.compact-spaces-selector summary::-webkit-details-marker {
+  display: none;
+}
+
+.compact-spaces-selector summary i,
+.compact-spaces-selector nav i {
+  font-style: normal;
+}
+
+.compact-spaces-selector[open] summary i {
+  transform: rotate(180deg);
+}
+
+.compact-spaces-selector nav {
+  position: absolute;
+  top: calc(100% + 0.65rem);
+  left: 50%;
+  width: min(24rem, calc(100vw - 2rem));
+  padding: 0.55rem;
+  display: grid;
+  gap: 0.2rem;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  background: rgb(8 8 8 / 0.96);
+  box-shadow: 0 2rem 5rem rgb(0 0 0 / 0.36);
+  backdrop-filter: blur(24px);
+  transform: translateX(-50%);
+}
+
+.compact-spaces-selector nav a {
+  padding: 0.95rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: rgb(255 255 255 / 0.72);
+  text-decoration: none;
+  font-size: 0.76rem;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: background 180ms ease, color 180ms ease, padding-left 180ms ease;
+}
+
+.compact-spaces-selector nav a:hover,
+.compact-spaces-selector nav a.is-active {
+  padding-left: 1.25rem;
+  color: var(--color-white);
+  background: rgb(255 255 255 / 0.08);
+}
+
+/* The local sticky bar was visually a second navbar. It is intentionally retired. */
+.space-local-nav {
+  display: none !important;
+}
+
+/* Heroes remain cinematic without forcing every section to consume a full viewport. */
+.space-hero,
+.space-hero__copy {
+  min-height: min(88svh, 920px);
+}
+
+.space-hero__copy {
+  padding-top: clamp(7.5rem, 14vh, 10rem);
+  padding-bottom: clamp(3rem, 7vh, 5.5rem);
+}
+
+.space-hero__copy h1 {
+  max-width: 12ch;
+  font-size: clamp(4.2rem, 8.5vw, 9.5rem);
+  line-height: 0.84;
+}
+
+.space-hero__copy p {
+  max-width: 38rem;
+  margin-top: 1.35rem;
+}
+
+/* Editorial headings use the whole row: title left, context aligned right. */
+.space-services > .space-section-heading,
+.space-team > .space-section-heading,
+.space-stylebook > .space-section-heading,
+.space-journal > .space-section-heading {
+  width: min(100%, 1500px);
+  margin: 0 auto clamp(2.4rem, 4.5vw, 4.5rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
+  gap: clamp(2rem, 7vw, 8rem);
+  align-items: end;
+}
+
+.space-services > .space-section-heading h2,
+.space-team > .space-section-heading h2,
+.space-stylebook > .space-section-heading h2,
+.space-journal > .space-section-heading h2 {
+  max-width: none;
+  margin: 0;
+  font-size: clamp(2.9rem, 5.6vw, 6.5rem);
+  line-height: 0.9;
+}
+
+.space-section-heading > p,
+.space-section-heading > div {
+  width: min(100%, 35rem);
+  margin: 0;
+  justify-self: end;
+  text-align: right;
+}
+
+.space-section-heading p {
+  margin: 0;
+  color: inherit;
+  opacity: 0.68;
+  font-size: clamp(0.95rem, 1.1vw, 1.08rem);
+  line-height: 1.65;
+}
+
+.space-section-heading--with-link > div {
+  display: grid;
+  gap: 1.2rem;
+  justify-items: end;
+}
+
+.space-stylebook > .space-section-heading a {
+  color: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.space-services,
+.space-team,
+.space-stylebook,
+.space-journal {
+  padding-block: clamp(4rem, 7vw, 7rem);
+}
+
+/* Services follow the document scroll. No nested browser scrollbar. */
+.space-services__workspace {
+  min-height: 0;
+  grid-template-columns: minmax(0, 0.95fr) minmax(390px, 1.05fr);
+  align-items: start;
+  border-color: rgb(0 0 0 / 0.12);
+}
+
+.space-service-preview {
+  top: 7rem;
+  min-height: min(660px, 74svh);
+}
+
+.space-service-list {
+  max-height: none;
+  overflow: visible;
+  background: var(--color-ivory);
+}
+
+.space-service-group {
+  border-bottom: 1px solid rgb(0 0 0 / 0.14);
+}
+
+.space-service-group__toggle {
+  width: 100%;
+  min-height: 84px;
+  padding: 1.2rem 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 1rem;
+  align-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--color-black);
+  cursor: pointer;
+  text-align: left;
+}
+
+.space-service-group__toggle > span {
+  font-family: var(--font-display);
+  font-size: clamp(1.65rem, 2.2vw, 2.55rem);
+  line-height: 1;
+}
+
+.space-service-group__toggle small {
+  color: rgb(0 0 0 / 0.48);
+  font-size: 0.66rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.space-service-group__toggle i {
+  width: 1.8rem;
+  height: 1.8rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(0 0 0 / 0.2);
+  border-radius: 50%;
+  font-style: normal;
+}
+
+.space-service-group.is-open .space-service-group__toggle {
+  background: var(--color-white);
+}
+
+.space-service-group__items {
+  padding: 0 1rem 1rem;
+  display: grid;
+  gap: 0.35rem;
+  background: var(--color-white);
+}
+
+.space-service-group__items button {
+  width: 100%;
+  min-height: 72px;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.45rem 1rem;
+  align-items: center;
+  border: 1px solid rgb(0 0 0 / 0.1);
+  background: transparent;
+  color: var(--color-black);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+.space-service-group__items button:hover,
+.space-service-group__items button.is-active {
+  border-color: rgb(0 0 0 / 0.35);
+  background: #f0eadf;
+  transform: translateX(0.25rem);
+}
+
+.space-service-group__items strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1.65vw, 1.75rem);
+  font-weight: 500;
+  line-height: 1.05;
+}
+
+.space-service-group__items small {
+  grid-column: 1;
+  color: rgb(0 0 0 / 0.52);
+}
+
+.space-service-group__items i {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  font-style: normal;
+}
+
+/* Team cards stay human-sized, including generic temporary profiles. */
+.space-team__grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 460px));
+  justify-content: start;
+  gap: 1rem;
+  background: transparent;
+}
+
+.space-team__grid article {
+  width: 100%;
+  min-height: clamp(420px, 38vw, 540px);
+}
+
+.space-team__grid h3 {
+  font-size: clamp(2rem, 3vw, 3rem);
+}
+
+.space-stylebook__grid {
+  grid-auto-rows: minmax(230px, 29vw);
+}
+
+.space-journal__grid > a {
+  min-height: clamp(420px, 38vw, 520px);
+}
+
+/* Benefits are now the offers themselves: no oversized section title or generic cards. */
+.space-benefits--promotions-only {
+  padding: clamp(2.5rem, 5vw, 5rem) clamp(1rem, 4vw, 5rem);
+  background: #11100e;
+  color: var(--color-ivory);
+}
+
+.space-benefits--promotions-only .space-promotions {
+  margin-top: 0;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.65rem;
+  background: transparent;
+}
+
+.space-benefits--promotions-only .space-promotions a {
+  min-height: 210px;
+  padding: clamp(1.35rem, 2.5vw, 2.25rem);
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  background:
+    radial-gradient(circle at 100% 0%, rgb(213 187 131 / 0.16), transparent 17rem),
+    rgb(255 255 255 / 0.035);
+  color: var(--color-ivory);
+  transition: transform 220ms ease, border-color 220ms ease, background 220ms ease;
+}
+
+.space-benefits--promotions-only .space-promotions a:hover {
+  transform: translateY(-0.3rem);
+  border-color: rgb(213 187 131 / 0.42);
+  background:
+    radial-gradient(circle at 100% 0%, rgb(213 187 131 / 0.24), transparent 17rem),
+    rgb(255 255 255 / 0.055);
+}
+
+.space-benefits--promotions-only .space-promotions strong {
+  max-width: 15ch;
+  font-size: clamp(1.8rem, 2.5vw, 2.8rem);
+}
+
+.space-benefits--promotions-only .space-promotions p {
+  color: rgb(255 255 255 / 0.62);
+}
+
+/* Compact final forms and location block. */
+.whatsapp-inquiry,
+.whatsapp-inquiry--compact {
+  padding: clamp(3rem, 5vw, 5.5rem) clamp(1.25rem, 5vw, 6rem);
+  gap: clamp(2.5rem, 6vw, 6rem);
+}
+
+.whatsapp-inquiry__copy h2 {
+  max-width: 14ch;
+  font-size: clamp(2.5rem, 4.8vw, 5.4rem);
+  line-height: 0.92;
+}
+
+.home-visit-strip--social {
+  min-height: 0;
+  padding: clamp(3rem, 5vw, 5.5rem) clamp(1.5rem, 4vw, 5rem);
+  row-gap: 2.5rem;
+}
+
+.home-visit-strip__intro h2 {
+  max-width: 10ch;
+  font-size: clamp(3rem, 5.8vw, 6.3rem);
+  line-height: 0.9;
+}
+
+.art-home--house .service-portals--house {
+  min-height: auto;
+  padding-block: clamp(4rem, 7vw, 7rem);
+}
+
+.service-portals--house .service-portals__grid {
+  min-height: min(760px, 80svh);
+}
+
+/* Footer always breaks out to the viewport, independent of parent width constraints. */
+.site-footer--house {
+  position: relative;
+  left: 50%;
+  width: 100vw !important;
+  max-width: none !important;
+  margin-right: -50vw !important;
+  margin-left: -50vw !important;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1100px) {
+  .compact-spaces-selector {
+    display: none;
+  }
+
+  .space-services__workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .space-service-preview {
+    position: relative;
+    top: auto;
+    min-height: min(620px, 70svh);
+  }
+}
+
+@media (max-width: 760px) {
+  html::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .space-hero,
+  .space-hero__copy {
+    min-height: 82svh;
+  }
+
+  .space-hero__copy h1 {
+    font-size: clamp(3.6rem, 18vw, 6rem);
+  }
+
+  .space-services > .space-section-heading,
+  .space-team > .space-section-heading,
+  .space-stylebook > .space-section-heading,
+  .space-journal > .space-section-heading {
+    grid-template-columns: 1fr;
+    gap: 1.4rem;
+    align-items: start;
+  }
+
+  .space-section-heading > p,
+  .space-section-heading > div {
+    justify-self: start;
+    text-align: left;
+  }
+
+  .space-section-heading--with-link > div {
+    justify-items: start;
+  }
+
+  .space-services > .space-section-heading h2,
+  .space-team > .space-section-heading h2,
+  .space-stylebook > .space-section-heading h2,
+  .space-journal > .space-section-heading h2 {
+    font-size: clamp(2.7rem, 13vw, 4.5rem);
+  }
+
+  .space-service-preview {
+    min-height: 62svh;
+  }
+
+  .space-service-group__toggle {
+    grid-template-columns: 1fr auto;
+  }
+
+  .space-service-group__toggle small {
+    display: none;
+  }
+
+  .space-team__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .space-team__grid article {
+    max-width: none;
+    min-height: 450px;
+  }
+
+  .space-benefits--promotions-only .space-promotions {
+    grid-template-columns: 1fr;
+  }
+
+  .service-portals--house .service-portals__grid {
+    min-height: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .compact-spaces-selector nav a,
+  .space-service-group__items button,
+  .space-benefits--promotions-only .space-promotions a {
+    transition: none;
+  }
+}

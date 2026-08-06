@@ -1,3 +1,4 @@
+import { getServiceExperienceMedia, spaceExperienceMedia } from '../data/experienceMedia';
 import { serviceCatalog as defaultCatalog, type ServiceCatalogArea, type SpaceId } from '../data/serviceCatalog';
 
 type LegacyCatalogArea = Omit<ServiceCatalogArea, 'id'> & { id: string };
@@ -27,16 +28,26 @@ function hydrateMedia(area: ServiceCatalogArea) {
   const defaults = defaultCatalog.find((item) => item.id === area.id);
   if (!defaults) return area;
 
+  const areaMedia = {
+    ...defaults.media,
+    ...area.media,
+    ...spaceExperienceMedia[area.id],
+  };
+
   return {
     ...area,
-    media: { ...defaults.media, ...area.media },
+    media: areaMedia,
     groups: area.groups.map((group) => ({
       ...group,
       items: group.items.map((item) => {
         const defaultItem = defaults.groups
           .flatMap((defaultGroup) => defaultGroup.items)
           .find((candidate) => candidate.name === item.name);
-        return { ...item, media: item.media ?? defaultItem?.media ?? defaults.media };
+        const fallbackMedia = item.media ?? defaultItem?.media ?? areaMedia;
+        return {
+          ...item,
+          media: getServiceExperienceMedia(area.id, item.name, fallbackMedia),
+        };
       }),
     })),
   };

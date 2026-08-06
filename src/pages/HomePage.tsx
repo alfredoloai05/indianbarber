@@ -12,6 +12,7 @@ import {
   useHomeVisit,
   useServiceCatalogContent,
 } from '../content/useSiteContent';
+import { houseHeroMedia } from '../data/experienceMedia';
 import { bookingPath } from '../utils/booking';
 import { spacePath } from '../utils/spaces';
 
@@ -28,12 +29,18 @@ export function HomePage() {
   const club = useHomeClub();
   const visit = useHomeVisit();
   const activeArea = serviceCatalog[activePortal] ?? serviceCatalog[0];
+  const heroRepeatsAService = serviceCatalog.some(
+    (area) => Boolean(hero.video && area.media.video && hero.video === area.media.video),
+  );
+  const resolvedHero = heroRepeatsAService || !hero.video
+    ? { ...hero, ...houseHeroMedia }
+    : hero;
 
   return (
     <>
       <Seo
         title={`${settings.brandName} · Indian House en Loja`}
-        description={`Indian House reúne barbería, estudio fotográfico, nails y SPA en el centro de Loja.`}
+        description="Indian House reúne barbería, estudio fotográfico, nails y SPA en el centro de Loja."
       />
 
       <div className="art-home art-home--house">
@@ -44,7 +51,12 @@ export function HomePage() {
             animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           >
-            <ViewportVideo src={hero.video} poster={hero.poster} label={`Indian House en ${settings.brandName}`} priority />
+            <ViewportVideo
+              src={resolvedHero.video}
+              poster={resolvedHero.poster}
+              label={`Entrada a Indian House en ${settings.city}`}
+              priority
+            />
             <div className="film-hero__veil" />
           </motion.div>
 
@@ -56,7 +68,7 @@ export function HomePage() {
               transition={{ duration: 0.72, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
             >
               <img src={settings.logoLockup} alt={settings.brandName} />
-              <div><span>{hero.location}</span><span>{hero.founded}</span></div>
+              <div><span>{resolvedHero.location}</span><span>{resolvedHero.founded}</span></div>
             </motion.div>
 
             <motion.div
@@ -65,15 +77,15 @@ export function HomePage() {
               animate={{ opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)' }}
               transition={{ duration: 0.78, delay: 0.26, ease: [0.16, 1, 0.3, 1] }}
             >
-              <h1 id="film-hero-title">{hero.title}</h1>
-              <p>{hero.lead}</p>
+              <h1 id="film-hero-title">{resolvedHero.title}</h1>
+              <p>{resolvedHero.lead}</p>
               <motion.div
                 className="film-hero__actions"
                 initial={reduceMotion ? false : { opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.58, delay: 0.48, ease: [0.16, 1, 0.3, 1] }}
               >
-                <Link to="/reservar">{hero.primaryLabel} <Arrow /></Link>
+                <Link to="/reservar">{resolvedHero.primaryLabel} <Arrow /></Link>
                 <a href="#espacios">Conocer los espacios</a>
               </motion.div>
             </motion.div>

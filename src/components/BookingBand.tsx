@@ -11,10 +11,10 @@ export function BookingBand({ area, service }: BookingBandProps) {
     <section className="booking-band" aria-labelledby="booking-band-title">
       <div>
         <span>Tu momento en Indian</span>
-        <h2 id="booking-band-title">Elige el servicio. Encuentra tu horario.</h2>
+        <h2 id="booking-band-title">Reserva tu próxima visita.</h2>
       </div>
       <p>
-        Selecciona profesional, fecha y hora dentro de Indian Club y envía la solicitud para confirmación.
+        Selecciona servicio, profesional, fecha y hora antes de enviar la solicitud de confirmación.
       </p>
       <Link className="button button--dark" to={bookingPath(area, service)}>
         Elegir cita <span aria-hidden="true">↗</span>
