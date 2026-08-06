@@ -9,24 +9,27 @@ import {
 } from 'framer-motion';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useGlobalSettings } from '../content/useSiteContent';
-import { spaceOrder, spacePath, spaceLabels } from '../utils/spaces';
+import type { SpaceId } from '../data/serviceCatalog';
+import { spaceLabels, spaceOrder, spacePath } from '../utils/spaces';
 
 const secondaryNavigation = [
-  { label: 'La Casa', to: '/club' },
   { label: 'Gift Cards', to: '/tarjetas-regalo' },
   { label: 'Contacto', to: '/contacto' },
 ];
 
-const barberNavigation = [
-  { label: 'Cabello', to: '/barberia#cabello' },
-  { label: 'Barba y afeitado', to: '/barberia#barba-y-afeitado' },
-  { label: 'Combos Indian', to: '/barberia#combos-indian' },
-  { label: 'Servicios especiales', to: '/barberia#servicios-especiales' },
-];
+const spaceSectionNavigation = [
+  { label: 'Servicios', anchor: 'servicios' },
+  { label: 'Equipo', anchor: 'equipo' },
+  { label: 'Style Book', anchor: 'style-book' },
+  { label: 'Consejos', anchor: 'consejos' },
+  { label: 'Beneficios', anchor: 'beneficios' },
+  { label: 'Consulta', anchor: 'consulta' },
+] as const;
 
 export function SiteLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [barberMenuOpen, setBarberMenuOpen] = useState(false);
+  const [openSpaceMenu, setOpenSpaceMenu] = useState<SpaceId | null>(null);
+  const [mobileSpaceMenu, setMobileSpaceMenu] = useState<SpaceId | null>(null);
   const location = useLocation();
   const reduceMotion = useReducedMotion();
   const settings = useGlobalSettings();
@@ -62,7 +65,29 @@ export function SiteLayout() {
     return () => window.removeEventListener('pointermove', moveCursor);
   }, [cursorX, cursorY, reduceMotion]);
 
+  useEffect(() => {
+    const closeOutside = (event: PointerEvent) => {
+      const target = event.target;
+      if (target instanceof Element && target.closest('.compact-space-nav__item')) return;
+      setOpenSpaceMenu(null);
+    };
+    const closeWithEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpenSpaceMenu(null);
+    };
+    document.addEventListener('pointerdown', closeOutside);
+    document.addEventListener('keydown', closeWithEscape);
+    return () => {
+      document.removeEventListener('pointerdown', closeOutside);
+      document.removeEventListener('keydown', closeWithEscape);
+    };
+  }, []);
+
   const primaryNavigation = spaceOrder.map((id) => ({ label: spaceLabels[id], to: spacePath(id), id }));
+
+  const closeMobileMenu = () => {
+    setMenuOpen(false);
+    setMobileSpaceMenu(null);
+  };
 
   return (
     <div className="site-shell site-shell--brand">
@@ -71,49 +96,58 @@ export function SiteLayout() {
       {!reduceMotion ? <motion.div className="ambient-cursor" style={{ x: cursorX, y: cursorY }} aria-hidden="true" /> : null}
 
       <header className="site-header site-header--compact site-header--four-spaces">
-        <Link className="compact-brand" to="/" aria-label={`${settings.brandName}, inicio`} onClick={() => setMenuOpen(false)}>
+        <Link className="compact-brand" to="/" aria-label={`${settings.brandName}, inicio`} onClick={closeMobileMenu}>
           <img src={settings.logoMark} alt="" />
           <span>{settings.brandName.toUpperCase()}</span>
         </Link>
 
         <nav className="compact-space-nav" aria-label="Espacios de Indian House">
-          {primaryNavigation.map((item) => item.id === 'barberia' ? (
-            <div
-              className={`compact-space-nav__item compact-space-nav__item--barber${barberMenuOpen ? ' is-open' : ''}`}
-              key={item.to}
-              onMouseLeave={() => setBarberMenuOpen(false)}
-            >
-              <NavLink
-                to={item.to}
-                className={({ isActive }) => (isActive ? 'is-active' : undefined)}
-                onFocus={() => setBarberMenuOpen(true)}
+          {primaryNavigation.map((item) => {
+            const isOpen = openSpaceMenu === item.id;
+            return (
+              <div
+                className={`compact-space-nav__item${isOpen ? ' is-open' : ''}`}
+                key={item.to}
+                onMouseEnter={() => setOpenSpaceMenu(item.id)}
+                onMouseLeave={() => setOpenSpaceMenu(null)}
+                onBlurCapture={(event) => {
+                  const nextTarget = event.relatedTarget;
+                  if (!(nextTarget instanceof Node) || !event.currentTarget.contains(nextTarget)) {
+                    setOpenSpaceMenu(null);
+                  }
+                }}
               >
-                {item.label}
-              </NavLink>
-              <button
-                type="button"
-                aria-label={barberMenuOpen ? 'Cerrar submenú de Barbería' : 'Abrir submenú de Barbería'}
-                aria-expanded={barberMenuOpen}
-                onClick={() => setBarberMenuOpen((current) => !current)}
-              >
-                <span aria-hidden="true">⌄</span>
-              </button>
+                <NavLink
+                  to={item.to}
+                  className={({ isActive }) => (isActive ? 'is-active' : undefined)}
+                  onFocus={() => setOpenSpaceMenu(item.id)}
+                  onClick={() => setOpenSpaceMenu(null)}
+                >
+                  {item.label}
+                </NavLink>
+                <button
+                  type="button"
+                  aria-label={isOpen ? `Cerrar menú de ${item.label}` : `Abrir menú de ${item.label}`}
+                  aria-expanded={isOpen}
+                  onClick={() => setOpenSpaceMenu((current) => current === item.id ? null : item.id)}
+                >
+                  <span aria-hidden="true">⌄</span>
+                </button>
 
-              <div className="compact-space-nav__submenu" aria-label="Servicios de Barbería">
-                {barberNavigation.map((subItem) => (
-                  <Link key={subItem.to} to={subItem.to} onClick={() => setBarberMenuOpen(false)}>
-                    <span>{subItem.label}</span><i aria-hidden="true">↘</i>
-                  </Link>
-                ))}
+                <div className="compact-space-nav__submenu" aria-label={`Secciones de ${item.label}`}>
+                  {spaceSectionNavigation.map((subItem) => (
+                    <Link
+                      key={subItem.anchor}
+                      to={spacePath(item.id, subItem.anchor)}
+                      onClick={() => setOpenSpaceMenu(null)}
+                    >
+                      <span>{subItem.label}</span><i aria-hidden="true">↘</i>
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className="compact-space-nav__item" key={item.to}>
-              <NavLink to={item.to} className={({ isActive }) => (isActive ? 'is-active' : undefined)}>
-                {item.label}
-              </NavLink>
-            </div>
-          ))}
+            );
+          })}
         </nav>
 
         <div className="compact-actions">
@@ -123,7 +157,11 @@ export function SiteLayout() {
             type="button"
             aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
             aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((current) => !current)}
+            onClick={() => {
+              setMenuOpen((current) => !current);
+              setMobileSpaceMenu(null);
+              setOpenSpaceMenu(null);
+            }}
           >
             <span /><span />
           </button>
@@ -133,29 +171,56 @@ export function SiteLayout() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            className="menu-overlay menu-overlay--brand"
+            className="menu-overlay menu-overlay--brand menu-overlay--spaces"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.24 }}
           >
             <img className="menu-overlay__brand-mark" src={settings.logoMark} alt="" />
             <div className="menu-overlay__index">INDIAN HOUSE · LOJA</div>
             <nav aria-label="Navegación móvil">
-              {primaryNavigation.map((item, index) => (
-                <motion.div
-                  key={item.to}
-                  initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: reduceMotion ? 0 : index * 0.04 }}
-                >
-                  <NavLink to={item.to} onClick={() => setMenuOpen(false)}>{item.label}</NavLink>
-                  {item.id === 'barberia' ? (
-                    <div className="menu-overlay__subnav">
-                      {barberNavigation.map((subItem) => (
-                        <Link to={subItem.to} key={subItem.to} onClick={() => setMenuOpen(false)}>{subItem.label}</Link>
-                      ))}
+              {primaryNavigation.map((item, index) => {
+                const isOpen = mobileSpaceMenu === item.id;
+                return (
+                  <motion.div
+                    className={`menu-overlay__space${isOpen ? ' is-open' : ''}`}
+                    key={item.to}
+                    initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: reduceMotion ? 0 : index * 0.04 }}
+                  >
+                    <div className="menu-overlay__space-row">
+                      <NavLink to={item.to} onClick={closeMobileMenu}>{item.label}</NavLink>
+                      <button
+                        type="button"
+                        aria-label={isOpen ? `Cerrar secciones de ${item.label}` : `Abrir secciones de ${item.label}`}
+                        aria-expanded={isOpen}
+                        onClick={() => setMobileSpaceMenu((current) => current === item.id ? null : item.id)}
+                      >
+                        <span aria-hidden="true">{isOpen ? '−' : '+'}</span>
+                      </button>
                     </div>
-                  ) : null}
-                </motion.div>
-              ))}
+                    <AnimatePresence initial={false}>
+                      {isOpen ? (
+                        <motion.div
+                          className="menu-overlay__subnav"
+                          initial={reduceMotion ? false : { opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                        >
+                          {spaceSectionNavigation.map((subItem) => (
+                            <Link
+                              to={spacePath(item.id, subItem.anchor)}
+                              key={subItem.anchor}
+                              onClick={closeMobileMenu}
+                            >
+                              {subItem.label}
+                            </Link>
+                          ))}
+                        </motion.div>
+                      ) : null}
+                    </AnimatePresence>
+                  </motion.div>
+                );
+              })}
               {secondaryNavigation.map((item, index) => (
                 <motion.div
                   key={item.to}
@@ -163,11 +228,11 @@ export function SiteLayout() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: reduceMotion ? 0 : (primaryNavigation.length + index) * 0.04 }}
                 >
-                  <NavLink to={item.to} onClick={() => setMenuOpen(false)}>{item.label}</NavLink>
+                  <NavLink to={item.to} onClick={closeMobileMenu}>{item.label}</NavLink>
                 </motion.div>
               ))}
             </nav>
-            <Link className="menu-overlay__booking" to="/reservar" onClick={() => setMenuOpen(false)}>
+            <Link className="menu-overlay__booking" to="/reservar" onClick={closeMobileMenu}>
               Reservar una cita <span aria-hidden="true">↗</span>
             </Link>
           </motion.div>
@@ -182,13 +247,13 @@ export function SiteLayout() {
             <img src={settings.logoMark} alt="" />
             <strong>INDIAN HOUSE</strong>
           </Link>
-          <span>Cuatro espacios. Una sola casa.</span>
+          <span>Cuatro experiencias. Un mismo lugar.</span>
         </div>
 
         <nav className="compact-footer__nav" aria-label="Espacios de Indian House">
           {primaryNavigation.map((item) => <Link to={item.to} key={item.to}>{item.label}</Link>)}
-          <Link to="/club">La Casa</Link>
           <Link to="/tarjetas-regalo">Gift Cards</Link>
+          <Link to="/contacto">Contacto</Link>
         </nav>
 
         <div className="compact-footer__contact">

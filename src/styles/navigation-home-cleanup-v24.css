@@ -1,0 +1,246 @@
+/* Navigation and Home cleanup v24 */
+
+/* Every primary space stays visible and owns the same internal section menu. */
+.site-header--four-spaces {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: clamp(0.8rem, 1.7vw, 1.8rem);
+  overflow: visible;
+}
+
+.compact-space-nav {
+  z-index: 30;
+  gap: clamp(0.45rem, 1.15vw, 1.25rem);
+}
+
+.compact-space-nav__item {
+  gap: 0.12rem;
+}
+
+.compact-space-nav__item > a {
+  font-size: clamp(0.59rem, 0.69vw, 0.7rem);
+}
+
+.compact-space-nav__item > button {
+  width: 1.55rem;
+  height: 1.55rem;
+  flex: 0 0 auto;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: rgb(255 255 255 / 0.58);
+  cursor: pointer;
+  transition: color 180ms ease, background 180ms ease;
+}
+
+.compact-space-nav__item > button:hover,
+.compact-space-nav__item > button:focus-visible,
+.compact-space-nav__item.is-open > button {
+  color: var(--color-white);
+  background: rgb(255 255 255 / 0.08);
+}
+
+.compact-space-nav__item > button span {
+  display: block;
+  font-size: 0.78rem;
+  line-height: 1;
+  transition: transform 180ms ease;
+}
+
+.compact-space-nav__item.is-open > button span {
+  transform: rotate(180deg);
+}
+
+.compact-space-nav__submenu {
+  top: calc(100% + 0.08rem);
+  left: 50%;
+  z-index: 60;
+  width: min(16rem, calc(100vw - 2rem));
+  max-height: min(27rem, calc(100svh - 7rem));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(213 187 131 / 0.55) rgb(255 255 255 / 0.04);
+  transform: translate(-50%, -0.45rem);
+}
+
+.compact-space-nav__item.is-open .compact-space-nav__submenu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+
+.compact-space-nav__submenu a {
+  min-height: 2.8rem;
+  padding: 0.68rem 0.8rem;
+}
+
+/* Keep the menu inside the viewport for the first and last primary items. */
+.compact-space-nav__item:first-child .compact-space-nav__submenu {
+  left: 0;
+  transform: translate(0, -0.45rem);
+}
+
+.compact-space-nav__item:first-child.is-open .compact-space-nav__submenu {
+  transform: translate(0, 0);
+}
+
+.compact-space-nav__item:last-child .compact-space-nav__submenu {
+  right: 0;
+  left: auto;
+  transform: translate(0, -0.45rem);
+}
+
+.compact-space-nav__item:last-child.is-open .compact-space-nav__submenu {
+  transform: translate(0, 0);
+}
+
+/* Mobile: four spaces remain visible, while their internal sections expand independently. */
+.menu-overlay--spaces {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.menu-overlay--spaces > nav {
+  padding-bottom: 8rem;
+}
+
+.menu-overlay__space {
+  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+}
+
+.menu-overlay__space-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+}
+
+.menu-overlay__space-row > button {
+  width: 2.7rem;
+  height: 2.7rem;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 0.18);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-white);
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.menu-overlay--spaces .menu-overlay__subnav {
+  overflow: hidden;
+  margin: 0 0 1rem;
+  padding: 0.7rem 0 0.9rem 1rem;
+}
+
+.menu-overlay--spaces .menu-overlay__subnav a {
+  min-height: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+/* The four portals now start immediately after the hero. */
+.art-home--house .film-hero--without-ticker {
+  margin-bottom: 0;
+}
+
+.art-home--house .service-portals--house {
+  margin-top: 0;
+  padding: 0 0 clamp(2rem, 4vw, 4rem) !important;
+  overflow: visible;
+}
+
+.service-portals--house .service-portals__grid {
+  min-height: clamp(720px, 88svh, 920px);
+}
+
+.service-portals--house .service-portal.is-active .service-portal__trigger {
+  height: 34%;
+}
+
+.service-portals--house .service-portal__details {
+  bottom: clamp(1.25rem, 2vw, 2rem);
+}
+
+.service-portals--house .service-portal__details p {
+  margin-bottom: 0.9rem;
+  line-height: 1.55;
+}
+
+.service-portals--house .service-portal__details ul {
+  margin-bottom: 1rem;
+}
+
+.service-portals--house .service-portal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+/* The retired standalone house section must not leave visual remnants. */
+.art-home--house .club-film {
+  display: none !important;
+}
+
+@media (max-width: 1120px) {
+  .compact-space-nav {
+    gap: 0.45rem;
+  }
+
+  .compact-space-nav__item > a {
+    font-size: 0.58rem;
+    letter-spacing: 0.055em;
+  }
+}
+
+@media (max-width: 1000px) {
+  .service-portals--house .service-portals__grid {
+    min-height: auto;
+  }
+
+  .service-portals--house .service-portal.is-active {
+    min-height: 760px;
+  }
+
+  .service-portals--house .service-portal.is-active .service-portal__trigger {
+    height: 34%;
+  }
+}
+
+@media (max-width: 900px) {
+  .compact-space-nav {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .art-home--house .service-portals--house {
+    padding-bottom: 2rem !important;
+  }
+
+  .service-portals--house .service-portal.is-active {
+    min-height: 780px;
+  }
+
+  .service-portals--house .service-portal__details {
+    width: calc(100% - 2rem);
+    left: 1rem;
+    bottom: 1rem;
+  }
+
+  .service-portals--house .service-portal__actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .service-portals--house .service-portal__actions a {
+    width: 100%;
+    justify-content: center;
+  }
+}

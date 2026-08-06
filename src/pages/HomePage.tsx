@@ -7,7 +7,6 @@ import { ViewportVideo } from '../components/ViewportVideo';
 import { WhatsappInquiryForm } from '../components/WhatsappInquiryForm';
 import {
   useGlobalSettings,
-  useHomeClub,
   useHomeHero,
   useHomeVisit,
   useServiceCatalogContent,
@@ -26,7 +25,6 @@ export function HomePage() {
   const settings = useGlobalSettings();
   const hero = useHomeHero();
   const serviceCatalog = useServiceCatalogContent();
-  const club = useHomeClub();
   const visit = useHomeVisit();
   const activeArea = serviceCatalog[activePortal] ?? serviceCatalog[0];
   const heroRepeatsAService = serviceCatalog.some(
@@ -92,11 +90,7 @@ export function HomePage() {
           </div>
         </section>
 
-        <section id="espacios" className="service-portals service-portals--house" aria-labelledby="service-portals-title">
-          <header className="service-portals__intro">
-            <div><h2 id="service-portals-title">Cuatro espacios. Una sola Indian House.</h2></div>
-          </header>
-
+        <section id="espacios" className="service-portals service-portals--house" aria-label="Espacios de Indian House">
           {activeArea ? (
             <div className="service-portals__grid" data-active={activeArea.id}>
               {serviceCatalog.map((area, index) => {
@@ -153,21 +147,6 @@ export function HomePage() {
           ) : null}
         </section>
 
-        <section className="club-film club-film--compact club-film--safe-copy" aria-labelledby="club-film-title">
-          {club.video ? (
-            <ViewportVideo src={club.video} poster={club.poster} label="Espacios de Indian House" />
-          ) : (
-            <img src={club.poster} alt="Espacios de Indian House" loading="lazy" />
-          )}
-          <div className="club-film__veil" />
-          <div className="club-film__copy">
-            <img src={settings.logoMark} alt="" />
-            <h2 id="club-film-title">{club.title}</h2>
-            <p>{club.description}</p>
-            <Link to="/club">{club.ctaLabel} <Arrow /></Link>
-          </div>
-        </section>
-
         <HomeGiftCards />
 
         <WhatsappInquiryForm
@@ -179,7 +158,7 @@ export function HomePage() {
         <section className="home-visit-strip home-visit-strip--social" aria-labelledby="home-visit-strip-title">
           <div className="home-visit-strip__intro">
             <h2 id="home-visit-strip-title">{visit.title}</h2>
-            <Link to="/club#ubicacion">Ubícanos <Arrow /></Link>
+            <a href={settings.mapHref} target="_blank" rel="noreferrer">Ubícanos <Arrow /></a>
           </div>
 
           <div className="home-visit-strip__contact">
