@@ -47,6 +47,11 @@ export function SiteLayout() {
   }, [cursorX, cursorY, reduceMotion]);
 
   const primaryNavigation = spaceOrder.map((id) => ({ label: spaceLabels[id], to: spacePath(id) }));
+  const activeSpace = primaryNavigation.find((item) => item.to === location.pathname);
+
+  const closeSpacesSelector = (target: HTMLElement) => {
+    target.closest('details')?.removeAttribute('open');
+  };
 
   return (
     <div className="site-shell site-shell--brand">
@@ -60,13 +65,24 @@ export function SiteLayout() {
           <span>{settings.brandName.toUpperCase()}</span>
         </Link>
 
-        <nav className="compact-nav compact-nav--spaces" aria-label="Espacios de Indian House">
-          {primaryNavigation.map((item) => (
-            <NavLink key={item.to} to={item.to} className={({ isActive }) => (isActive ? 'is-active' : undefined)}>
-              {item.label}
-            </NavLink>
-          ))}
-        </nav>
+        <details className="compact-spaces-selector">
+          <summary>
+            <span>{activeSpace?.label ?? 'Espacios'}</span>
+            <i aria-hidden="true">⌄</i>
+          </summary>
+          <nav aria-label="Espacios de Indian House">
+            {primaryNavigation.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) => (isActive ? 'is-active' : undefined)}
+                onClick={(event) => closeSpacesSelector(event.currentTarget)}
+              >
+                <span>{item.label}</span><i aria-hidden="true">↗</i>
+              </NavLink>
+            ))}
+          </nav>
+        </details>
 
         <div className="compact-actions">
           <Link className="compact-booking" to="/reservar">Reservar</Link>
