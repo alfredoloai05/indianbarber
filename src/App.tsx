@@ -13,6 +13,7 @@ import { PromotionsPage } from './pages/PromotionsPage';
 import { ReservePage } from './pages/ReservePage';
 import { ServiceDetailPage } from './pages/ServiceDetailPage';
 import { ServicesPage } from './pages/ServicesPage';
+import { SpacePage } from './pages/SpacePage';
 import { StyleBookPage } from './pages/StyleBookPage';
 import { TeamPage } from './pages/TeamPage';
 
@@ -22,6 +23,10 @@ function App() {
       <Route path="admin" element={<AdminPage />} />
       <Route element={<SiteLayout />}>
         <Route index element={<HomePage />} />
+        <Route path="barberia" element={<SpacePage spaceId="barberia" />} />
+        <Route path="estudio-fotografico" element={<SpacePage spaceId="fotografia" />} />
+        <Route path="nails" element={<SpacePage spaceId="nails" />} />
+        <Route path="spa" element={<SpacePage spaceId="spa" />} />
         <Route path="servicios" element={<ServicesPage />} />
         <Route path="servicios/:slug" element={<ServiceDetailPage />} />
         <Route path="equipo" element={<TeamPage />} />
