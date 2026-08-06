@@ -61,6 +61,8 @@
   max-height: min(27rem, calc(100svh - 7rem));
   overflow-y: auto;
   overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(213 187 131 / 0.55) rgb(255 255 255 / 0.04);
   transform: translate(-50%, -0.45rem);
 }
 
