@@ -1,4 +1,4 @@
-import type { ServiceCatalogArea, SpaceId } from '../data/serviceCatalog';
+import { serviceCatalog as defaultCatalog, type ServiceCatalogArea, type SpaceId } from '../data/serviceCatalog';
 
 export const spaceOrder: SpaceId[] = ['barberia', 'fotografia', 'nails', 'spa'];
 
@@ -21,6 +21,25 @@ export function spacePath(id: SpaceId, anchor?: string) {
   return anchor ? `${path}#${anchor}` : path;
 }
 
+function hydrateMedia(area: ServiceCatalogArea) {
+  const defaults = defaultCatalog.find((item) => item.id === area.id);
+  if (!defaults) return area;
+
+  return {
+    ...area,
+    media: { ...defaults.media, ...area.media },
+    groups: area.groups.map((group) => ({
+      ...group,
+      items: group.items.map((item) => {
+        const defaultItem = defaults.groups
+          .flatMap((defaultGroup) => defaultGroup.items)
+          .find((candidate) => candidate.name === item.name);
+        return { ...item, media: item.media ?? defaultItem?.media ?? defaults.media };
+      }),
+    })),
+  };
+}
+
 export function normalizeServiceCatalog(catalog: ServiceCatalogArea[]) {
   const rawCatalog = catalog as Array<ServiceCatalogArea & { id: string }>;
   const legacyCombos = rawCatalog.find((area) => area.id === 'combos');
@@ -28,19 +47,18 @@ export function normalizeServiceCatalog(catalog: ServiceCatalogArea[]) {
   const normalized = rawCatalog
     .filter((area) => spaceOrder.includes(area.id as SpaceId))
     .map((area) => {
-      if (area.id !== 'barberia' || !legacyCombos) return area as ServiceCatalogArea;
+      if (area.id !== 'barberia' || !legacyCombos) return hydrateMedia(area as ServiceCatalogArea);
 
       const alreadyMerged = area.groups.some((group) => group.title.toLowerCase().includes('combo'));
-      if (alreadyMerged) return area as ServiceCatalogArea;
-
-      return {
+      const mergedArea = alreadyMerged ? area : {
         ...area,
         aliases: Array.from(new Set([...area.aliases, ...legacyCombos.aliases])),
         groups: [...area.groups, ...legacyCombos.groups],
         summary: 'Cortes, barba, afeitado, combos y servicios especiales dentro del universo de barbería Indian.',
         duration: '10–120 min',
         price: 'Desde USD 3',
-      } as ServiceCatalogArea;
+      };
+      return hydrateMedia(mergedArea as ServiceCatalogArea);
     });
 
   return spaceOrder
