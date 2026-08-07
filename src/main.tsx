@@ -37,6 +37,7 @@ import './styles/header-four-spaces-v23.css';
 import './styles/navigation-home-cleanup-v24.css';
 import './styles/booking-home-functional-v26.css';
 import './styles/service-booking-layout-v27.css';
+import './styles/reservation-home-v28.css';
 
 const root = document.getElementById('root');
 
