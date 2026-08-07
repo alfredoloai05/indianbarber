@@ -1,0 +1,4 @@
+Indian House deployment marker
+source_commit=41d975df5dfa0242a7f95f92df94715462261809
+feature=header-four-spaces-with-submenus
+redeploy_trigger=2026-08-06T20:41:00-05:00
