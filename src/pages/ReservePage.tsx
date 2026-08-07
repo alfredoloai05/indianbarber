@@ -156,7 +156,11 @@ export function ReservePage() {
 
       <section className="booking-experience booking-experience--direct" aria-labelledby="booking-flow-title">
         <header className="booking-experience__header booking-experience__header--direct">
-          <h1 id="booking-flow-title">Empieza por el área.</h1>
+          <div>
+            <span className="booking-experience__eyebrow">Reservas Indian House</span>
+            <h1 id="booking-flow-title">Agenda tu visita.</h1>
+          </div>
+          <p>Elige el área, servicio, profesional y horario para enviar tu solicitud.</p>
         </header>
 
         <div className="booking-area-tabs" role="tablist" aria-label="Áreas disponibles">
