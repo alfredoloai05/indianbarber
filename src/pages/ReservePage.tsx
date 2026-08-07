@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { Seo } from '../components/Seo';
 import {
   type TeamMemberContent,
@@ -73,19 +73,10 @@ function professionalsForArea(
   const anyAvailable: BookingProfessional = {
     name: 'Cualquier profesional disponible',
     role: 'La primera opción disponible para esta área',
-    image: area.media.poster,
+    image: matching[0]?.image ?? area.media.poster,
   };
 
-  if (matching.length > 0) return [anyAvailable, ...matching];
-
-  return [
-    anyAvailable,
-    {
-      name: area.id === 'spa' ? 'Equipo SPA Indian Club' : 'Equipo de Estudio Fotográfico',
-      role: 'Asignación según disponibilidad',
-      image: area.media.poster,
-    },
-  ];
+  return [anyAvailable, ...matching];
 }
 
 export function ReservePage() {
@@ -100,9 +91,15 @@ export function ReservePage() {
   const initialArea = catalog.find((area) => area.id === requestedArea) ?? catalog[0];
   const initialServices = initialArea?.groups.flatMap((group) => group.items) ?? [];
   const initialService = initialServices.find((service) => service.name === requestedService) ?? initialServices[0];
+  const initialGroupTitle = initialArea?.groups.find((group) =>
+    group.items.some((service) => service.name === initialService?.name),
+  )?.title ?? initialArea?.groups[0]?.title ?? '';
 
   const [areaId, setAreaId] = useState<ServiceCatalogArea['id']>(initialArea?.id ?? 'barberia');
   const [serviceName, setServiceName] = useState(initialService?.name ?? '');
+  const [openServiceGroups, setOpenServiceGroups] = useState<Partial<Record<ServiceCatalogArea['id'], string>>>(
+    initialArea ? { [initialArea.id]: initialGroupTitle } : {},
+  );
   const [professionalName, setProfessionalName] = useState('Cualquier profesional disponible');
   const [selectedDate, setSelectedDate] = useState(days[0]?.iso ?? '');
   const [selectedTime, setSelectedTime] = useState('');
@@ -114,6 +111,9 @@ export function ReservePage() {
     group.items.map((service) => ({ ...service, group: group.title })),
   ) ?? [];
   const selectedService = services.find((service) => service.name === serviceName) ?? services[0];
+  const openServiceGroup = activeArea
+    ? openServiceGroups[activeArea.id] ?? activeArea.groups[0]?.title ?? ''
+    : '';
   const professionals = activeArea ? professionalsForArea(activeArea, team) : [];
   const selectedProfessional = professionals.find((professional) => professional.name === professionalName) ?? professionals[0];
   const activeDay = days.find((day) => day.iso === selectedDate) ?? days[0];
@@ -138,9 +138,11 @@ export function ReservePage() {
   const whatsappUrl = `${settings.whatsappHref}${separator}text=${encodeURIComponent(message)}`;
 
   const selectArea = (area: ServiceCatalogArea) => {
-    const firstService = area.groups[0]?.items[0];
+    const firstGroup = area.groups[0];
+    const firstService = firstGroup?.items[0];
     setAreaId(area.id);
     setServiceName(firstService?.name ?? '');
+    setOpenServiceGroups((current) => ({ ...current, [area.id]: firstGroup?.title ?? '' }));
     setProfessionalName('Cualquier profesional disponible');
     setSelectedTime('');
   };
@@ -152,24 +154,9 @@ export function ReservePage() {
         description={`Elige servicio, profesional, fecha y hora para solicitar tu próxima visita a ${settings.brandName}.`}
       />
 
-      <section className="booking-experience-hero">
-        <div className="booking-experience-hero__media">
-          {activeArea ? <img src={activeArea.media.poster} alt="" loading="eager" /> : null}
-          <div aria-hidden="true" />
-        </div>
-        <div className="booking-experience-hero__copy">
-          <h1>Reserva tu próxima visita.</h1>
-          <p>
-            Elige todo dentro de Indian Club. La fecha y la hora se confirman por WhatsApp mientras conectamos la agenda en tiempo real.
-          </p>
-          <Link to="/servicios">Revisar todos los servicios ↗</Link>
-        </div>
-      </section>
-
-      <section className="booking-experience" aria-labelledby="booking-flow-title">
-        <header className="booking-experience__header">
-          <h2 id="booking-flow-title">Empieza por el área.</h2>
-          <p>Si llegaste desde un servicio, ya aparece seleccionado. Puedes cambiarlo aquí.</p>
+      <section className="booking-experience booking-experience--direct" aria-labelledby="booking-flow-title">
+        <header className="booking-experience__header booking-experience__header--direct">
+          <h1 id="booking-flow-title">Empieza por el área.</h1>
         </header>
 
         <div className="booking-area-tabs" role="tablist" aria-label="Áreas disponibles">
@@ -194,26 +181,51 @@ export function ReservePage() {
               <div className="booking-step__heading">
                 <span>1</span>
                 <div>
-                  <h3 id="booking-service-title">Elige el servicio</h3>
+                  <h2 id="booking-service-title">Elige el servicio</h2>
                   <p>{activeArea?.summary}</p>
                 </div>
               </div>
-              <div className="booking-service-list">
-                {services.map((service) => (
-                  <button
-                    type="button"
-                    className={service.name === selectedService?.name ? 'is-active' : undefined}
-                    key={service.name}
-                    onClick={() => {
-                      setServiceName(service.name);
-                      setSelectedTime('');
-                    }}
-                  >
-                    <span>{service.group}</span>
-                    <strong>{service.name}</strong>
-                    <small>{service.duration} · {service.price}</small>
-                  </button>
-                ))}
+
+              <div className="booking-service-groups">
+                {activeArea?.groups.map((group) => {
+                  const isOpen = openServiceGroup === group.title;
+                  return (
+                    <section className={`booking-service-group${isOpen ? ' is-open' : ''}`} key={group.title}>
+                      <button
+                        type="button"
+                        className="booking-service-group__toggle"
+                        aria-expanded={isOpen}
+                        onClick={() => setOpenServiceGroups((current) => ({
+                          ...current,
+                          [activeArea.id]: isOpen ? '' : group.title,
+                        }))}
+                      >
+                        <strong>{group.title}</strong>
+                        <small>{group.items.length} {group.items.length === 1 ? 'opción' : 'opciones'}</small>
+                        <i aria-hidden="true">{isOpen ? '−' : '+'}</i>
+                      </button>
+
+                      {isOpen ? (
+                        <div className="booking-service-list">
+                          {group.items.map((service) => (
+                            <button
+                              type="button"
+                              className={service.name === selectedService?.name ? 'is-active' : undefined}
+                              key={service.name}
+                              onClick={() => {
+                                setServiceName(service.name);
+                                setSelectedTime('');
+                              }}
+                            >
+                              <strong>{service.name}</strong>
+                              <small>{service.duration} · {service.price}</small>
+                            </button>
+                          ))}
+                        </div>
+                      ) : null}
+                    </section>
+                  );
+                })}
               </div>
             </section>
 
@@ -221,7 +233,7 @@ export function ReservePage() {
               <div className="booking-step__heading">
                 <span>2</span>
                 <div>
-                  <h3 id="booking-professional-title">Elige profesional</h3>
+                  <h2 id="booking-professional-title">Elige profesional</h2>
                   <p>Solo aparecen profesionales relacionados con el área seleccionada.</p>
                 </div>
               </div>
@@ -244,7 +256,7 @@ export function ReservePage() {
               <div className="booking-step__heading">
                 <span>3</span>
                 <div>
-                  <h3 id="booking-date-title">Elige fecha y hora</h3>
+                  <h2 id="booking-date-title">Elige fecha y hora</h2>
                   <p>Son horarios de solicitud. Indian Club confirmará la disponibilidad final.</p>
                 </div>
               </div>
@@ -281,7 +293,7 @@ export function ReservePage() {
               <div className="booking-step__heading">
                 <span>4</span>
                 <div>
-                  <h3 id="booking-contact-title">Añade tus datos</h3>
+                  <h2 id="booking-contact-title">Añade tus datos</h2>
                   <p>Son opcionales, pero ayudan a identificar la solicitud.</p>
                 </div>
               </div>
