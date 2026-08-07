@@ -148,6 +148,38 @@ export function HomePage() {
           ) : null}
         </section>
 
+        <section className="home-value-bridge" aria-labelledby="home-value-title">
+          <header className="home-value-bridge__header">
+            <span>Indian House</span>
+            <h2 id="home-value-title">Cuatro experiencias. Una sola casa.</h2>
+            <p>Barbería, fotografía, nails y SPA conviven en un mismo lugar para que puedas resolver tu visita sin saltar entre espacios ni agendas.</p>
+          </header>
+
+          <div className="home-value-bridge__grid">
+            <article>
+              <strong>Todo en un lugar</strong>
+              <p>Combina servicios de distintas áreas dentro de una misma visita a Indian House.</p>
+            </article>
+            <article>
+              <strong>Reserva simple</strong>
+              <p>Elige área, servicio, profesional y horario desde un solo flujo.</p>
+            </article>
+            <article>
+              <strong>Equipo especializado</strong>
+              <p>Cada espacio conserva su propio equipo, técnica y forma de atender.</p>
+            </article>
+            <article>
+              <strong>En el centro de Loja</strong>
+              <p>Una ubicación accesible con horarios pensados para organizar mejor tu día.</p>
+            </article>
+          </div>
+
+          <div className="home-value-bridge__actions">
+            <Link to="/reservar">Agendar una visita <Arrow /></Link>
+            <a href={settings.mapHref} target="_blank" rel="noreferrer">Cómo llegar <Arrow /></a>
+          </div>
+        </section>
+
         <HomeGiftCards />
 
         <WhatsappInquiryForm
