@@ -18,6 +18,13 @@ export function ViewportVideo({ src, poster, className, label, priority = false 
     const video = videoRef.current;
     if (!video || reduceMotion || failed) return undefined;
 
+    // Service selectors should remain visually stable while users compare options.
+    // Their poster stays visible instead of replaying a moving clip on every selection.
+    if (video.closest('.space-service-preview')) {
+      video.pause();
+      return undefined;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
