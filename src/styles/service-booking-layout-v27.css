@@ -1,0 +1,386 @@
+/* Service and booking visual corrections v27. */
+
+/* Space services: stable media column, no internal scroll and stronger contrast. */
+.space-services {
+  background: #f1eadf !important;
+  color: #17140f !important;
+}
+
+.space-services .space-section-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.46fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: end;
+}
+
+.space-services .space-section-heading h2 {
+  color: #17140f;
+  text-wrap: balance;
+}
+
+.space-services .space-section-heading p {
+  max-width: 38rem;
+  justify-self: end;
+  margin: 0;
+  color: #51493e !important;
+  opacity: 1 !important;
+}
+
+.space-services__workspace {
+  grid-template-columns: minmax(0, 0.96fr) minmax(430px, 1.04fr) !important;
+  min-height: 0 !important;
+  align-items: stretch;
+  overflow: hidden;
+  border-color: #a99b84 !important;
+  background: #fbf7ef !important;
+}
+
+.space-service-preview {
+  position: relative !important;
+  top: auto !important;
+  min-height: 660px !important;
+  height: auto !important;
+  align-self: stretch;
+  isolation: isolate;
+  background: #17140f;
+}
+
+.space-service-preview > img,
+.space-service-preview > .viewport-video,
+.space-service-preview video {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  transform: none !important;
+  scale: 1 !important;
+  animation: none !important;
+  transition: none !important;
+}
+
+.space-service-preview > .viewport-video {
+  position: absolute !important;
+  inset: 0 !important;
+  overflow: hidden;
+}
+
+.space-service-preview__veil {
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 0.06), rgb(0 0 0 / 0.28) 50%, rgb(0 0 0 / 0.94) 100%) !important;
+}
+
+.space-service-preview__copy {
+  inset: auto clamp(1.5rem, 3vw, 3rem) clamp(1.5rem, 3vw, 3rem) !important;
+  max-width: min(40rem, calc(100% - 3rem));
+}
+
+.space-service-preview__copy h3 {
+  max-width: 14ch !important;
+  margin: 0.65rem 0 0.8rem !important;
+  font-size: clamp(2.65rem, 4.25vw, 5.35rem) !important;
+  line-height: 0.9 !important;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.space-service-preview__copy p {
+  max-width: 34rem !important;
+  margin: 0;
+  color: rgb(255 255 255 / 0.82) !important;
+}
+
+.space-service-preview__copy > div {
+  flex-wrap: wrap;
+  margin: 1rem 0 1.2rem !important;
+}
+
+.space-service-list {
+  max-height: none !important;
+  overflow: visible !important;
+  color: #17140f !important;
+  background: #fbf7ef !important;
+}
+
+.space-service-group {
+  border-bottom: 1px solid #b9ab94 !important;
+}
+
+.space-service-group__toggle {
+  min-height: 88px !important;
+  padding: 1.2rem 1.35rem !important;
+  color: #17140f !important;
+  background: #f2eadf !important;
+}
+
+.space-service-group__toggle > span {
+  color: #17140f !important;
+  font-weight: 900;
+}
+
+.space-service-group__toggle small {
+  color: #5c5346 !important;
+}
+
+.space-service-group__toggle i {
+  border-color: #776951 !important;
+  color: #17140f !important;
+  background: #fffaf1 !important;
+}
+
+.space-service-group.is-open .space-service-group__toggle {
+  color: #fffaf1 !important;
+  background: #1b1813 !important;
+}
+
+.space-service-group.is-open .space-service-group__toggle > span {
+  color: #f2d38f !important;
+}
+
+.space-service-group.is-open .space-service-group__toggle small {
+  color: rgb(255 250 241 / 0.72) !important;
+}
+
+.space-service-group.is-open .space-service-group__toggle i {
+  border-color: rgb(255 255 255 / 0.38) !important;
+  color: #fffaf1 !important;
+  background: transparent !important;
+}
+
+.space-service-group__items {
+  padding: 0.85rem !important;
+  background: #f8f2e8 !important;
+}
+
+.space-service-group__items button {
+  min-height: 92px !important;
+  margin: 0 0 0.55rem;
+  padding: 1rem 1.15rem !important;
+  border: 1px solid #c4b59e !important;
+  color: #17140f !important;
+  background: #fffdf8 !important;
+}
+
+.space-service-group__items button:last-child {
+  margin-bottom: 0;
+}
+
+.space-service-group__items button:hover {
+  border-color: #7f6d4f !important;
+  background: #eee4d4 !important;
+}
+
+.space-service-group__items button.is-active {
+  border-color: #8d7444 !important;
+  color: #17140f !important;
+  background: #d8bd82 !important;
+  box-shadow: inset 0 0 0 1px #8d7444;
+}
+
+.space-service-group__items button strong {
+  color: inherit !important;
+}
+
+.space-service-group__items button small,
+.space-service-group__items button.is-active small {
+  color: #51483a !important;
+}
+
+.space-service-group__items button i {
+  color: inherit !important;
+}
+
+/* Booking: a reservation-led title and a calmer, aligned composition. */
+.booking-experience--direct {
+  padding-top: clamp(7rem, 9vw, 8.5rem) !important;
+}
+
+.booking-experience__header--direct {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.42fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: end;
+  margin-bottom: clamp(2rem, 4vw, 3.5rem) !important;
+}
+
+.booking-experience__header--direct h1 {
+  max-width: 10ch !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #17140f !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-size: clamp(3.8rem, 6.3vw, 7rem) !important;
+  line-height: 0.88 !important;
+  text-wrap: balance;
+}
+
+.booking-experience__header--direct p {
+  max-width: 30rem;
+  justify-self: end;
+  margin: 0;
+  color: #574f43;
+  line-height: 1.6;
+}
+
+.booking-area-tabs {
+  overflow: hidden;
+  border-color: #9f917b !important;
+  background: #17140f !important;
+}
+
+.booking-area-tabs button {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.booking-area-tabs span {
+  max-width: calc(100% - 2rem);
+  overflow: hidden;
+  color: #fffaf1 !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.booking-workspace {
+  grid-template-columns: minmax(0, 1fr) minmax(290px, 340px) !important;
+  gap: clamp(2rem, 4vw, 4rem) !important;
+}
+
+.booking-step__heading {
+  align-items: start;
+}
+
+.booking-step__heading h2 {
+  color: #17140f;
+  text-wrap: balance;
+}
+
+.booking-service-groups {
+  overflow: hidden;
+  border-color: #a99b84 !important;
+}
+
+.booking-service-group__toggle {
+  color: #17140f !important;
+  background: #eee5d7 !important;
+}
+
+.booking-service-group__toggle strong {
+  color: inherit;
+}
+
+.booking-service-group.is-open .booking-service-group__toggle {
+  color: #fffaf1 !important;
+  background: #1b1813 !important;
+}
+
+.booking-service-group.is-open .booking-service-group__toggle strong {
+  color: #f2d38f !important;
+}
+
+.booking-service-group .booking-service-list button.is-active {
+  border-color: #8d7444 !important;
+  color: #17140f !important;
+  background: #d8bd82 !important;
+  box-shadow: inset 0 0 0 1px #8d7444;
+}
+
+.booking-service-group .booking-service-list button.is-active strong,
+.booking-service-group .booking-service-list button.is-active small {
+  color: #17140f !important;
+}
+
+.booking-summary {
+  width: 100%;
+  overflow: hidden;
+}
+
+.booking-summary__media {
+  aspect-ratio: 4 / 3;
+  min-height: 0 !important;
+  overflow: hidden;
+}
+
+.booking-summary__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 1050px) {
+  .space-services .space-section-heading,
+  .booking-experience__header--direct {
+    grid-template-columns: 1fr;
+  }
+
+  .space-services .space-section-heading p,
+  .booking-experience__header--direct p {
+    justify-self: start;
+  }
+
+  .space-services__workspace {
+    grid-template-columns: 1fr !important;
+  }
+
+  .space-service-preview {
+    min-height: 620px !important;
+  }
+
+  .booking-workspace {
+    grid-template-columns: 1fr !important;
+  }
+
+  .booking-summary {
+    position: static !important;
+    max-width: 680px;
+  }
+}
+
+@media (max-width: 720px) {
+  .space-services {
+    padding-inline: 1rem !important;
+  }
+
+  .space-services .space-section-heading {
+    margin-bottom: 2rem;
+  }
+
+  .space-service-preview {
+    min-height: 560px !important;
+  }
+
+  .space-service-preview__copy {
+    inset: auto 1.2rem 1.2rem !important;
+    max-width: calc(100% - 2.4rem);
+  }
+
+  .space-service-preview__copy h3 {
+    font-size: clamp(2.55rem, 12vw, 4.4rem) !important;
+  }
+
+  .space-service-group__toggle {
+    min-height: 74px !important;
+    padding: 1rem !important;
+  }
+
+  .space-service-group__items {
+    padding: 0.65rem !important;
+  }
+
+  .space-service-group__items button {
+    min-height: 84px !important;
+  }
+
+  .booking-experience--direct {
+    padding-top: 6.5rem !important;
+  }
+
+  .booking-experience__header--direct h1 {
+    font-size: clamp(3.25rem, 14vw, 5rem) !important;
+  }
+
+  .booking-area-tabs span {
+    white-space: normal;
+  }
+}
