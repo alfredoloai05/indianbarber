@@ -33,6 +33,7 @@ export function HomePage() {
   const resolvedHero = heroRepeatsAService || !hero.video
     ? { ...hero, ...houseHeroMedia }
     : hero;
+  const mapEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(`${settings.address}, ${settings.city}`)}&output=embed`;
 
   return (
     <>
@@ -155,10 +156,21 @@ export function HomePage() {
           context="Sugerencia general para Indian House"
         />
 
-        <section className="home-visit-strip home-visit-strip--social" aria-labelledby="home-visit-strip-title">
+        <section className="home-visit-strip home-visit-strip--social home-visit-strip--compact-map" aria-labelledby="home-visit-strip-title">
           <div className="home-visit-strip__intro">
             <h2 id="home-visit-strip-title">{visit.title}</h2>
-            <a href={settings.mapHref} target="_blank" rel="noreferrer">Ubícanos <Arrow /></a>
+            <a href={settings.mapHref} target="_blank" rel="noreferrer">Cómo llegar <Arrow /></a>
+          </div>
+
+          <div className="home-visit-strip__map">
+            <iframe
+              src={mapEmbedUrl}
+              title={`Mapa de ${settings.brandName}`}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              tabIndex={-1}
+            />
+            <a href={settings.mapHref} target="_blank" rel="noreferrer">Ver en Google Maps <Arrow /></a>
           </div>
 
           <div className="home-visit-strip__contact">
