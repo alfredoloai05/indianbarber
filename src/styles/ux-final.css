@@ -1,0 +1,470 @@
+/* Final UX pass: hierarchy, legibility, rhythm and mobile density. */
+
+/* Navigation: premium can still be readable. */
+.compact-space-nav__item > a {
+  font-size: clamp(0.78rem, 0.82vw, 0.875rem) !important;
+  letter-spacing: 0.055em !important;
+  color: rgb(255 255 255 / 0.82) !important;
+}
+
+.compact-space-nav__item > a.is-active,
+.compact-space-nav__item > a:hover,
+.compact-space-nav__item > a:focus-visible {
+  color: #fff !important;
+}
+
+.compact-space-nav__submenu a {
+  min-height: 3rem !important;
+  font-size: clamp(0.72rem, 0.76vw, 0.81rem) !important;
+  letter-spacing: 0.055em !important;
+}
+
+.compact-booking {
+  font-size: clamp(0.74rem, 0.78vw, 0.81rem) !important;
+  letter-spacing: 0.07em !important;
+}
+
+.menu-overlay__secondary-label {
+  margin: 2.2rem 0 0.75rem;
+  color: rgb(255 255 255 / 0.42);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.menu-overlay__secondary-item a {
+  font-size: clamp(1.35rem, 4.6vw, 2.2rem) !important;
+}
+
+/* Home trust band: proof before spectacle. */
+.home-proof-band {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(2rem, 5vw, 6rem);
+  align-items: end;
+  padding: clamp(3.25rem, 5.5vw, 5.5rem) max(1.25rem, calc((100vw - 1560px) / 2));
+  color: #17140f;
+  background: #f2ede4;
+  border-block: 1px solid rgb(23 20 15 / 0.14);
+}
+
+.home-proof-band__intro > span,
+.home-results header span,
+.home-guidance > div > span {
+  color: #8a7142;
+  font-size: 0.67rem;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.home-proof-band__intro h2 {
+  max-width: 12ch;
+  margin: 0.8rem 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 4.5vw, 4.9rem);
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+}
+
+.home-proof-band__items {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid rgb(23 20 15 / 0.18);
+}
+
+.home-proof-band__items article {
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.55rem;
+  padding: 1.3rem;
+  border-right: 1px solid rgb(23 20 15 / 0.14);
+}
+
+.home-proof-band__items article:last-child { border-right: 0; }
+.home-proof-band__items strong {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 4.4vw, 4.9rem);
+  font-weight: 400;
+  line-height: 0.8;
+}
+.home-proof-band__items span {
+  max-width: 18ch;
+  color: rgb(23 20 15 / 0.62);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+/* Four spaces: keep the concept, stop it competing with the hero. */
+.service-portals--house .service-portals__grid {
+  min-height: clamp(620px, 74svh, 800px) !important;
+}
+
+.service-portal__ambient {
+  animation: none !important;
+  opacity: 0.12 !important;
+  background:
+    radial-gradient(circle at 52% 22%, rgb(212 175 104 / 0.12), transparent 34%),
+    linear-gradient(180deg, transparent, rgb(0 0 0 / 0.14)) !important;
+}
+
+.service-portal__ambient::before,
+.service-portal__ambient::after {
+  display: none !important;
+  animation: none !important;
+}
+
+.service-portal:not(.is-active)::after {
+  animation: none !important;
+  opacity: 0.08 !important;
+}
+
+.service-portal__details {
+  transition: opacity 220ms ease, transform 280ms var(--ease-out-expo);
+}
+
+.service-portal__details[aria-hidden='true'] {
+  opacity: 0 !important;
+  transform: translateY(12px);
+  pointer-events: none !important;
+}
+
+.service-portal__details[aria-hidden='false'] {
+  opacity: 1 !important;
+  transform: none;
+  pointer-events: auto !important;
+}
+
+.service-portal__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 1rem;
+  margin: 0 0 0.9rem;
+}
+
+.service-portal__meta span {
+  color: #f0d397;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+/* Results: one real proof-oriented light section instead of another dark spectacle. */
+.home-results {
+  padding: clamp(4rem, 7vw, 7rem) max(1.25rem, calc((100vw - 1560px) / 2));
+  color: #17140f;
+  background: #f4efe6;
+}
+
+.home-results > header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.5fr);
+  gap: clamp(2rem, 5vw, 6rem);
+  align-items: end;
+  margin-bottom: clamp(2.2rem, 4vw, 4rem);
+}
+
+.home-results h2 {
+  max-width: 9ch;
+  margin: 0.7rem 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 5vw, 5.25rem);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+}
+
+.home-results header > div:last-child {
+  justify-self: end;
+  max-width: 34rem;
+}
+
+.home-results header p {
+  margin: 0 0 1rem;
+  color: rgb(23 20 15 / 0.62);
+  line-height: 1.6;
+}
+
+.home-results header a {
+  color: #17140f;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.home-results__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.home-results__grid figure {
+  position: relative;
+  grid-column: span 4;
+  min-height: 290px;
+  margin: 0;
+  overflow: hidden;
+  background: #d8d0c2;
+}
+
+.home-results__grid figure:nth-child(1),
+.home-results__grid figure:nth-child(4) {
+  grid-column: span 6;
+  min-height: 390px;
+}
+
+.home-results__grid figure:nth-child(2),
+.home-results__grid figure:nth-child(3),
+.home-results__grid figure:nth-child(5),
+.home-results__grid figure:nth-child(6) {
+  grid-column: span 3;
+}
+
+.home-results__grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 450ms var(--ease-out-expo);
+}
+
+.home-results__grid figure:hover img { transform: scale(1.02); }
+.home-results__grid figcaption {
+  position: absolute;
+  inset: auto 1rem 1rem;
+  padding: 0.45rem 0.6rem;
+  color: white;
+  background: rgb(10 10 10 / 0.66);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+
+/* Why Indian: concrete, light and shorter. */
+.home-value-bridge--light {
+  color: #17140f !important;
+  background: #e8dcc8 !important;
+  border-block-color: rgb(23 20 15 / 0.14) !important;
+}
+
+.home-value-bridge--light .home-value-bridge__header > span { color: #7c6338 !important; }
+.home-value-bridge--light .home-value-bridge__header h2 {
+  max-width: 11ch;
+  font-size: clamp(3rem, 5vw, 5.25rem) !important;
+}
+.home-value-bridge--light .home-value-bridge__header p,
+.home-value-bridge--light .home-value-bridge__grid p { color: rgb(23 20 15 / 0.62) !important; }
+.home-value-bridge--light .home-value-bridge__grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  border-block-color: rgb(23 20 15 / 0.17) !important;
+}
+.home-value-bridge--light .home-value-bridge__grid article {
+  min-height: 180px !important;
+  border-right-color: rgb(23 20 15 / 0.14) !important;
+}
+.home-value-bridge--light .home-value-bridge__actions a { color: #17140f !important; }
+.home-value-bridge--light .home-value-bridge__actions a:first-child {
+  color: white !important;
+  background: #17140f !important;
+}
+.home-value-bridge--light .home-value-bridge__actions a:last-child { border-bottom-color: rgb(23 20 15 / 0.42) !important; }
+
+/* Gift Cards remains premium without becoming another hero. */
+.home-gift {
+  min-height: clamp(430px, 50vh, 560px) !important;
+  gap: clamp(2rem, 5vw, 6rem) !important;
+  padding-top: clamp(3rem, 5vw, 5rem) !important;
+  padding-bottom: clamp(3rem, 5vw, 5rem) !important;
+}
+.home-gift__card { width: min(430px, 92%) !important; }
+.home-gift__card::before { animation: none !important; opacity: 0.3; }
+.home-gift__copy h2 {
+  max-width: 9ch !important;
+  font-size: clamp(3rem, 5vw, 5.2rem) !important;
+}
+
+/* Guidance replaces the oversized suggestion form. */
+.home-guidance {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(2rem, 5vw, 6rem);
+  align-items: end;
+  padding: clamp(3.5rem, 6vw, 6rem) max(1.25rem, calc((100vw - 1560px) / 2));
+  color: #17140f;
+  background: #f3eee5;
+  border-bottom: 1px solid rgb(23 20 15 / 0.15);
+}
+.home-guidance h2 {
+  max-width: 12ch;
+  margin: 0.8rem 0 1rem;
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 4.8vw, 5rem);
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.05em;
+}
+.home-guidance p {
+  max-width: 42rem;
+  margin: 0;
+  color: rgb(23 20 15 / 0.62);
+  line-height: 1.65;
+}
+.home-guidance__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+.home-guidance__actions a {
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+  border: 1px solid #17140f;
+  color: #17140f;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.home-guidance__actions a:first-child { color: white; background: #17140f; }
+
+/* Internal pages: restore hierarchy. */
+.space-hero__copy h1 {
+  max-width: 11ch !important;
+  font-size: clamp(4.2rem, 8vw, 8.8rem) !important;
+  line-height: 0.82 !important;
+}
+.space-hero--fotografia .space-hero__copy h1 {
+  font-size: clamp(4rem, 7vw, 7.8rem) !important;
+}
+.space-services > header h2,
+.space-team > header h2,
+.space-stylebook > header h2,
+.space-journal > header h2,
+.space-benefits > header h2 {
+  font-size: clamp(3rem, 5vw, 5.5rem) !important;
+  line-height: 0.92 !important;
+}
+.space-team__grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+  background: transparent !important;
+  gap: 1px;
+}
+.space-team__grid article { min-height: 480px !important; }
+.space-stylebook__grid { align-items: stretch; }
+
+/* Booking: four choices should remain 2x2 on phones. */
+.booking-experience__header--direct h1 {
+  font-size: clamp(3rem, 4.6vw, 5.1rem) !important;
+}
+.booking-area-tabs button { min-height: clamp(165px, 16vw, 230px) !important; }
+.booking-area-tabs span { font-size: clamp(1.7rem, 2.5vw, 2.8rem) !important; }
+
+@media (max-width: 1050px) {
+  .home-proof-band,
+  .home-results > header,
+  .home-guidance {
+    grid-template-columns: 1fr;
+  }
+  .home-results header > div:last-child { justify-self: start; }
+  .home-value-bridge--light .home-value-bridge__grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+  .service-portals--house .service-portals__grid { min-height: auto !important; }
+  .service-portals--house .service-portal { min-height: 230px !important; }
+  .service-portals--house .service-portal.is-active { min-height: 500px !important; }
+}
+
+@media (max-width: 760px) {
+  .home-proof-band { padding: 3rem 1.2rem; }
+  .home-proof-band__items { grid-template-columns: 1fr; }
+  .home-proof-band__items article {
+    min-height: 110px;
+    border-right: 0;
+    border-bottom: 1px solid rgb(23 20 15 / 0.14);
+  }
+  .home-proof-band__items article:last-child { border-bottom: 0; }
+
+  .service-portals--house .service-portals__grid { grid-template-columns: 1fr !important; }
+  .service-portals--house .service-portal,
+  .service-portals--house .service-portal.is-active { grid-column: 1 !important; }
+  .service-portals--house .service-portal { min-height: 190px !important; }
+  .service-portals--house .service-portal.is-active { min-height: 440px !important; }
+  .service-portals--house .service-portal.is-active .service-portal__trigger { height: 34% !important; }
+  .service-portals--house .service-portal__details {
+    width: calc(100% - 2rem) !important;
+    left: 1rem !important;
+    bottom: 1rem !important;
+  }
+  .service-portal__details p { line-height: 1.5; }
+  .service-portal__details ul { margin-bottom: 0.8rem; }
+
+  .home-results { padding: 3.5rem 1rem; }
+  .home-results__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.55rem; }
+  .home-results__grid figure,
+  .home-results__grid figure:nth-child(n) {
+    grid-column: span 1 !important;
+    min-height: 210px !important;
+  }
+
+  .home-value-bridge--light .home-value-bridge__grid { grid-template-columns: 1fr !important; }
+  .home-value-bridge--light .home-value-bridge__grid article {
+    min-height: 135px !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid rgb(23 20 15 / 0.14) !important;
+  }
+  .home-value-bridge--light .home-value-bridge__grid article:last-child { border-bottom: 0 !important; }
+
+  .home-guidance { padding: 3.5rem 1.2rem; }
+  .home-guidance__actions { align-items: stretch; flex-direction: column; }
+  .home-guidance__actions a { width: 100%; }
+
+  .home-gift { padding: 3.5rem 1rem !important; }
+  .home-gift__copy h2 { font-size: clamp(2.8rem, 13vw, 4.5rem) !important; }
+
+  .booking-area-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .booking-area-tabs button { min-height: 128px !important; }
+  .booking-area-tabs span {
+    max-width: calc(100% - 1.5rem) !important;
+    inset: auto 0.8rem 0.8rem !important;
+    font-size: clamp(1.25rem, 6vw, 1.8rem) !important;
+    white-space: normal !important;
+  }
+
+  .space-hero__copy h1,
+  .space-hero--fotografia .space-hero__copy h1 {
+    font-size: clamp(3.6rem, 14vw, 6rem) !important;
+  }
+  .space-services > header h2,
+  .space-team > header h2,
+  .space-stylebook > header h2,
+  .space-journal > header h2,
+  .space-benefits > header h2 {
+    font-size: clamp(2.8rem, 12vw, 4.5rem) !important;
+  }
+}
+
+@media (max-width: 440px) {
+  .booking-area-tabs button { min-height: 112px !important; }
+  .booking-area-tabs span { font-size: 1.25rem !important; }
+  .compact-brand span { font-size: 0.72rem !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-portal,
+  .service-portal__poster img,
+  .service-portal__details,
+  .home-results__grid img,
+  .home-gift__card::before {
+    animation: none !important;
+    transition: none !important;
+  }
+}

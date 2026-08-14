@@ -38,6 +38,7 @@ import './styles/navigation-home-cleanup-v24.css';
 import './styles/booking-home-functional-v26.css';
 import './styles/service-booking-layout-v27.css';
 import './styles/reservation-home-v28.css';
+import './styles/ux-final.css';
 
 const root = document.getElementById('root');
 
