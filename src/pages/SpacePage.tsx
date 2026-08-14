@@ -7,7 +7,6 @@ import {
   type JournalArticleContent,
   type PromotionContent,
   type StyleBookFrame,
-  type TeamMemberContent,
   useGlobalSettings,
   useJournalArticlesContent,
   usePromotionsContent,
@@ -16,7 +15,6 @@ import {
   useStyleBookContent,
   useTeamMembersContent,
 } from '../content/useSiteContent';
-import { genericTeamBySpace } from '../data/experienceMedia';
 import type { SpaceId } from '../data/serviceCatalog';
 import { bookingPath } from '../utils/booking';
 import { spacePath } from '../utils/spaces';
@@ -28,12 +26,12 @@ const sectionDescriptions: Record<SpaceId, {
 }> = {
   barberia: {
     team: 'Conoce a quienes trabajan forma, textura y detalle detrás de cada resultado.',
-    styleBook: 'Referencias de corte, barba y acabado para llegar con una idea más clara.',
+    styleBook: 'Cortes, barba y acabados para llegar con una referencia más clara.',
     advice: 'Guías breves para mantener el corte y la barba mejor entre una visita y la siguiente.',
   },
   fotografia: {
     team: 'Dirección y acompañamiento para convertir una idea en una sesión con intención.',
-    styleBook: 'Retratos, producto y contenido visual que ayudan a definir el lenguaje de tu sesión.',
+    styleBook: 'Retratos, producto y contenido visual para entender el lenguaje del estudio antes de reservar.',
     advice: 'Preparación, vestuario y decisiones prácticas antes de entrar al estudio.',
   },
   nails: {
@@ -43,8 +41,35 @@ const sectionDescriptions: Record<SpaceId, {
   },
   spa: {
     team: 'Atención coordinada según el ritual, la valoración y el horario seleccionado.',
-    styleBook: 'Una mirada al ambiente, los procesos y el ritmo de una experiencia de cuidado.',
+    styleBook: 'Ambiente, procesos y referencias para entender mejor la experiencia antes de reservar.',
     advice: 'Recomendaciones para llegar preparado y prolongar el bienestar después de la visita.',
+  },
+};
+
+const sectionTitles: Record<SpaceId, {
+  team: string;
+  styleBook: string;
+  advice: string;
+}> = {
+  barberia: {
+    team: 'Quienes te atienden.',
+    styleBook: 'Resultados y referencias.',
+    advice: 'Cuida el resultado.',
+  },
+  fotografia: {
+    team: 'Dirección de la sesión.',
+    styleBook: 'Portfolio.',
+    advice: 'Antes de tu sesión.',
+  },
+  nails: {
+    team: 'Tu especialista.',
+    styleBook: 'Resultados y diseños.',
+    advice: 'Cuida tus uñas.',
+  },
+  spa: {
+    team: 'Quienes te acompañan.',
+    styleBook: 'Ambiente y rituales.',
+    advice: 'Antes y después.',
   },
 };
 
@@ -57,7 +82,7 @@ function serviceGroupId(title: string) {
     .replace(/^-+|-+$/g, '');
 }
 
-function memberMatchesSpace(member: TeamMemberContent, id: SpaceId) {
+function memberMatchesSpace(member: ReturnType<typeof useTeamMembersContent>[number], id: SpaceId) {
   if (member.areas?.length) return member.areas.includes(id);
   if (/ceo|coordinador/i.test(member.role)) return false;
   if (id === 'barberia') return /barber/i.test(member.role);
@@ -120,12 +145,175 @@ export function SpacePage({ spaceId }: { spaceId: SpaceId }) {
   if (!area || !page) return null;
 
   const team = allTeam.filter((member) => memberMatchesSpace(member, spaceId));
-  const visibleTeam: TeamMemberContent[] = team.length ? team : [genericTeamBySpace[spaceId]];
-  const frames = styleBook.frames.filter((frame) => frameMatchesSpace(frame, spaceId));
-  const articles = allArticles.filter((article) => articleMatchesSpace(article, spaceId));
+  const frames = styleBook.frames.filter((frame) => frameMatchesSpace(frame, spaceId)).slice(0, 6);
+  const articles = allArticles.filter((article) => articleMatchesSpace(article, spaceId)).slice(0, 3);
   const promotions = allPromotions.filter((promotion) => promotionMatchesSpace(promotion, spaceId));
   const activeMedia = selectedService?.media ?? area.media;
   const descriptions = sectionDescriptions[spaceId];
+  const titles = sectionTitles[spaceId];
+
+  const servicesSection = (
+    <section key="services" id="servicios" className="space-services" aria-labelledby="space-services-title">
+      <header className="space-section-heading">
+        <h2 id="space-services-title">{page.servicesTitle}</h2>
+        <p>{area.summary}</p>
+      </header>
+
+      <div className="space-services__workspace">
+        <div className="space-service-preview" key={selectedService?.name}>
+          {activeMedia.video ? (
+            <ViewportVideo
+              src={activeMedia.video}
+              poster={activeMedia.poster}
+              label={selectedService?.name ?? area.title}
+            />
+          ) : (
+            <img src={activeMedia.poster} alt={selectedService?.name ?? area.title} loading="lazy" />
+          )}
+          <div className="space-service-preview__veil" aria-hidden="true" />
+          <div className="space-service-preview__copy">
+            <span>{selectedService?.group}</span>
+            <h3>{selectedService?.name}</h3>
+            <p>{selectedService?.note ?? area.summary}</p>
+            <div><strong>{selectedService?.duration}</strong><b>{selectedService?.price}</b></div>
+            <Link to={bookingPath(spaceId, selectedService?.name)}>Reservar este servicio ↗</Link>
+          </div>
+        </div>
+
+        <div className="space-service-list" role="list" aria-label={`Servicios de ${area.title}`}>
+          {area.groups.map((group) => {
+            const isOpen = openGroup === group.title;
+            return (
+              <section
+                id={serviceGroupId(group.title)}
+                className={`space-service-group${isOpen ? ' is-open' : ''}`}
+                key={group.title}
+                role="listitem"
+              >
+                <button
+                  type="button"
+                  className="space-service-group__toggle"
+                  aria-expanded={isOpen}
+                  onClick={() => setOpenGroups((current) => ({
+                    ...current,
+                    [spaceId]: isOpen ? '' : group.title,
+                  }))}
+                >
+                  <span>{group.title}</span>
+                  <small>{group.items.length} {group.items.length === 1 ? 'opción' : 'opciones'}</small>
+                  <i aria-hidden="true">{isOpen ? '−' : '+'}</i>
+                </button>
+
+                {isOpen ? (
+                  <div className="space-service-group__items">
+                    {group.items.map((service) => (
+                      <button
+                        type="button"
+                        className={service.name === selectedService?.name ? 'is-active' : undefined}
+                        key={service.name}
+                        onClick={() => setSelectedServices((current) => ({
+                          ...current,
+                          [spaceId]: service.name,
+                        }))}
+                      >
+                        <strong>{service.name}</strong>
+                        <small>{service.duration} · {service.price}</small>
+                        <i aria-hidden="true">↗</i>
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+              </section>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+
+  const teamSection = team.length ? (
+    <section key="team" id="equipo" className="space-team" aria-labelledby="space-team-title">
+      <header className="space-section-heading">
+        <h2 id="space-team-title">{titles.team}</h2>
+        <p>{descriptions.team}</p>
+      </header>
+      <div className="space-team__grid">
+        {team.map((member) => (
+          <article key={member.name}>
+            <img src={member.image} alt={`${member.name}, ${member.role}`} loading="lazy" />
+            <div><span>{member.role}</span><h3>{member.name}</h3><p>{member.statement}</p></div>
+          </article>
+        ))}
+      </div>
+    </section>
+  ) : null;
+
+  const styleBookSection = frames.length ? (
+    <section key="style-book" id="style-book" className="space-stylebook" aria-labelledby="space-stylebook-title">
+      <header className="space-section-heading space-section-heading--with-link">
+        <h2 id="space-stylebook-title">{titles.styleBook}</h2>
+        <div>
+          <p>{descriptions.styleBook}</p>
+          <Link to={bookingPath(spaceId)}>{spaceId === 'fotografia' ? 'Solicitar una sesión' : 'Reservar desde una referencia'} ↗</Link>
+        </div>
+      </header>
+      <div className="space-stylebook__grid">
+        {frames.map((frame, index) => (
+          <figure key={`${frame.label}-${index}`}>
+            <img src={frame.image} alt={frame.alt} loading="lazy" />
+            <figcaption>{frame.label}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+  ) : null;
+
+  const journalSection = articles.length ? (
+    <section key="journal" id="consejos" className="space-journal" aria-labelledby="space-journal-title">
+      <header className="space-section-heading">
+        <h2 id="space-journal-title">{titles.advice}</h2>
+        <p>{descriptions.advice}</p>
+      </header>
+      <div className="space-journal__grid">
+        {articles.map((article) => (
+          <Link to={`/inspirate/${article.slug}`} key={article.slug}>
+            <img src={article.image} alt="" loading="lazy" />
+            <div><span>{article.type}</span><h3>{article.title}</h3><p>{article.excerpt}</p><i>Leer guía ↗</i></div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  ) : null;
+
+  const promotionsSection = promotions.length ? (
+    <section key="promotions" id="beneficios" className="space-benefits space-benefits--promotions-only" aria-label="Promociones disponibles">
+      <div className="space-promotions">
+        {promotions.map((promotion) => (
+          <Link to={bookingPath(spaceId)} key={`${promotion.eyebrow}-${promotion.title}`}>
+            <span>{promotion.eyebrow}</span><strong>{promotion.title}</strong><p>{promotion.note}</p><i>↗</i>
+          </Link>
+        ))}
+      </div>
+    </section>
+  ) : null;
+
+  const inquirySection = (
+    <div key="inquiry" id="consulta" className="space-inquiry-wrap">
+      <WhatsappInquiryForm
+        title={page.inquiryTitle}
+        lead={page.inquiryLead}
+        context={area.title}
+        compact
+      />
+    </div>
+  );
+
+  const orderedSections = {
+    barberia: [servicesSection, teamSection, styleBookSection, promotionsSection, journalSection, inquirySection],
+    fotografia: [styleBookSection, servicesSection, teamSection, journalSection, inquirySection, promotionsSection],
+    nails: [servicesSection, styleBookSection, teamSection, journalSection, promotionsSection, inquirySection],
+    spa: [servicesSection, styleBookSection, teamSection, promotionsSection, journalSection, inquirySection],
+  }[spaceId];
 
   return (
     <>
@@ -141,163 +329,21 @@ export function SpacePage({ spaceId }: { spaceId: SpaceId }) {
           <div aria-hidden="true" />
         </div>
         <div className="space-hero__copy">
-          <Link to="/">Indian House</Link>
+          <Link to="/">{settings.brandName}</Link>
           <h1>{page.title}</h1>
           <p>{page.lead}</p>
           <div>
-            <a href="#servicios">Explorar el espacio ↓</a>
-            <Link to={bookingPath(spaceId)}>Reservar ↗</Link>
+            <a href={spaceId === 'fotografia' && frames.length ? '#style-book' : '#servicios'}>
+              {spaceId === 'fotografia' ? 'Ver portfolio' : 'Explorar el espacio'} ↓
+            </a>
+            <Link to={bookingPath(spaceId)}>{spaceId === 'fotografia' ? 'Solicitar sesión' : 'Reservar'} ↗</Link>
           </div>
         </div>
       </section>
 
-      <section id="servicios" className="space-services" aria-labelledby="space-services-title">
-        <header className="space-section-heading">
-          <h2 id="space-services-title">{page.servicesTitle}</h2>
-          <p>{area.summary}</p>
-        </header>
+      {orderedSections}
 
-        <div className="space-services__workspace">
-          <div className="space-service-preview" key={selectedService?.name}>
-            {activeMedia.video ? (
-              <ViewportVideo
-                src={activeMedia.video}
-                poster={activeMedia.poster}
-                label={selectedService?.name ?? area.title}
-              />
-            ) : (
-              <img src={activeMedia.poster} alt={selectedService?.name ?? area.title} loading="lazy" />
-            )}
-            <div className="space-service-preview__veil" aria-hidden="true" />
-            <div className="space-service-preview__copy">
-              <span>{selectedService?.group}</span>
-              <h3>{selectedService?.name}</h3>
-              <p>{selectedService?.note ?? area.summary}</p>
-              <div><strong>{selectedService?.duration}</strong><b>{selectedService?.price}</b></div>
-              <Link to={bookingPath(spaceId, selectedService?.name)}>Reservar este servicio ↗</Link>
-            </div>
-          </div>
-
-          <div className="space-service-list" role="list" aria-label={`Servicios de ${area.title}`}>
-            {area.groups.map((group) => {
-              const isOpen = openGroup === group.title;
-              return (
-                <section
-                  id={serviceGroupId(group.title)}
-                  className={`space-service-group${isOpen ? ' is-open' : ''}`}
-                  key={group.title}
-                  role="listitem"
-                >
-                  <button
-                    type="button"
-                    className="space-service-group__toggle"
-                    aria-expanded={isOpen}
-                    onClick={() => setOpenGroups((current) => ({
-                      ...current,
-                      [spaceId]: isOpen ? '' : group.title,
-                    }))}
-                  >
-                    <span>{group.title}</span>
-                    <small>{group.items.length} {group.items.length === 1 ? 'opción' : 'opciones'}</small>
-                    <i aria-hidden="true">{isOpen ? '−' : '+'}</i>
-                  </button>
-
-                  {isOpen ? (
-                    <div className="space-service-group__items">
-                      {group.items.map((service) => (
-                        <button
-                          type="button"
-                          className={service.name === selectedService?.name ? 'is-active' : undefined}
-                          key={service.name}
-                          onClick={() => setSelectedServices((current) => ({
-                            ...current,
-                            [spaceId]: service.name,
-                          }))}
-                        >
-                          <strong>{service.name}</strong>
-                          <small>{service.duration} · {service.price}</small>
-                          <i aria-hidden="true">↗</i>
-                        </button>
-                      ))}
-                    </div>
-                  ) : null}
-                </section>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section id="equipo" className="space-team" aria-labelledby="space-team-title">
-        <header className="space-section-heading">
-          <h2 id="space-team-title">{page.teamTitle}</h2>
-          <p>{descriptions.team}</p>
-        </header>
-        <div className="space-team__grid">
-          {visibleTeam.map((member) => (
-            <article key={member.name}>
-              <img src={member.image} alt={`${member.name}, ${member.role}`} loading="lazy" />
-              <div><span>{member.role}</span><h3>{member.name}</h3><p>{member.statement}</p></div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section id="style-book" className="space-stylebook" aria-labelledby="space-stylebook-title">
-        <header className="space-section-heading space-section-heading--with-link">
-          <h2 id="space-stylebook-title">{page.styleBookTitle}</h2>
-          <div>
-            <p>{descriptions.styleBook}</p>
-            <Link to={bookingPath(spaceId)}>Reservar desde una referencia ↗</Link>
-          </div>
-        </header>
-        <div className="space-stylebook__grid">
-          {(frames.length ? frames : styleBook.frames.slice(0, 3)).slice(0, 6).map((frame, index) => (
-            <figure key={`${frame.label}-${index}`}>
-              <img src={frame.image} alt={frame.alt} loading="lazy" />
-              <figcaption>{frame.label}</figcaption>
-            </figure>
-          ))}
-        </div>
-      </section>
-
-      <section id="consejos" className="space-journal" aria-labelledby="space-journal-title">
-        <header className="space-section-heading">
-          <h2 id="space-journal-title">{page.adviceTitle}</h2>
-          <p>{descriptions.advice}</p>
-        </header>
-        <div className="space-journal__grid">
-          {articles.slice(0, 3).map((article) => (
-            <Link to={`/inspirate/${article.slug}`} key={article.slug}>
-              <img src={article.image} alt="" loading="lazy" />
-              <div><span>{article.type}</span><h3>{article.title}</h3><p>{article.excerpt}</p><i>Leer guía ↗</i></div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {promotions.length ? (
-        <section id="beneficios" className="space-benefits space-benefits--promotions-only" aria-label="Promociones disponibles">
-          <div className="space-promotions">
-            {promotions.map((promotion) => (
-              <Link to={bookingPath(spaceId)} key={`${promotion.eyebrow}-${promotion.title}`}>
-                <span>{promotion.eyebrow}</span><strong>{promotion.title}</strong><p>{promotion.note}</p><i>↗</i>
-              </Link>
-            ))}
-          </div>
-        </section>
-      ) : null}
-
-      <div id="consulta" className="space-inquiry-wrap">
-        <WhatsappInquiryForm
-          title={page.inquiryTitle}
-          lead={page.inquiryLead}
-          context={area.title}
-          compact
-        />
-      </div>
-
-      <nav className="space-next" aria-label="Explorar otros espacios de Indian House">
+      <nav className="space-next" aria-label={`Explorar otros espacios de ${settings.brandName}`}>
         {catalog.filter((item) => item.id !== spaceId).map((item) => (
           <Link to={spacePath(item.id)} key={item.id}>{item.title} ↗</Link>
         ))}
