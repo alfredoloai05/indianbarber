@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import {
   AnimatePresence,
   motion,
-  useMotionValue,
   useReducedMotion,
   useScroll,
   useSpring,
@@ -13,17 +12,18 @@ import type { SpaceId } from '../data/serviceCatalog';
 import { spaceLabels, spaceOrder, spacePath } from '../utils/spaces';
 
 const secondaryNavigation = [
+  { label: 'Style Book', to: '/style-book' },
+  { label: 'Equipo', to: '/equipo' },
+  { label: 'Inspírate', to: '/inspirate' },
+  { label: 'Promociones', to: '/promociones' },
   { label: 'Gift Cards', to: '/tarjetas-regalo' },
   { label: 'Contacto', to: '/contacto' },
 ];
 
 const spaceSectionNavigation = [
   { label: 'Servicios', anchor: 'servicios' },
+  { label: 'Resultados', anchor: 'style-book' },
   { label: 'Equipo', anchor: 'equipo' },
-  { label: 'Style Book', anchor: 'style-book' },
-  { label: 'Consejos', anchor: 'consejos' },
-  { label: 'Beneficios', anchor: 'beneficios' },
-  { label: 'Consulta', anchor: 'consulta' },
 ] as const;
 
 export function SiteLayout() {
@@ -33,8 +33,6 @@ export function SiteLayout() {
   const location = useLocation();
   const reduceMotion = useReducedMotion();
   const settings = useGlobalSettings();
-  const cursorX = useMotionValue(-500);
-  const cursorY = useMotionValue(-500);
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 30, restDelta: 0.001 });
 
@@ -54,16 +52,6 @@ export function SiteLayout() {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
-
-  useEffect(() => {
-    if (reduceMotion || !window.matchMedia('(pointer: fine)').matches) return undefined;
-    const moveCursor = (event: PointerEvent) => {
-      cursorX.set(event.clientX);
-      cursorY.set(event.clientY);
-    };
-    window.addEventListener('pointermove', moveCursor, { passive: true });
-    return () => window.removeEventListener('pointermove', moveCursor);
-  }, [cursorX, cursorY, reduceMotion]);
 
   useEffect(() => {
     const closeOutside = (event: PointerEvent) => {
@@ -93,7 +81,6 @@ export function SiteLayout() {
     <div className="site-shell site-shell--brand">
       <a className="skip-link" href="#main-content">Saltar al contenido</a>
       <motion.div className="scroll-progress" style={{ scaleX: progress }} />
-      {!reduceMotion ? <motion.div className="ambient-cursor" style={{ x: cursorX, y: cursorY }} aria-hidden="true" /> : null}
 
       <header className="site-header site-header--compact site-header--four-spaces">
         <Link className="compact-brand" to="/" aria-label={`${settings.brandName}, inicio`} onClick={closeMobileMenu}>
@@ -101,7 +88,7 @@ export function SiteLayout() {
           <span>{settings.brandName.toUpperCase()}</span>
         </Link>
 
-        <nav className="compact-space-nav" aria-label="Espacios de Indian House">
+        <nav className="compact-space-nav" aria-label={`Espacios de ${settings.brandName}`}>
           {primaryNavigation.map((item) => {
             const isOpen = openSpaceMenu === item.id;
             return (
@@ -134,7 +121,7 @@ export function SiteLayout() {
                   <span aria-hidden="true">⌄</span>
                 </button>
 
-                <div className="compact-space-nav__submenu" aria-label={`Secciones de ${item.label}`}>
+                <div className="compact-space-nav__submenu" aria-label={`Accesos de ${item.label}`}>
                   {spaceSectionNavigation.map((subItem) => (
                     <Link
                       key={subItem.anchor}
@@ -144,6 +131,9 @@ export function SiteLayout() {
                       <span>{subItem.label}</span><i aria-hidden="true">↘</i>
                     </Link>
                   ))}
+                  <Link to={bookingPath(item.id)} onClick={() => setOpenSpaceMenu(null)}>
+                    <span>Reservar</span><i aria-hidden="true">↗</i>
+                  </Link>
                 </div>
               </div>
             );
@@ -172,10 +162,10 @@ export function SiteLayout() {
         {menuOpen && (
           <motion.div
             className="menu-overlay menu-overlay--brand menu-overlay--spaces"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.24 }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}
           >
             <img className="menu-overlay__brand-mark" src={settings.logoMark} alt="" />
-            <div className="menu-overlay__index">INDIAN HOUSE · LOJA</div>
+            <div className="menu-overlay__index">{settings.brandName.toUpperCase()} · INDIAN HOUSE · LOJA</div>
             <nav aria-label="Navegación móvil">
               {primaryNavigation.map((item, index) => {
                 const isOpen = mobileSpaceMenu === item.id;
@@ -183,15 +173,15 @@ export function SiteLayout() {
                   <motion.div
                     className={`menu-overlay__space${isOpen ? ' is-open' : ''}`}
                     key={item.to}
-                    initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+                    initial={reduceMotion ? false : { opacity: 0, y: 14 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: reduceMotion ? 0 : index * 0.04 }}
+                    transition={{ delay: reduceMotion ? 0 : index * 0.035 }}
                   >
                     <div className="menu-overlay__space-row">
                       <NavLink to={item.to} onClick={closeMobileMenu}>{item.label}</NavLink>
                       <button
                         type="button"
-                        aria-label={isOpen ? `Cerrar secciones de ${item.label}` : `Abrir secciones de ${item.label}`}
+                        aria-label={isOpen ? `Cerrar accesos de ${item.label}` : `Abrir accesos de ${item.label}`}
                         aria-expanded={isOpen}
                         onClick={() => setMobileSpaceMenu((current) => current === item.id ? null : item.id)}
                       >
@@ -215,18 +205,22 @@ export function SiteLayout() {
                               {subItem.label}
                             </Link>
                           ))}
+                          <Link to={bookingPath(item.id)} onClick={closeMobileMenu}>Reservar</Link>
                         </motion.div>
                       ) : null}
                     </AnimatePresence>
                   </motion.div>
                 );
               })}
+
+              <div className="menu-overlay__secondary-label">Explorar Indian</div>
               {secondaryNavigation.map((item, index) => (
                 <motion.div
+                  className="menu-overlay__secondary-item"
                   key={item.to}
-                  initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+                  initial={reduceMotion ? false : { opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: reduceMotion ? 0 : (primaryNavigation.length + index) * 0.04 }}
+                  transition={{ delay: reduceMotion ? 0 : (primaryNavigation.length + index) * 0.025 }}
                 >
                   <NavLink to={item.to} onClick={closeMobileMenu}>{item.label}</NavLink>
                 </motion.div>
@@ -245,13 +239,14 @@ export function SiteLayout() {
         <div className="compact-footer__brand">
           <Link to="/" aria-label={`${settings.brandName}, inicio`}>
             <img src={settings.logoMark} alt="" />
-            <strong>INDIAN HOUSE</strong>
+            <strong>{settings.brandName.toUpperCase()}</strong>
           </Link>
-          <span>Cuatro experiencias. Un mismo lugar.</span>
+          <span>Indian House · Cuatro experiencias. Un mismo lugar.</span>
         </div>
 
-        <nav className="compact-footer__nav" aria-label="Espacios de Indian House">
+        <nav className="compact-footer__nav" aria-label={`Espacios de ${settings.brandName}`}>
           {primaryNavigation.map((item) => <Link to={item.to} key={item.to}>{item.label}</Link>)}
+          <Link to="/style-book">Style Book</Link>
           <Link to="/tarjetas-regalo">Gift Cards</Link>
           <Link to="/contacto">Contacto</Link>
         </nav>
