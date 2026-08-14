@@ -4,14 +4,16 @@ import { Link } from 'react-router-dom';
 import { HomeGiftCards } from '../components/HomeGiftCards';
 import { Seo } from '../components/Seo';
 import { ViewportVideo } from '../components/ViewportVideo';
-import { WhatsappInquiryForm } from '../components/WhatsappInquiryForm';
 import {
   useGlobalSettings,
   useHomeHero,
+  useHomeProof,
   useHomeVisit,
   useServiceCatalogContent,
+  useStyleBookContent,
 } from '../content/useSiteContent';
 import { houseHeroMedia } from '../data/experienceMedia';
+import type { ServiceCatalogArea } from '../data/serviceCatalog';
 import { bookingPath } from '../utils/booking';
 import { spacePath } from '../utils/spaces';
 
@@ -19,12 +21,30 @@ function Arrow() {
   return <span aria-hidden="true">↗</span>;
 }
 
+function getAreaMeta(area: ServiceCatalogArea) {
+  const items = area.groups.flatMap((group) => group.items);
+  const numericPrices = items
+    .map((item) => item.price.match(/\d+(?:[.,]\d+)?/)?.[0])
+    .filter((value): value is string => Boolean(value))
+    .map((value) => Number(value.replace(',', '.')))
+    .filter((value) => Number.isFinite(value));
+  const minPrice = numericPrices.length ? Math.min(...numericPrices) : null;
+  const price = minPrice === null
+    ? items.find((item) => item.price)?.price ?? 'Consultar'
+    : `Desde USD ${minPrice.toLocaleString('es-EC', { maximumFractionDigits: 2 })}`;
+  const duration = items.find((item) => item.duration)?.duration ?? 'Según servicio';
+
+  return { price, duration };
+}
+
 export function HomePage() {
   const [activePortal, setActivePortal] = useState(0);
   const reduceMotion = useReducedMotion();
   const settings = useGlobalSettings();
   const hero = useHomeHero();
+  const proof = useHomeProof();
   const serviceCatalog = useServiceCatalogContent();
+  const styleBook = useStyleBookContent();
   const visit = useHomeVisit();
   const activeArea = serviceCatalog[activePortal] ?? serviceCatalog[0];
   const heroRepeatsAService = serviceCatalog.some(
@@ -34,26 +54,27 @@ export function HomePage() {
     ? { ...hero, ...houseHeroMedia }
     : hero;
   const mapEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(`${settings.address}, ${settings.city}`)}&output=embed`;
+  const resultFrames = styleBook.frames.slice(0, 6);
 
   return (
     <>
       <Seo
         title={`${settings.brandName} · Indian House en Loja`}
-        description="Indian House reúne barbería, estudio fotográfico, nails y SPA en el centro de Loja."
+        description={`${settings.brandName} reúne barbería, estudio fotográfico, nails y SPA en el centro de Loja.`}
       />
 
       <div className="art-home art-home--house">
         <section className="film-hero film-hero--integrated film-hero--without-ticker" aria-labelledby="film-hero-title">
           <motion.div
             className="film-hero__media"
-            initial={reduceMotion ? false : { opacity: 0, scale: 1.045, filter: 'blur(10px)' }}
-            animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            initial={reduceMotion ? false : { opacity: 0, scale: 1.025 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.72, ease: [0.16, 1, 0.3, 1] }}
           >
             <ViewportVideo
               src={resolvedHero.video}
               poster={resolvedHero.poster}
-              label={`Entrada a Indian House en ${settings.city}`}
+              label={`Entrada a ${settings.brandName} en ${settings.city}`}
               priority
             />
             <div className="film-hero__veil" />
@@ -62,9 +83,9 @@ export function HomePage() {
           <div className="film-hero__content">
             <motion.div
               className="film-hero__identity"
-              initial={reduceMotion ? false : { opacity: 0, y: -22 }}
+              initial={reduceMotion ? false : { opacity: 0, y: -16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.72, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.58, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
             >
               <img src={settings.logoLockup} alt={settings.brandName} />
               <div><span>{resolvedHero.location}</span><span>{resolvedHero.founded}</span></div>
@@ -72,31 +93,44 @@ export function HomePage() {
 
             <motion.div
               className="film-hero__statement"
-              initial={reduceMotion ? false : { opacity: 0, y: 34, clipPath: 'inset(0 0 18% 0)' }}
-              animate={{ opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)' }}
-              transition={{ duration: 0.78, delay: 0.26, ease: [0.16, 1, 0.3, 1] }}
+              initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.66, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
             >
               <h1 id="film-hero-title">{resolvedHero.title}</h1>
               <p>{resolvedHero.lead}</p>
-              <motion.div
-                className="film-hero__actions"
-                initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.58, delay: 0.48, ease: [0.16, 1, 0.3, 1] }}
-              >
+              <div className="film-hero__actions">
                 <Link to="/reservar">{resolvedHero.primaryLabel} <Arrow /></Link>
                 <a href="#espacios">Conocer los espacios</a>
-              </motion.div>
+              </div>
             </motion.div>
           </div>
         </section>
 
-        <section id="espacios" className="service-portals service-portals--house" aria-label="Espacios de Indian House">
+        {proof.items.length ? (
+          <section className="home-proof-band" aria-labelledby="home-proof-title">
+            <div className="home-proof-band__intro">
+              <span>Trayectoria y confianza</span>
+              <h2 id="home-proof-title">{proof.title}</h2>
+            </div>
+            <div className="home-proof-band__items">
+              {proof.items.map((item) => (
+                <article key={`${item.value}-${item.label}`}>
+                  <strong>{item.value}</strong>
+                  <span>{item.label}</span>
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        <section id="espacios" className="service-portals service-portals--house" aria-label={`Espacios de ${settings.brandName}`}>
           {activeArea ? (
             <div className="service-portals__grid" data-active={activeArea.id}>
               {serviceCatalog.map((area, index) => {
                 const isActive = activePortal === index;
                 const examples = area.groups.flatMap((group) => group.items).slice(0, 3);
+                const meta = getAreaMeta(area);
                 return (
                   <article
                     key={area.id}
@@ -106,14 +140,9 @@ export function HomePage() {
                   >
                     <div className="service-portal__poster"><img src={area.media.poster} alt="" loading={index === 0 ? 'eager' : 'lazy'} /></div>
                     {isActive && area.media.video ? (
-                      <motion.div
-                        className="service-portal__video"
-                        initial={reduceMotion ? false : { opacity: 0, scale: 1.035 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                      >
+                      <div className="service-portal__video">
                         <ViewportVideo src={area.media.video} poster={area.media.poster} label={`${area.title} en ${settings.brandName}`} />
-                      </motion.div>
+                      </div>
                     ) : null}
                     <div className="service-portal__ambient" aria-hidden="true" />
                     <div className="service-portal__veil" aria-hidden="true" />
@@ -126,21 +155,19 @@ export function HomePage() {
                     >
                       <strong>{area.title}</strong><span aria-hidden="true">+</span>
                     </button>
-                    <motion.div
+                    <div
                       id={`portal-${area.id}`}
                       className="service-portal__details"
-                      initial={false}
-                      animate={isActive ? { opacity: 1, y: 0, pointerEvents: 'auto' } : { opacity: 0, y: 18, pointerEvents: 'none' }}
-                      transition={{ duration: 0.34, ease: [0.16, 1, 0.3, 1] }}
                       aria-hidden={!isActive}
                     >
+                      <div className="service-portal__meta"><span>{meta.price}</span><span>{meta.duration}</span></div>
                       <p>{area.summary}</p>
                       <ul>{examples.map((item) => <li key={item.name}>{item.name}</li>)}</ul>
                       <div className="service-portal__actions">
                         <Link to={spacePath(area.id)}>Entrar al espacio <Arrow /></Link>
                         <Link to={bookingPath(area.id)}>Reservar <Arrow /></Link>
                       </div>
-                    </motion.div>
+                    </div>
                   </article>
                 );
               })}
@@ -148,45 +175,70 @@ export function HomePage() {
           ) : null}
         </section>
 
-        <section className="home-value-bridge" aria-labelledby="home-value-title">
+        {resultFrames.length ? (
+          <section className="home-results" aria-labelledby="home-results-title">
+            <header>
+              <div>
+                <span>Resultados</span>
+                <h2 id="home-results-title">Mira antes de elegir.</h2>
+              </div>
+              <div>
+                <p>Una selección de referencias de los distintos espacios. Las imágenes se actualizan desde el administrador.</p>
+                <Link to="/style-book">Ver Style Book <Arrow /></Link>
+              </div>
+            </header>
+            <div className="home-results__grid">
+              {resultFrames.map((frame, index) => (
+                <figure key={`${frame.label}-${index}`}>
+                  <img src={frame.image} alt={frame.alt} loading="lazy" />
+                  <figcaption>{frame.label}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        <section className="home-value-bridge home-value-bridge--light" aria-labelledby="home-value-title">
           <header className="home-value-bridge__header">
-            <span>Indian House</span>
-            <h2 id="home-value-title">Cuatro experiencias. Una sola casa.</h2>
-            <p>Barbería, fotografía, nails y SPA conviven en un mismo lugar para que puedas resolver tu visita sin saltar entre espacios ni agendas.</p>
+            <span>Por qué Indian</span>
+            <h2 id="home-value-title">Todo lo que necesitas para tu visita.</h2>
+            <p>Menos promesas genéricas y más cosas concretas que facilitan venir, elegir y reservar.</p>
           </header>
 
           <div className="home-value-bridge__grid">
             <article>
-              <strong>Todo en un lugar</strong>
-              <p>Combina servicios de distintas áreas dentro de una misma visita a Indian House.</p>
+              <strong>Todo en una visita</strong>
+              <p>Barbería, nails, SPA y fotografía conviven en la misma casa.</p>
             </article>
             <article>
-              <strong>Reserva simple</strong>
-              <p>Elige área, servicio, profesional y horario desde un solo flujo.</p>
+              <strong>Parqueo para clientes</strong>
+              <p>Llega al centro de Loja sin tener que resolver el estacionamiento por tu cuenta.</p>
             </article>
             <article>
-              <strong>Equipo especializado</strong>
-              <p>Cada espacio conserva su propio equipo, técnica y forma de atender.</p>
-            </article>
-            <article>
-              <strong>En el centro de Loja</strong>
-              <p>Una ubicación accesible con horarios pensados para organizar mejor tu día.</p>
+              <strong>Reserva directa</strong>
+              <p>Elige servicio, profesional, fecha y horario dentro de un mismo flujo.</p>
             </article>
           </div>
 
           <div className="home-value-bridge__actions">
-            <Link to="/reservar">Agendar una visita <Arrow /></Link>
+            <Link to="/reservar">Reservar una visita <Arrow /></Link>
             <a href={settings.mapHref} target="_blank" rel="noreferrer">Cómo llegar <Arrow /></a>
           </div>
         </section>
 
         <HomeGiftCards />
 
-        <WhatsappInquiryForm
-          title="¿Tienes una sugerencia para Indian House?"
-          lead="Déjanos tu nombre, teléfono y mensaje. La sugerencia llegará directamente por WhatsApp."
-          context="Sugerencia general para Indian House"
-        />
+        <section className="home-guidance" aria-labelledby="home-guidance-title">
+          <div>
+            <span>Orientación</span>
+            <h2 id="home-guidance-title">¿No sabes qué reservar?</h2>
+            <p>Cuéntanos qué buscas y te ayudamos a elegir el área o servicio adecuado por WhatsApp.</p>
+          </div>
+          <div className="home-guidance__actions">
+            <a href={settings.whatsappHref} target="_blank" rel="noreferrer">Preguntar por WhatsApp <Arrow /></a>
+            <Link to="/servicios">Revisar servicios</Link>
+          </div>
+        </section>
 
         <section className="home-visit-strip home-visit-strip--social home-visit-strip--compact-map" aria-labelledby="home-visit-strip-title">
           <div className="home-visit-strip__intro">
