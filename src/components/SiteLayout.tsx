@@ -9,6 +9,7 @@ import {
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useGlobalSettings } from '../content/useSiteContent';
 import type { SpaceId } from '../data/serviceCatalog';
+import { bookingPath } from '../utils/booking';
 import { spaceLabels, spaceOrder, spacePath } from '../utils/spaces';
 
 const secondaryNavigation = [
