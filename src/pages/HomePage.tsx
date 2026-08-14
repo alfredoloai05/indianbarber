@@ -32,7 +32,7 @@ function getAreaMeta(area: ServiceCatalogArea) {
   const price = minPrice === null
     ? items.find((item) => item.price)?.price ?? 'Consultar'
     : `Desde USD ${minPrice.toLocaleString('es-EC', { maximumFractionDigits: 2 })}`;
-  const duration = items.find((item) => item.duration)?.duration ?? 'Según servicio';
+  const duration = area.duration || 'Según servicio';
 
   return { price, duration };
 }
@@ -183,7 +183,7 @@ export function HomePage() {
                 <h2 id="home-results-title">Mira antes de elegir.</h2>
               </div>
               <div>
-                <p>Una selección de referencias de los distintos espacios. Las imágenes se actualizan desde el administrador.</p>
+                <p>Una selección de trabajos de nuestros distintos espacios para ayudarte a encontrar una referencia antes de reservar.</p>
                 <Link to="/style-book">Ver Style Book <Arrow /></Link>
               </div>
             </header>
@@ -202,7 +202,7 @@ export function HomePage() {
           <header className="home-value-bridge__header">
             <span>Por qué Indian</span>
             <h2 id="home-value-title">Todo lo que necesitas para tu visita.</h2>
-            <p>Menos promesas genéricas y más cosas concretas que facilitan venir, elegir y reservar.</p>
+            <p>Todo pensado para que puedas elegir, llegar y reservar tu visita con facilidad.</p>
           </header>
 
           <div className="home-value-bridge__grid">
