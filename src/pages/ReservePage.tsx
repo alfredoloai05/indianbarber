@@ -1,90 +1,18 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Seo } from '../components/Seo';
-import {
-  type TeamMemberContent,
-  useGlobalSettings,
-  useServiceCatalogContent,
-  useTeamMembersContent,
-} from '../content/useSiteContent';
+import { useGlobalSettings, useServiceCatalogContent } from '../content/useSiteContent';
 import type { ServiceCatalogArea } from '../data/serviceCatalog';
-
-const dateFormatter = new Intl.DateTimeFormat('es-EC', {
-  weekday: 'long',
-  day: 'numeric',
-  month: 'long',
-});
-
-const compactDateFormatter = new Intl.DateTimeFormat('es-EC', {
-  weekday: 'short',
-  day: 'numeric',
-  month: 'short',
-});
-
-type BookingDay = {
-  iso: string;
-  date: Date;
-  compact: string;
-  full: string;
-};
-
-type BookingProfessional = {
-  name: string;
-  role: string;
-  image: string;
-};
-
-function buildBookingDays(): BookingDay[] {
-  return Array.from({ length: 14 }, (_, index) => {
-    const date = new Date();
-    date.setHours(12, 0, 0, 0);
-    date.setDate(date.getDate() + index + 1);
-
-    return {
-      iso: date.toISOString().slice(0, 10),
-      date,
-      compact: compactDateFormatter.format(date).replace('.', ''),
-      full: dateFormatter.format(date),
-    };
-  });
-}
-
-function slotsForDate(date: Date) {
-  if (date.getDay() === 0) return ['10:00', '11:30', '13:00'];
-  return ['09:00', '10:30', '12:00', '14:00', '15:30', '17:00', '18:30', '20:00'];
-}
-
-function professionalsForArea(
-  area: ServiceCatalogArea,
-  team: TeamMemberContent[],
-): BookingProfessional[] {
-  const rolePattern = {
-    barberia: /barber/i,
-    combos: /barber/i,
-    nails: /manicur|uñas|nails/i,
-    spa: /spa|esteti|facial|masaj/i,
-    fotografia: /fotograf|contenido visual/i,
-  }[area.id];
-
-  const matching = team
-    .filter((member) => rolePattern.test(member.role))
-    .map((member) => ({ name: member.name, role: member.role, image: member.image }));
-
-  const anyAvailable: BookingProfessional = {
-    name: 'Cualquier profesional disponible',
-    role: 'La primera opción disponible para esta área',
-    image: matching[0]?.image ?? area.media.poster,
-  };
-
-  return [anyAvailable, ...matching];
-}
+import {
+  agendaProEmbedUrl,
+  agendaProPublicBookingUrl,
+  getAgendaProService,
+} from '../integrations/agendapro';
 
 export function ReservePage() {
   const [searchParams] = useSearchParams();
   const settings = useGlobalSettings();
   const catalog = useServiceCatalogContent();
-  const team = useTeamMembersContent();
-  const days = useMemo(() => buildBookingDays(), []);
 
   const requestedArea = searchParams.get('area');
   const requestedService = searchParams.get('service');
@@ -100,11 +28,7 @@ export function ReservePage() {
   const [openServiceGroups, setOpenServiceGroups] = useState<Partial<Record<ServiceCatalogArea['id'], string>>>(
     initialArea ? { [initialArea.id]: initialGroupTitle } : {},
   );
-  const [professionalName, setProfessionalName] = useState('Cualquier profesional disponible');
-  const [selectedDate, setSelectedDate] = useState(days[0]?.iso ?? '');
-  const [selectedTime, setSelectedTime] = useState('');
-  const [customerName, setCustomerName] = useState('');
-  const [notes, setNotes] = useState('');
+  const [agendaOpen, setAgendaOpen] = useState(false);
 
   const activeArea = catalog.find((area) => area.id === areaId) ?? catalog[0];
   const services = activeArea?.groups.flatMap((group) =>
@@ -114,28 +38,38 @@ export function ReservePage() {
   const openServiceGroup = activeArea
     ? openServiceGroups[activeArea.id] ?? activeArea.groups[0]?.title ?? ''
     : '';
-  const professionals = activeArea ? professionalsForArea(activeArea, team) : [];
-  const selectedProfessional = professionals.find((professional) => professional.name === professionalName) ?? professionals[0];
-  const activeDay = days.find((day) => day.iso === selectedDate) ?? days[0];
-  const availableSlots = activeDay ? slotsForDate(activeDay.date) : [];
-  const canRequest = Boolean(activeArea && selectedService && selectedProfessional && activeDay && selectedTime);
+  const agendaService = getAgendaProService(selectedService?.name);
+  const publicBookingUrl = agendaProPublicBookingUrl(selectedService?.name);
+  const embedBookingUrl = agendaProEmbedUrl(selectedService?.name);
 
-  const message = [
-    `Hola, quiero solicitar una cita en ${settings.brandName}.`,
+  const fallbackMessage = [
+    `Hola, quiero reservar en ${settings.brandName}.`,
     '',
     `Área: ${activeArea?.title ?? 'Por definir'}`,
     `Servicio: ${selectedService?.name ?? 'Por definir'}`,
-    `Profesional: ${selectedProfessional?.name ?? 'Por definir'}`,
-    `Fecha solicitada: ${activeDay?.full ?? 'Por definir'}`,
-    `Hora solicitada: ${selectedTime || 'Por definir'}`,
-    customerName.trim() ? `Nombre: ${customerName.trim()}` : '',
-    notes.trim() ? `Nota: ${notes.trim()}` : '',
     '',
-    'Entiendo que la fecha y la hora quedan pendientes de confirmación por Indian Club.',
-  ].filter(Boolean).join('\n');
-
+    'Este servicio todavía no tiene un enlace directo de AgendaPro desde la web. ¿Me ayudan a coordinar disponibilidad?',
+  ].join('\n');
   const separator = settings.whatsappHref.includes('?') ? '&' : '?';
-  const whatsappUrl = `${settings.whatsappHref}${separator}text=${encodeURIComponent(message)}`;
+  const whatsappUrl = `${settings.whatsappHref}${separator}text=${encodeURIComponent(fallbackMessage)}`;
+
+  useEffect(() => {
+    if (!agendaOpen) return undefined;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [agendaOpen]);
+
+  useEffect(() => {
+    if (!agendaOpen) return undefined;
+    const closeWithEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setAgendaOpen(false);
+    };
+    document.addEventListener('keydown', closeWithEscape);
+    return () => document.removeEventListener('keydown', closeWithEscape);
+  }, [agendaOpen]);
 
   const selectArea = (area: ServiceCatalogArea) => {
     const firstGroup = area.groups[0];
@@ -143,24 +77,23 @@ export function ReservePage() {
     setAreaId(area.id);
     setServiceName(firstService?.name ?? '');
     setOpenServiceGroups((current) => ({ ...current, [area.id]: firstGroup?.title ?? '' }));
-    setProfessionalName('Cualquier profesional disponible');
-    setSelectedTime('');
+    setAgendaOpen(false);
   };
 
   return (
     <>
       <Seo
         title="Reservar"
-        description={`Elige servicio, profesional, fecha y hora para solicitar tu próxima visita a ${settings.brandName}.`}
+        description={`Elige tu servicio y consulta disponibilidad real para reservar tu próxima visita a ${settings.brandName}.`}
       />
 
-      <section className="booking-experience booking-experience--direct" aria-labelledby="booking-flow-title">
+      <section className="booking-experience booking-experience--direct booking-experience--agendapro" aria-labelledby="booking-flow-title">
         <header className="booking-experience__header booking-experience__header--direct">
           <div>
-            <span className="booking-experience__eyebrow">Reservas Indian House</span>
+            <span className="booking-experience__eyebrow">Reservas Indian Club</span>
             <h1 id="booking-flow-title">Agenda tu visita.</h1>
           </div>
-          <p>Elige el área, servicio, profesional y horario para enviar tu solicitud.</p>
+          <p>Elige el servicio en Indian y consulta profesionales, fechas y horas disponibles en la agenda real.</p>
         </header>
 
         <div className="booking-area-tabs" role="tablist" aria-label="Áreas disponibles">
@@ -179,7 +112,7 @@ export function ReservePage() {
           ))}
         </div>
 
-        <div className="booking-workspace">
+        <div className="booking-workspace booking-workspace--live">
           <div className="booking-steps">
             <section className="booking-step" aria-labelledby="booking-service-title">
               <div className="booking-step__heading">
@@ -211,20 +144,28 @@ export function ReservePage() {
 
                       {isOpen ? (
                         <div className="booking-service-list">
-                          {group.items.map((service) => (
-                            <button
-                              type="button"
-                              className={service.name === selectedService?.name ? 'is-active' : undefined}
-                              key={service.name}
-                              onClick={() => {
-                                setServiceName(service.name);
-                                setSelectedTime('');
-                              }}
-                            >
-                              <strong>{service.name}</strong>
-                              <small>{service.duration} · {service.price}</small>
-                            </button>
-                          ))}
+                          {group.items.map((service) => {
+                            const mapped = Boolean(getAgendaProService(service.name));
+                            return (
+                              <button
+                                type="button"
+                                className={service.name === selectedService?.name ? 'is-active' : undefined}
+                                key={service.name}
+                                onClick={() => {
+                                  setServiceName(service.name);
+                                  setAgendaOpen(false);
+                                }}
+                              >
+                                <span>
+                                  <strong>{service.name}</strong>
+                                  <small>{service.duration} · {service.price}</small>
+                                </span>
+                                <i className={`booking-service-list__status${mapped ? ' is-live' : ''}`}>
+                                  {mapped ? 'Agenda online' : 'Consulta'}
+                                </i>
+                              </button>
+                            );
+                          })}
                         </div>
                       ) : null}
                     </section>
@@ -233,125 +174,105 @@ export function ReservePage() {
               </div>
             </section>
 
-            <section className="booking-step" aria-labelledby="booking-professional-title">
+            <section className="booking-step booking-step--live" aria-labelledby="booking-live-title">
               <div className="booking-step__heading">
                 <span>2</span>
                 <div>
-                  <h2 id="booking-professional-title">Elige profesional</h2>
-                  <p>Solo aparecen profesionales relacionados con el área seleccionada.</p>
+                  <h2 id="booking-live-title">Profesional, fecha y hora</h2>
+                  {agendaService ? (
+                    <p>La disponibilidad se abre con este servicio identificado en AgendaPro. Allí eliges profesional, fecha y hora y completas la reserva.</p>
+                  ) : (
+                    <p>Este servicio todavía no tiene un enlace directo con AgendaPro. Puedes coordinarlo con el equipo por WhatsApp.</p>
+                  )}
                 </div>
               </div>
-              <div className="booking-professionals">
-                {professionals.map((professional) => (
-                  <button
-                    type="button"
-                    className={professional.name === selectedProfessional?.name ? 'is-active' : undefined}
-                    key={professional.name}
-                    onClick={() => setProfessionalName(professional.name)}
-                  >
-                    <img src={professional.image} alt="" />
-                    <span><strong>{professional.name}</strong><small>{professional.role}</small></span>
-                  </button>
-                ))}
-              </div>
-            </section>
 
-            <section className="booking-step" aria-labelledby="booking-date-title">
-              <div className="booking-step__heading">
-                <span>3</span>
-                <div>
-                  <h2 id="booking-date-title">Elige fecha y hora</h2>
-                  <p>Son horarios de solicitud. Indian Club confirmará la disponibilidad final.</p>
+              {agendaService ? (
+                <div className="booking-live-card">
+                  <div>
+                    <span>Disponibilidad real</span>
+                    <strong>{agendaService.agendaName}</strong>
+                    <p>AgendaPro · {agendaService.durationMinutes} min · USD {agendaService.price}</p>
+                  </div>
+                  <div className="booking-live-card__actions">
+                    <button type="button" onClick={() => setAgendaOpen(true)}>Ver horarios disponibles ↗</button>
+                    <a href={publicBookingUrl} target="_blank" rel="noreferrer">Abrir en otra pestaña</a>
+                  </div>
                 </div>
-              </div>
-              <div className="booking-calendar" aria-label="Próximos días disponibles">
-                {days.map((day) => (
-                  <button
-                    type="button"
-                    className={day.iso === activeDay?.iso ? 'is-active' : undefined}
-                    key={day.iso}
-                    onClick={() => {
-                      setSelectedDate(day.iso);
-                      setSelectedTime('');
-                    }}
-                  >
-                    {day.compact}
-                  </button>
-                ))}
-              </div>
-              <div className="booking-time-slots" aria-label="Horarios de solicitud">
-                {availableSlots.map((slot) => (
-                  <button
-                    type="button"
-                    className={slot === selectedTime ? 'is-active' : undefined}
-                    key={slot}
-                    onClick={() => setSelectedTime(slot)}
-                  >
-                    {slot}
-                  </button>
-                ))}
-              </div>
-            </section>
-
-            <section className="booking-step" aria-labelledby="booking-contact-title">
-              <div className="booking-step__heading">
-                <span>4</span>
-                <div>
-                  <h2 id="booking-contact-title">Añade tus datos</h2>
-                  <p>Son opcionales, pero ayudan a identificar la solicitud.</p>
+              ) : (
+                <div className="booking-live-card booking-live-card--fallback">
+                  <div>
+                    <span>Coordinación directa</span>
+                    <strong>{selectedService?.name}</strong>
+                    <p>Te ayudamos a revisar profesional y disponibilidad por WhatsApp.</p>
+                  </div>
+                  <a href={whatsappUrl} target="_blank" rel="noreferrer">Consultar disponibilidad ↗</a>
                 </div>
-              </div>
-              <div className="booking-contact-fields">
-                <label>
-                  <span>Nombre</span>
-                  <input
-                    type="text"
-                    value={customerName}
-                    onChange={(event) => setCustomerName(event.target.value)}
-                    placeholder="Tu nombre"
-                  />
-                </label>
-                <label>
-                  <span>Nota para el equipo</span>
-                  <textarea
-                    value={notes}
-                    onChange={(event) => setNotes(event.target.value)}
-                    placeholder="Referencia, preferencia o detalle importante"
-                    rows={4}
-                  />
-                </label>
-              </div>
+              )}
             </section>
           </div>
 
-          <aside className="booking-summary" aria-label="Resumen de la solicitud">
+          <aside className="booking-summary booking-summary--live" aria-label="Resumen de reserva">
             <div className="booking-summary__media">
               {activeArea ? <img src={activeArea.media.poster} alt="" /> : null}
             </div>
-            <h2>Tu solicitud</h2>
+            <span className="booking-summary__eyebrow">Tu selección</span>
+            <h2>{selectedService?.name}</h2>
             <dl>
               <div><dt>Área</dt><dd>{activeArea?.shortTitle}</dd></div>
-              <div><dt>Servicio</dt><dd>{selectedService?.name}</dd></div>
-              <div><dt>Profesional</dt><dd>{selectedProfessional?.name}</dd></div>
-              <div><dt>Fecha</dt><dd>{activeDay?.full}</dd></div>
-              <div><dt>Hora</dt><dd>{selectedTime || 'Selecciona una hora'}</dd></div>
+              <div><dt>Duración</dt><dd>{selectedService?.duration}</dd></div>
+              <div><dt>Precio</dt><dd>{selectedService?.price}</dd></div>
+              <div><dt>Disponibilidad</dt><dd>{agendaService ? 'AgendaPro en tiempo real' : 'Consulta directa'}</dd></div>
             </dl>
-            <a
-              className={`booking-summary__submit${canRequest ? '' : ' is-disabled'}`}
-              href={canRequest ? whatsappUrl : undefined}
-              target="_blank"
-              rel="noreferrer"
-              aria-disabled={!canRequest}
-              onClick={(event) => {
-                if (!canRequest) event.preventDefault();
-              }}
-            >
-              Solicitar por WhatsApp ↗
-            </a>
-            <p>La solicitud no bloquea el horario hasta recibir confirmación de Indian Club.</p>
+            {agendaService ? (
+              <button className="booking-summary__submit" type="button" onClick={() => setAgendaOpen(true)}>
+                Ver horarios disponibles ↗
+              </button>
+            ) : (
+              <a className="booking-summary__submit" href={whatsappUrl} target="_blank" rel="noreferrer">
+                Consultar por WhatsApp ↗
+              </a>
+            )}
+            <p>
+              {agendaService
+                ? 'La cita queda confirmada únicamente al completar el flujo de AgendaPro.'
+                : 'El equipo confirmará manualmente la disponibilidad de este servicio.'}
+            </p>
           </aside>
         </div>
       </section>
+
+      {agendaOpen && agendaService ? (
+        <div className="agendapro-modal" role="dialog" aria-modal="true" aria-labelledby="agendapro-modal-title">
+          <div className="agendapro-modal__shell">
+            <header className="agendapro-modal__header">
+              <div>
+                <span>Reserva online · AgendaPro</span>
+                <strong id="agendapro-modal-title">{selectedService?.name}</strong>
+                <small>{selectedService?.duration} · {selectedService?.price}</small>
+              </div>
+              <div className="agendapro-modal__header-actions">
+                <a href={publicBookingUrl} target="_blank" rel="noreferrer">Abrir aparte ↗</a>
+                <button type="button" onClick={() => setAgendaOpen(false)} aria-label="Cerrar agenda">×</button>
+              </div>
+            </header>
+            <div className="agendapro-modal__frame-wrap">
+              <iframe
+                key={agendaService.id}
+                src={embedBookingUrl}
+                title={`Reserva ${selectedService?.name} en AgendaPro`}
+                loading="eager"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allow="payment"
+              />
+            </div>
+            <footer className="agendapro-modal__footer">
+              <span>Disponibilidad y confirmación gestionadas temporalmente por AgendaPro.</span>
+              <a href={publicBookingUrl} target="_blank" rel="noreferrer">Si no carga correctamente, continuar en AgendaPro ↗</a>
+            </footer>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }
