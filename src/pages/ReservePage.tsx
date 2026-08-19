@@ -1,13 +1,34 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Seo } from '../components/Seo';
 import { useGlobalSettings, useServiceCatalogContent } from '../content/useSiteContent';
 import type { ServiceCatalogArea } from '../data/serviceCatalog';
 import {
-  agendaProEmbedUrl,
   agendaProPublicBookingUrl,
   getAgendaProService,
 } from '../integrations/agendapro';
+
+function openBookingWindow(url: string) {
+  const availableWidth = window.screen?.availWidth ?? window.innerWidth;
+  const availableHeight = window.screen?.availHeight ?? window.innerHeight;
+  const width = Math.min(520, Math.max(360, availableWidth - 32));
+  const height = Math.min(820, Math.max(620, availableHeight - 32));
+  const left = Math.max(0, Math.round((availableWidth - width) / 2));
+  const top = Math.max(0, Math.round((availableHeight - height) / 2));
+
+  const popup = window.open(
+    url,
+    'indian-agendapro-booking',
+    `popup=yes,width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`,
+  );
+
+  if (popup) {
+    popup.focus();
+    return;
+  }
+
+  window.location.assign(url);
+}
 
 export function ReservePage() {
   const [searchParams] = useSearchParams();
@@ -28,7 +49,6 @@ export function ReservePage() {
   const [openServiceGroups, setOpenServiceGroups] = useState<Partial<Record<ServiceCatalogArea['id'], string>>>(
     initialArea ? { [initialArea.id]: initialGroupTitle } : {},
   );
-  const [agendaOpen, setAgendaOpen] = useState(false);
 
   const activeArea = catalog.find((area) => area.id === areaId) ?? catalog[0];
   const services = activeArea?.groups.flatMap((group) =>
@@ -40,7 +60,6 @@ export function ReservePage() {
     : '';
   const agendaService = getAgendaProService(selectedService?.name);
   const publicBookingUrl = agendaProPublicBookingUrl(selectedService?.name);
-  const embedBookingUrl = agendaProEmbedUrl(selectedService?.name);
 
   const fallbackMessage = [
     `Hola, quiero reservar en ${settings.brandName}.`,
@@ -48,28 +67,10 @@ export function ReservePage() {
     `Área: ${activeArea?.title ?? 'Por definir'}`,
     `Servicio: ${selectedService?.name ?? 'Por definir'}`,
     '',
-    'Este servicio todavía no tiene un enlace directo de AgendaPro desde la web. ¿Me ayudan a coordinar disponibilidad?',
+    '¿Me ayudan a revisar profesional, fecha y hora disponibles?',
   ].join('\n');
   const separator = settings.whatsappHref.includes('?') ? '&' : '?';
   const whatsappUrl = `${settings.whatsappHref}${separator}text=${encodeURIComponent(fallbackMessage)}`;
-
-  useEffect(() => {
-    if (!agendaOpen) return undefined;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [agendaOpen]);
-
-  useEffect(() => {
-    if (!agendaOpen) return undefined;
-    const closeWithEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setAgendaOpen(false);
-    };
-    document.addEventListener('keydown', closeWithEscape);
-    return () => document.removeEventListener('keydown', closeWithEscape);
-  }, [agendaOpen]);
 
   const selectArea = (area: ServiceCatalogArea) => {
     const firstGroup = area.groups[0];
@@ -77,7 +78,11 @@ export function ReservePage() {
     setAreaId(area.id);
     setServiceName(firstService?.name ?? '');
     setOpenServiceGroups((current) => ({ ...current, [area.id]: firstGroup?.title ?? '' }));
-    setAgendaOpen(false);
+  };
+
+  const openSelectedBooking = () => {
+    if (!agendaService) return;
+    openBookingWindow(publicBookingUrl);
   };
 
   return (
@@ -93,7 +98,7 @@ export function ReservePage() {
             <span className="booking-experience__eyebrow">Reservas Indian Club</span>
             <h1 id="booking-flow-title">Agenda tu visita.</h1>
           </div>
-          <p>Elige el servicio en Indian y consulta profesionales, fechas y horas disponibles en la agenda real.</p>
+          <p>Elige tu servicio aquí. El último paso se abre en una ventana compacta para escoger profesional, fecha y hora reales.</p>
         </header>
 
         <div className="booking-area-tabs" role="tablist" aria-label="Áreas disponibles">
@@ -151,17 +156,14 @@ export function ReservePage() {
                                 type="button"
                                 className={service.name === selectedService?.name ? 'is-active' : undefined}
                                 key={service.name}
-                                onClick={() => {
-                                  setServiceName(service.name);
-                                  setAgendaOpen(false);
-                                }}
+                                onClick={() => setServiceName(service.name)}
                               >
                                 <span>
                                   <strong>{service.name}</strong>
                                   <small>{service.duration} · {service.price}</small>
                                 </span>
                                 <i className={`booking-service-list__status${mapped ? ' is-live' : ''}`}>
-                                  {mapped ? 'Agenda online' : 'Consulta'}
+                                  {mapped ? 'Reserva online' : 'Consulta'}
                                 </i>
                               </button>
                             );
@@ -180,9 +182,9 @@ export function ReservePage() {
                 <div>
                   <h2 id="booking-live-title">Profesional, fecha y hora</h2>
                   {agendaService ? (
-                    <p>La disponibilidad se abre con este servicio identificado en AgendaPro. Allí eliges profesional, fecha y hora y completas la reserva.</p>
+                    <p>Tu servicio ya está identificado. Continúa para ver la disponibilidad real y confirmar la cita.</p>
                   ) : (
-                    <p>Este servicio todavía no tiene un enlace directo con AgendaPro. Puedes coordinarlo con el equipo por WhatsApp.</p>
+                    <p>Este servicio todavía requiere coordinación directa con el equipo.</p>
                   )}
                 </div>
               </div>
@@ -190,13 +192,16 @@ export function ReservePage() {
               {agendaService ? (
                 <div className="booking-live-card">
                   <div>
-                    <span>Disponibilidad real</span>
+                    <span>Disponibilidad en línea</span>
                     <strong>{agendaService.agendaName}</strong>
-                    <p>AgendaPro · {agendaService.durationMinutes} min · USD {agendaService.price}</p>
+                    <p>{agendaService.durationMinutes} min · USD {agendaService.price}</p>
+                    <small className="booking-live-card__note">
+                      Se abrirá una ventana compacta únicamente para elegir profesional, fecha, hora y confirmar.
+                    </small>
                   </div>
                   <div className="booking-live-card__actions">
-                    <button type="button" onClick={() => setAgendaOpen(true)}>Ver horarios disponibles ↗</button>
-                    <a href={publicBookingUrl} target="_blank" rel="noreferrer">Abrir en otra pestaña</a>
+                    <button type="button" onClick={openSelectedBooking}>Elegir profesional y horario ↗</button>
+                    <a href={publicBookingUrl} target="_blank" rel="noreferrer">Abrir pantalla completa</a>
                   </div>
                 </div>
               ) : (
@@ -222,11 +227,11 @@ export function ReservePage() {
               <div><dt>Área</dt><dd>{activeArea?.shortTitle}</dd></div>
               <div><dt>Duración</dt><dd>{selectedService?.duration}</dd></div>
               <div><dt>Precio</dt><dd>{selectedService?.price}</dd></div>
-              <div><dt>Disponibilidad</dt><dd>{agendaService ? 'AgendaPro en tiempo real' : 'Consulta directa'}</dd></div>
+              <div><dt>Disponibilidad</dt><dd>{agendaService ? 'En línea' : 'Consulta directa'}</dd></div>
             </dl>
             {agendaService ? (
-              <button className="booking-summary__submit" type="button" onClick={() => setAgendaOpen(true)}>
-                Ver horarios disponibles ↗
+              <button className="booking-summary__submit" type="button" onClick={openSelectedBooking}>
+                Elegir profesional y horario ↗
               </button>
             ) : (
               <a className="booking-summary__submit" href={whatsappUrl} target="_blank" rel="noreferrer">
@@ -235,44 +240,12 @@ export function ReservePage() {
             )}
             <p>
               {agendaService
-                ? 'La cita queda confirmada únicamente al completar el flujo de AgendaPro.'
+                ? 'La reserva queda confirmada al completar el último paso en la agenda online.'
                 : 'El equipo confirmará manualmente la disponibilidad de este servicio.'}
             </p>
           </aside>
         </div>
       </section>
-
-      {agendaOpen && agendaService ? (
-        <div className="agendapro-modal" role="dialog" aria-modal="true" aria-labelledby="agendapro-modal-title">
-          <div className="agendapro-modal__shell">
-            <header className="agendapro-modal__header">
-              <div>
-                <span>Reserva online · AgendaPro</span>
-                <strong id="agendapro-modal-title">{selectedService?.name}</strong>
-                <small>{selectedService?.duration} · {selectedService?.price}</small>
-              </div>
-              <div className="agendapro-modal__header-actions">
-                <a href={publicBookingUrl} target="_blank" rel="noreferrer">Abrir aparte ↗</a>
-                <button type="button" onClick={() => setAgendaOpen(false)} aria-label="Cerrar agenda">×</button>
-              </div>
-            </header>
-            <div className="agendapro-modal__frame-wrap">
-              <iframe
-                key={agendaService.id}
-                src={embedBookingUrl}
-                title={`Reserva ${selectedService?.name} en AgendaPro`}
-                loading="eager"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allow="payment"
-              />
-            </div>
-            <footer className="agendapro-modal__footer">
-              <span>Disponibilidad y confirmación gestionadas temporalmente por AgendaPro.</span>
-              <a href={publicBookingUrl} target="_blank" rel="noreferrer">Si no carga correctamente, continuar en AgendaPro ↗</a>
-            </footer>
-          </div>
-        </div>
-      ) : null}
     </>
   );
 }
