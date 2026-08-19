@@ -95,6 +95,7 @@ export function ReservePage() {
     ? openServiceGroups[activeArea.id] ?? activeArea.groups[0]?.title ?? ''
     : '';
   const agendaService = getAgendaProService(selectedService?.name);
+  const agendaServiceId = agendaService?.id ?? null;
   const publicBookingUrl = agendaProPublicBookingUrl(selectedService?.name);
   const selectedSlot = slots.find((slot) => slot.key === selectedSlotKey) ?? null;
   const selectedProvider = providers.find((provider) => provider.id === providerId) ?? null;
@@ -122,35 +123,42 @@ export function ReservePage() {
     setSelectedSlotKey('');
     setProviders([]);
     setProviderId(null);
+    setLoadingDays(false);
+    setLoadingSlots(false);
+    setLoadingProviders(false);
     setAvailabilityError('');
   };
 
   useEffect(() => {
-    if (!agendaService) return undefined;
+    if (!agendaServiceId) return undefined;
 
     let cancelled = false;
     const startDate = today;
     const endDate = addDays(today, 13);
-    setLoadingDays(true);
 
-    fetchAgendaDays(agendaService.id, startDate, endDate)
-      .then((days) => {
-        if (!cancelled) {
-          setAvailableDays(days.filter((day) => day.available));
-          setAvailabilityError('');
-        }
-      })
-      .catch(() => {
-        if (!cancelled) setAvailabilityError('No pudimos cargar los próximos días disponibles. Puedes elegir una fecha manualmente.');
-      })
-      .finally(() => {
-        if (!cancelled) setLoadingDays(false);
-      });
+    queueMicrotask(() => {
+      if (cancelled) return;
+      setLoadingDays(true);
+
+      fetchAgendaDays(agendaServiceId, startDate, endDate)
+        .then((days) => {
+          if (!cancelled) {
+            setAvailableDays(days.filter((day) => day.available));
+            setAvailabilityError('');
+          }
+        })
+        .catch(() => {
+          if (!cancelled) setAvailabilityError('No pudimos cargar los próximos días disponibles. Puedes elegir una fecha manualmente.');
+        })
+        .finally(() => {
+          if (!cancelled) setLoadingDays(false);
+        });
+    });
 
     return () => {
       cancelled = true;
     };
-  }, [agendaService?.id, today]);
+  }, [agendaServiceId, today]);
 
   const selectArea = (area: ServiceCatalogArea) => {
     const firstGroup = area.groups[0];
@@ -167,7 +175,7 @@ export function ReservePage() {
   };
 
   const loadDate = async (date: string) => {
-    if (!agendaService || !date) return;
+    if (!agendaServiceId || !date) return;
 
     setSelectedDate(date);
     setSlots([]);
@@ -178,7 +186,7 @@ export function ReservePage() {
     setAvailabilityError('');
 
     try {
-      const result = await fetchAgendaSlots(agendaService.id, date);
+      const result = await fetchAgendaSlots(agendaServiceId, date);
       setSlots(result.slots);
       if (!result.slots.length) {
         setAvailabilityError('No hay horarios disponibles para esa fecha. Prueba con otro día.');
@@ -191,7 +199,7 @@ export function ReservePage() {
   };
 
   const loadSlotProviders = async (slot: AgendaAvailabilitySlot) => {
-    if (!agendaService || !selectedDate) return;
+    if (!agendaServiceId || !selectedDate) return;
 
     setSelectedSlotKey(slot.key);
     setProviders([]);
@@ -200,7 +208,7 @@ export function ReservePage() {
     setAvailabilityError('');
 
     try {
-      const result = await fetchAgendaProviders(agendaService.id, selectedDate, slot.start, slot.end);
+      const result = await fetchAgendaProviders(agendaServiceId, selectedDate, slot.start, slot.end);
       setProviders(result);
       if (result.length === 1) setProviderId(result[0].id);
       if (!result.length) {
