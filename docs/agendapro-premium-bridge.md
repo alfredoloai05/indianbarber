@@ -2,13 +2,12 @@
 
 ## Objetivo
 
-Mantener la experiencia visual y de descubrimiento dentro de Indian Club mientras AgendaPro sigue siendo temporalmente la fuente real de disponibilidad y confirmación hasta que Indian Fase 2 reemplace el motor de reservas.
+Mantener toda la experiencia visual y de descubrimiento dentro de Indian Club mientras AgendaPro sigue siendo temporalmente la fuente real de profesional, fecha, hora y confirmación hasta que Indian Fase 2 reemplace el motor de reservas.
 
 ## Fuente
 
 - Sucursal pública: `224670`
 - Sitio: `https://indianclub.site.agendapro.com/ec/sucursal/224670`
-- Iframe oficial suministrado por AgendaPro: `https://agendapro.com/iframe/overview/ee389fa5-e2a8-4ac2-a824-94221f4c47f0`
 - Catálogo cruzado desde el export `services_report_240304_1787108531.xlsx` recibido el 2026-08-18.
 - No se almacena ninguna API key ni credencial privada en el repositorio.
 
@@ -16,24 +15,28 @@ Mantener la experiencia visual y de descubrimiento dentro de Indian Club mientra
 
 1. El cliente entra a `/reservar` en Indian.
 2. Elige área y servicio dentro de la interfaz Indian.
-3. Si el servicio tiene un `services_id` público mapeado, Indian muestra `Agenda online`.
-4. `Ver horarios disponibles` abre el iframe oficial de AgendaPro dentro de un modal de pantalla completa con shell visual Indian.
+3. Si el servicio tiene un `services_id` público mapeado, Indian muestra `Reserva online`.
+4. `Elegir profesional y horario` abre el deep link público del servicio en una ventana compacta centrada, pensada para forzar una composición más cercana a móvil y evitar incrustar todo el sitio de AgendaPro a pantalla completa.
 5. AgendaPro gestiona profesional, fecha, hora, datos del cliente y confirmación real.
-6. Siempre existe un enlace externo al deep link público `?services_id=...` como fallback.
+6. Existe además un enlace `Abrir pantalla completa` como fallback.
 7. Servicios sin mapping (por ejemplo fotografía o experiencias SPA genéricas aún no equivalentes) pasan a coordinación por WhatsApp en vez de mostrar horarios ficticios.
+
+## Por qué ya no usamos iframe
+
+El iframe oficial de AgendaPro carga su experiencia completa y no permite que Indian modifique el DOM o el CSS interno por tratarse de otro origen. En desktop generaba una composición visual demasiado grande, repetitiva y ajena al lenguaje de Indian.
+
+El bridge ahora mantiene Indian hasta el último paso y abre AgendaPro únicamente en una ventana compacta usando el deep link público `?services_id=...` del servicio seleccionado. Esto evita el modal fullscreen, no inventa disponibilidad y sigue usando la agenda real.
 
 ## Regla de datos
 
 Para servicios mapeados, el precio y duración visibles en el sitio se sincronizan en runtime con el último export de AgendaPro. Los textos editoriales, imágenes y estructura siguen siendo administrables desde el CMS.
-
-El bridge no intenta leer el DOM del iframe ni extraer disponibilidad porque AgendaPro corre en otro origen. Eso evita depender de scraping o de mecanismos frágiles/no documentados.
 
 ## Sustitución en Fase 2
 
 Cuando el sistema propio de reservas esté listo:
 
 - reemplazar `src/integrations/agendapro.ts` por el cliente del backend propio;
-- reemplazar el modal/iframe de `ReservePage` por componentes nativos de disponibilidad, profesional, fecha, hora y confirmación;
+- sustituir el handoff externo de `ReservePage` por componentes nativos de profesional, disponibilidad, fecha, hora y confirmación;
 - conservar las rutas `bookingPath`, el catálogo CMS y la mayor parte de la UI actual.
 
-La integración está diseñada precisamente para que ese reemplazo no requiera otro rediseño de la web.
+La integración queda encapsulada para que ese reemplazo no requiera otro rediseño de la web.
