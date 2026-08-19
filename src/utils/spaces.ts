@@ -1,5 +1,6 @@
 import { getServiceExperienceMedia, spaceExperienceMedia } from '../data/experienceMedia';
 import { serviceCatalog as defaultCatalog, type ServiceCatalogArea, type SpaceId } from '../data/serviceCatalog';
+import { syncAgendaProCatalogMetadata } from '../integrations/agendapro';
 
 type LegacyCatalogArea = Omit<ServiceCatalogArea, 'id'> & { id: string };
 
@@ -26,7 +27,7 @@ export function spacePath(id: SpaceId, anchor?: string) {
 
 function hydrateMedia(area: ServiceCatalogArea) {
   const defaults = defaultCatalog.find((item) => item.id === area.id);
-  if (!defaults) return area;
+  if (!defaults) return syncAgendaProCatalogMetadata(area);
 
   const areaMedia = {
     ...defaults.media,
@@ -34,7 +35,7 @@ function hydrateMedia(area: ServiceCatalogArea) {
     ...spaceExperienceMedia[area.id],
   };
 
-  return {
+  const hydratedArea = {
     ...area,
     media: areaMedia,
     groups: area.groups.map((group) => ({
@@ -51,6 +52,10 @@ function hydrateMedia(area: ServiceCatalogArea) {
       }),
     })),
   };
+
+  // Until Indian Fase 2 replaces AgendaPro, mapped services use the latest
+  // exported AgendaPro price/duration as the public source of truth.
+  return syncAgendaProCatalogMetadata(hydratedArea);
 }
 
 export function normalizeServiceCatalog(catalog: ServiceCatalogArea[]) {
