@@ -115,6 +115,7 @@ export function syncAgendaProServiceMetadata(item: ServiceOption): ServiceOption
 }
 
 export function syncAgendaProCatalogMetadata(area: ServiceCatalogArea): ServiceCatalogArea {
+  const originalItems = area.groups.flatMap((group) => group.items);
   const groups = area.groups.map((group) => ({
     ...group,
     items: group.items.map(syncAgendaProServiceMetadata),
@@ -123,7 +124,10 @@ export function syncAgendaProCatalogMetadata(area: ServiceCatalogArea): ServiceC
     .map((item) => getAgendaProService(item.name))
     .filter((item): item is AgendaProServiceBridge => Boolean(item));
 
-  if (!mappedItems.length) return { ...area, groups };
+  // Item-level metadata can safely sync whenever a mapping exists. Area-level ranges are
+  // only replaced when every visible service in that area is mapped; otherwise we preserve
+  // the CMS range so partial SPA/Fotografía mappings do not create misleading summaries.
+  if (!mappedItems.length || mappedItems.length !== originalItems.length) return { ...area, groups };
 
   const minPrice = Math.min(...mappedItems.map((item) => item.price));
   const minDuration = Math.min(...mappedItems.map((item) => item.durationMinutes));
