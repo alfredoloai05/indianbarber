@@ -41,6 +41,7 @@ import './styles/reservation-home-v28.css';
 import './styles/ux-final.css';
 import './styles/agendapro-bridge-v31.css';
 import './styles/agendapro-provider-fix-v34.css';
+import './styles/agendapro-premium-handoff-v35.css';
 
 const root = document.getElementById('root');
 
