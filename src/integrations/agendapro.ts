@@ -11,7 +11,6 @@ import type { ServiceCatalogArea, ServiceOption } from '../data/serviceCatalog';
 export const agendaProConfig = {
   locationId: 224670,
   publicBaseUrl: 'https://indianclub.site.agendapro.com/ec/sucursal/224670',
-  iframeBaseUrl: 'https://agendapro.com/iframe/overview/ee389fa5-e2a8-4ac2-a824-94221f4c47f0',
   sourceReportDate: '2026-08-18',
 } as const;
 
@@ -83,16 +82,6 @@ export function agendaProPublicBookingUrl(serviceName?: string | null) {
   const service = getAgendaProService(serviceName);
   if (!service) return agendaProConfig.publicBaseUrl;
   return `${agendaProConfig.publicBaseUrl}?services_id=${service.id}`;
-}
-
-export function agendaProEmbedUrl(serviceName?: string | null) {
-  const service = getAgendaProService(serviceName);
-  if (!service) return agendaProConfig.iframeBaseUrl;
-
-  // AgendaPro officially supplies this iframe for embedding. We preserve the service_id
-  // in the query so compatible versions can open directly on the service; the modal also
-  // exposes the documented public deep link as a fallback if the iframe ignores the query.
-  return `${agendaProConfig.iframeBaseUrl}?services_id=${service.id}`;
 }
 
 export function formatAgendaProDuration(minutes: number) {
