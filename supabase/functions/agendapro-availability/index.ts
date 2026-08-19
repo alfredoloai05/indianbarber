@@ -116,7 +116,7 @@ type NormalizedProvider = {
   image: string;
 };
 
-function extractSlots(raw: any, date: string): NormalizedSlot[] {
+function extractSlots(raw: Record<string, unknown>, date: string): NormalizedSlot[] {
   const buckets = ['morning_hours', 'afternoon_hours', 'night_hours'] as const;
 
   return buckets
@@ -134,7 +134,7 @@ function extractSlots(raw: any, date: string): NormalizedSlot[] {
     .filter((slot) => isClock(slot.start) && isClock(slot.end));
 }
 
-function normalizeProvider(provider: any): NormalizedProvider | null {
+function normalizeProvider(provider: Record<string, unknown>): NormalizedProvider | null {
   const id = Number(provider?.id);
   const name = String(provider?.public_name ?? provider?.name ?? '');
   const image = typeof provider?.image === 'string' ? provider.image : '';
