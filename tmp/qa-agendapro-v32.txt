@@ -1,0 +1,1 @@
+Validate current main after replacing the fullscreen AgendaPro iframe with the compact booking handoff.
