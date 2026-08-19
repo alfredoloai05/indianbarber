@@ -1,0 +1,9 @@
+/* AgendaPro bridge hotfix: keep implementation language out of the customer UI. */
+
+.booking-service-list__status.is-live {
+  display: none !important;
+}
+
+.booking-summary--native > p:last-child {
+  display: none !important;
+}
